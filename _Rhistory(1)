@@ -1,0 +1,53 @@
+library(pack)
+library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
+library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
+{
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+}
+head(data2); summary(data2)
+X_1 <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X_1)), X_1)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X_1)
+N = nrow(data2)
+Y_EXT_1 <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT_1[,-ncol(Y_EXT_1)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+CumulativeF
+dist4 <- new(CumulativeF)
+dist4$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+ReferenceF
+dist3 <- new(CumulativeF)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+pkgbuild::compile_dll()
+#error "The file 'Rcpp.h' should not be included. Please correct to include only 'RcppArmadillo.h'."
+# Borre del distribution.h el include rcpp
+getLoadedDLLs()
+# Using modules
+# We need to tell R that we want to use a C++11 compiler
+Sys.setenv("PKG_CXXFLAGS"="-std=c++11")
+compileAttributes()
+document()
+devtools::load_all(".")
+devtools::load_all(".")
