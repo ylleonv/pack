@@ -1,1 +1,2 @@
-# Rcpp::loadModule("locationmodule", TRUE)
+Rcpp::loadModule("distribution", TRUE)
+Rcpp::loadModule("fishder", TRUE)

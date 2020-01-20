@@ -33,11 +33,13 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_fishder();
 RcppExport SEXP _rcpp_module_boot_distribution();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_pack_LogisticMulti", (DL_FUNC) &_pack_LogisticMulti, 2},
     {"_pack_MultinomialRegressionAlgo", (DL_FUNC) &_pack_MultinomialRegressionAlgo, 3},
+    {"_rcpp_module_boot_fishder", (DL_FUNC) &_rcpp_module_boot_fishder, 0},
     {"_rcpp_module_boot_distribution", (DL_FUNC) &_rcpp_module_boot_distribution, 0},
     {NULL, NULL, 0}
 };

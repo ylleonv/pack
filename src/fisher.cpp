@@ -67,11 +67,11 @@ arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
     Cov = diagmat(Cov);
 
     Eigen::MatrixXd CovEig = Eigen::Map<Eigen::MatrixXd>(Cov.memptr(),
-                                      Cov.n_rows,
-                                      Cov.n_cols);
+                                                         Cov.n_rows,
+                                                         Cov.n_cols);
     CovEig = CovEig.inverse();
     arma::mat Covinv = arma::mat(CovEig.data(), CovEig.rows(), CovEig.cols(),
-                     false, false);
+                                 false, false);
 
     // First derivative - ScoreFunction:
     arma::mat Score = X_M.t() * (D_M * Covinv) *  (Y_M-Mu);
@@ -116,7 +116,16 @@ arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
   Rcout << Deviance << endl;
 
   return beta;
+}
 
 
 
+RCPP_MODULE(fishder){
+  Rcpp::class_<distribution>("distribution")
+  .constructor()
+  ;
+  Rcpp::class_<FisherScoring>("FisherScoring")
+    .constructor()
+    .method( "GLMm", &FisherScoring::GLMm )
+  ;
 }

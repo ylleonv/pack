@@ -42,10 +42,10 @@ RCPP_MODULE(distribution){
     .constructor()
     .method( "InverseLinkCumulativeFunction", &Gompertz::InverseLinkCumulativeFunction )
   ;
-  class_<FisherScoring>("FisherScoring")
-    // .derives<Logistic>("Logistic")
-    .constructor()
-    .method( "GLMm", &FisherScoring::GLMm )
+  // class_<FisherScoring>("FisherScoring")
+  //   // .derives<Logistic>("Logistic")
+  //   .constructor()
+  //   .method( "GLMm", &FisherScoring::GLMm )
   ;
   class_<ReferenceF>("ReferenceF")
     .constructor()
