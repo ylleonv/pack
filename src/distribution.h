@@ -16,8 +16,8 @@ public:
 class Logistic : virtual distribution{
 public:
   Eigen::VectorXd Quantile(Eigen::VectorXd vectordis1);
-  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis1);
-  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis1);
+  arma::vec InverseLinkCumulativeFunction(arma::vec vectordis);
+  arma::vec InverseLinkDensityFunction(arma::vec vectordis);
   virtual Eigen::VectorXd in_open_corner(const Eigen::VectorXd& p) const;
 
   virtual double cdf_logit(const double& value) const;
@@ -41,6 +41,9 @@ class Cauchit : public distribution{
 public:
   arma::vec InverseLinkCumulativeFunction(arma::vec vectordis);
   arma::vec InverseLinkDensityFunction(arma::vec vectordis);
+
+  virtual double cdf_cauchit(const double& value) const;
+
   Cauchit();
 };
 

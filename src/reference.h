@@ -1,5 +1,5 @@
-#ifndef REFERENCE_H_
-#define REFERENCE_H_
+#ifndef REFERENCEF_H_
+#define REFERENCEF_H_
 #include <RcppArmadillo.h>
 #include "distribution.h"
 
@@ -8,10 +8,17 @@ public:
   ReferenceF();
   const arma::mat X_M;
   const arma::mat Y_M;
-  Eigen::VectorXd evaluate(Eigen::VectorXd pi);
-  Eigen::VectorXd inverse(Eigen::VectorXd eta);
-  Eigen::MatrixXd inverse_derivate(Eigen::VectorXd eta);
-  Eigen::MatrixXd GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q);
+
+  // virtual Eigen::VectorXd inverse( Eigen::VectorXd& eta, std::string link) ;
+
+  virtual Eigen::VectorXd inverse_logistic(const Eigen::VectorXd& eta1) const;
+  virtual Eigen::MatrixXd inverse_derivative_logistic(const Eigen::VectorXd& eta) const ;
+
+  virtual Eigen::VectorXd inverse_probit(const Eigen::VectorXd& eta) const;
+  virtual Eigen::MatrixXd inverse_derivative_probit(const Eigen::VectorXd& eta) const ;
+
+  Eigen::MatrixXd GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link);
+
 };
 
 #endif

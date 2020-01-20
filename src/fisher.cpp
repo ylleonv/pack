@@ -32,13 +32,15 @@ arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
   double tol = 0.001;
   int n_iter = -1;
 
+  arma::vec Deviance;
+
   //    algorithm
   while (check_tutz > tol){
     // Vector of probabilities:
     arma::mat eta = X_M * beta;
     if(link == "logistic"){
-      // Mu = Logistic::InverseLinkCumulativeFunction(eta);
-      // D_M = Logistic::InverseLinkDensityFunction(eta);
+      Mu = Logistic::InverseLinkCumulativeFunction(eta);
+      D_M = Logistic::InverseLinkDensityFunction(eta);
     }else if(link == "probit"){
       Mu = Probit::InverseLinkCumulativeFunction(eta);
       D_M = Probit::InverseLinkDensityFunction(eta);
@@ -99,18 +101,22 @@ arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
     // cout << check_tutz << endl;
 
     // Deviance for ungrouped -> bernulli
-    arma::vec Deviance = -2*(Y_M.t()*log(Mu)) + ((1-Y_M.t())*log(1-Mu));
+    Deviance = -2*(Y_M.t()*log(Mu)) + ((1-Y_M.t())*log(1-Mu));
 
     beta = beta_new;
-    Rcout << "Number of iterations" << endl;
-    beta.print();
-    // For cauchit
-    Deviance.print();
+    // beta.print();
 
     n_iter = n_iter + 1;
   }
 
   Rcout << "Number of iterations" << endl;
   Rcout << n_iter << endl;
+
+  Rcout << "Deviance" << endl;
+  Rcout << Deviance << endl;
+
   return beta;
+
+
+
 }

@@ -2,11 +2,9 @@
 #include "distribution.h"
 #include "fisher.h"
 #include "reference.h"
-#include "cumulative.h"
-#include "adjacent.h"
-#include "referenceJean.h"
-#include "adjacentJean.h"
-#include "cumulativeJean.h"
+#include "cumulativeR.h"
+#include "adjacentR.h"
+#include "sequentialR.h"
 
 using namespace Rcpp;
 
@@ -53,26 +51,17 @@ RCPP_MODULE(distribution){
     .constructor()
     .method( "GLMref", &ReferenceF::GLMref )
   ;
-  // class_<CumulativeF>("CumulativeF")
-  //   .constructor()
-  //   .method( "GLMcum", &CumulativeF::GLMcum )
-  // ;
-  // class_<AdjacentF>("AdjacentF")
-  //   .constructor()
-  //   .method( "GLMadj", &AdjacentF::GLMadj )
-  // ;
-  class_<ReferenceJean>("ReferenceJean")
+  class_<CumulativeR>("CumulativeR")
     .constructor()
-    .method( "GLMrefJean", &ReferenceJean::GLMrefJean )
+    .method( "GLMcum", &CumulativeR::GLMcum )
   ;
-  // class_<AdjacentJean>("AdjacentJean")
+  // class_<AdjacentR>("AdjacentR")
   //   .constructor()
-  //   .method( "GLMadjJean", &AdjacentJean::GLMadjJean )
+  //   .method( "GLMadj", &AdjacentR::GLMadj)
   // ;
-  // class_<CumulativeJean>("CumulativeJean")
-  //   .constructor()
-  //   .method( "GLMcumJean", &CumulativeJean::GLMcumJean )
-  // ;
+  class_<SequentialR>("SequentialR")
+    .constructor()
+    .method( "GLMseq", &SequentialR::GLMseq)
+  ;
 }
-
 

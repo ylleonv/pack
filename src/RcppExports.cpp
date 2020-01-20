@@ -32,24 +32,12 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// timesTwo
-int timesTwo(int x);
-RcppExport SEXP _pack_timesTwo(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(timesTwo(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP _rcpp_module_boot_distribution();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_pack_LogisticMulti", (DL_FUNC) &_pack_LogisticMulti, 2},
     {"_pack_MultinomialRegressionAlgo", (DL_FUNC) &_pack_MultinomialRegressionAlgo, 3},
-    {"_pack_timesTwo", (DL_FUNC) &_pack_timesTwo, 1},
     {"_rcpp_module_boot_distribution", (DL_FUNC) &_rcpp_module_boot_distribution, 0},
     {NULL, NULL, 0}
 };

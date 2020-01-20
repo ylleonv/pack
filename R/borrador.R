@@ -153,13 +153,22 @@
 # }
 #
 # ReferenceF
-# dist3 <- new(ReferenceF)
-# dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+# dist1 <- new(ReferenceF)
+# dist1$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "logistic")
+# dist1$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "probit")
 #
-# CumulativeF
-# dist4 <- new(CumulativeF)
-# dist4$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+# CumulativeR
+# dist2 <- new(CumulativeR)
+# dist2$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "logistic")
+# dist2$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "probit")
 #
+# dist1 <- new(AdjacentR)
+# dist1$GLMadj(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "logistic")
+# dist1$GLMadj(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "probit")
+#
+# dist3 <- new(SequentialR)
+# dist3$GLMseq(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "logistic")
+# dist3$GLMseq(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "probit")
 #
 # # Pruebas con la librerìa usual
 #
@@ -171,9 +180,17 @@
 #
 # (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 3)))
 #
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), cumulative(link = "logit")))
+# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), acat(link = "logitlink"),
+#       trace = TRUE, maxit = 1))
+# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), acat(link = "loglink"),
+#       trace = TRUE, maxit = 1))
 #
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), acat))
+# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), cumulative(link = "logit")))
+# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), cumulative(link = "probit")))
+#
+# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), sratio(link = "logit")))
+# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), sratio(link = "probit")))
+#
 #
 # # Others ------------------------------------------------------------------
 # vignette("ordinal-knee1")

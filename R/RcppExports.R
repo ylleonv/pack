@@ -9,7 +9,3 @@ MultinomialRegressionAlgo <- function(X_M, Y_EXT, K) {
     .Call(`_pack_MultinomialRegressionAlgo`, X_M, Y_EXT, K)
 }
 
-timesTwo <- function(x) {
-    .Call(`_pack_timesTwo`, x)
-}
-
