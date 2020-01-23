@@ -118,14 +118,12 @@ arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
   return beta;
 }
 
-
-
-RCPP_MODULE(fishder){
-  Rcpp::class_<distribution>("distribution")
-  .constructor()
-  ;
-  Rcpp::class_<FisherScoring>("FisherScoring")
-    .constructor()
-    .method( "GLMm", &FisherScoring::GLMm )
-  ;
-}
+// RCPP_MODULE(fishder){
+//   Rcpp::class_<distribution>("distribution")
+//   .constructor()
+//   ;
+//   Rcpp::class_<FisherScoring>("FisherScoring")
+//     .constructor()
+//     .method( "GLMm", &FisherScoring::GLMm )
+//   ;
+// }

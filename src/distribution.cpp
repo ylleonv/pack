@@ -45,13 +45,6 @@ Probit::Probit(void) {
   cout << "Probit is being created" << endl;
 }
 
-// Methods
-// Eigen::VectorXd Logistic::Quantile(Eigen::VectorXd vector){
-//   logistic_distribution<> myLogistic1(0., 1.);
-//   for (int i = 0; i<=vector.size()-1; i++)
-//     vector[i] = quantile(myLogistic1, vector[i]);
-//   return vector;
-// }
 
 arma::vec Logistic::InverseLinkCumulativeFunction(arma::vec vector){
   logistic_distribution<> myLogistic1(0., 1.);

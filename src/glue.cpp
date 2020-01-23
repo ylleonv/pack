@@ -46,7 +46,7 @@ RCPP_MODULE(distribution){
   //   // .derives<Logistic>("Logistic")
   //   .constructor()
   //   .method( "GLMm", &FisherScoring::GLMm )
-  ;
+  // ;
   class_<ReferenceF>("ReferenceF")
     .constructor()
     .method( "GLMref", &ReferenceF::GLMref )
