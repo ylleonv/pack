@@ -8,10 +8,10 @@
 using namespace Rcpp;
 
 
-RcppExport SEXP _rcpp_module_boot_distribution();
+RcppExport SEXP _rcpp_module_boot_fishder();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rcpp_module_boot_distribution", (DL_FUNC) &_rcpp_module_boot_distribution, 0},
+    {"_rcpp_module_boot_fishder", (DL_FUNC) &_rcpp_module_boot_fishder, 0},
     {NULL, NULL, 0}
 };
 
