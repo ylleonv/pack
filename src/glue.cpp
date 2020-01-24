@@ -6,11 +6,10 @@
 #include "adjacentR.h"
 #include "sequentialR.h"
 
-using namespace Rcpp;
-
 RCPP_MODULE(distribution){
+  using namespace Rcpp ;
   class_<distribution>("distribution")
-  .constructor()
+    .constructor()
   ;
   class_<Logistic>("Logistic")
     .derives<distribution>("distribution")
@@ -42,11 +41,11 @@ RCPP_MODULE(distribution){
     .constructor()
     .method( "InverseLinkCumulativeFunction", &Gompertz::InverseLinkCumulativeFunction )
   ;
-  // class_<FisherScoring>("FisherScoring")
-  //   // .derives<Logistic>("Logistic")
-  //   .constructor()
-  //   .method( "GLMm", &FisherScoring::GLMm )
-  // ;
+  class_<FisherScoring>("FisherScoring")
+    // .derives<Logistic>("Logistic")
+    .constructor()
+    .method( "GLMm", &FisherScoring::GLMm )
+  ;
   class_<ReferenceF>("ReferenceF")
     .constructor()
     .method( "GLMref", &ReferenceF::GLMref )

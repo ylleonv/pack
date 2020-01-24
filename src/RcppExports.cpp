@@ -7,37 +7,10 @@
 
 using namespace Rcpp;
 
-// LogisticMulti
-arma::mat LogisticMulti(arma::mat a, arma::mat b);
-RcppExport SEXP _pack_LogisticMulti(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(LogisticMulti(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// MultinomialRegressionAlgo
-arma::mat MultinomialRegressionAlgo(arma::mat X_M, arma::mat Y_EXT, int K);
-RcppExport SEXP _pack_MultinomialRegressionAlgo(SEXP X_MSEXP, SEXP Y_EXTSEXP, SEXP KSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type X_M(X_MSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Y_EXT(Y_EXTSEXP);
-    Rcpp::traits::input_parameter< int >::type K(KSEXP);
-    rcpp_result_gen = Rcpp::wrap(MultinomialRegressionAlgo(X_M, Y_EXT, K));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP _rcpp_module_boot_distribution();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_pack_LogisticMulti", (DL_FUNC) &_pack_LogisticMulti, 2},
-    {"_pack_MultinomialRegressionAlgo", (DL_FUNC) &_pack_MultinomialRegressionAlgo, 3},
     {"_rcpp_module_boot_distribution", (DL_FUNC) &_rcpp_module_boot_distribution, 0},
     {NULL, NULL, 0}
 };

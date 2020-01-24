@@ -1,4 +1,8 @@
-Rcpp::loadModule("distribution", TRUE)
-# Rcpp::loadModule("fishder", TRUE)
-# loadModule("BASEMODULE", TRUE)
-# loadModule("export_module_heritage", TRUE)
+## usethis namespace: start
+#' @export distribution
+#' @import Rcpp
+#' @useDynLib pack, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
+## usethis namespace: end
+
+loadModule("distribution", TRUE)
