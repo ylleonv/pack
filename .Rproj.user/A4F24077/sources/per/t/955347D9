@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1579270106956.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "373948942",
+    "id" : "955347D9",
+    "lastKnownWriteTime" : 1579197417,
+    "last_content_update" : 1579197417,
+    "path" : "~/Desktop/pack/NAMESPACE",
+    "project_path" : "NAMESPACE",
+    "properties" : {
+        "cursorPosition" : "5,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : true,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_namespace"
+}

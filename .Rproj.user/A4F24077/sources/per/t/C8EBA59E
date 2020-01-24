@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1579197323314.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3402190755",
+    "id" : "C8EBA59E",
+    "lastKnownWriteTime" : 1579017681,
+    "last_content_update" : 1579017681,
+    "path" : "~/Desktop/pack/src/distribution.cpp",
+    "project_path" : "src/distribution.cpp",
+    "properties" : {
+        "cursorPosition" : "196,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled2"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}

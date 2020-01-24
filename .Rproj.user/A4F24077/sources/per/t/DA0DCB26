@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1579196585930.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2983589900",
+    "id" : "DA0DCB26",
+    "lastKnownWriteTime" : 1579259875,
+    "last_content_update" : 1579259875596,
+    "path" : "~/Desktop/pack/src/glue.cpp",
+    "project_path" : "src/glue.cpp",
+    "properties" : {
+        "cursorPosition" : "52,3",
+        "scrollLine" : "0",
+        "tempName" : "Untitled3"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}

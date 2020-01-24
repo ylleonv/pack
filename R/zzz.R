@@ -1,8 +1,10 @@
 ## usethis namespace: start
 #' @import Rcpp
+#' @export FisherScoring
 #' @useDynLib pack, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
 
-# loadModule("distribution", TRUE)
+loadModule("exportmod", TRUE)
+loadModule("exportmoddev", TRUE)
 loadModule("fishder", TRUE)

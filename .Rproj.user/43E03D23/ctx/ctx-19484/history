@@ -1,0 +1,512 @@
+Y_M_i <- Y_EXT[((i*Q)+1):(Q*(i+1))]
+pi = logit_model(X_M_i,BETA)
+Cov_i <- diag(as.vector(pi)) - (as.matrix(pi) %*% t(as.matrix(pi)))
+Score_i_2 <- t(X_M_i) %*% (Y_M_i - pi)
+Score_i <- Score_i + Score_i_2
+F_i_2 <- (t(X_M_i) %*% Cov_i) %*% (X_M_i)
+F_i <- F_i + F_i_2
+}
+BETA = BETA + (solve(F_i) %*% Score_i)
+print(BETA)
+}
+multinom0 <- multinom(ill ~ gender + university, data=data2)
+multinom0
+data2$ill = relevel(data2$ill, ref = "2")
+multinom0 <- multinom(ill ~ gender + university, data=data2)
+multinom0
+BETA
+devtools::load_all(".")
+library(dplyr); library(tidyr); library(nnet); library(varhandle);
+library(catdata); library(magic)
+# DATA
+{
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+}
+# head(data2); summary(data2)
+X <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X)), X)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X)-1
+N = nrow(data2)
+Y_EXT <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT[,-ncol(Y_EXT)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+%>%
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+library(pack)
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+library(pack)
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+dim(X_EXT)
+dim(X_EXT)
+dim(Y_EXT)
+Y_EXT <- as.vector(t((Y_EXT)))
+Y_EXT <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT[,-ncol(Y_EXT)]
+Y_EXT <- as.vector(t((Y_EXT)))
+dim(Y_EXT)
+length(Y_EXT)
+dim(X)
+library(pack)
+# DATA
+{
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+}
+# head(data2); summary(data2)
+X <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X)), X)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X)-1
+N = nrow(data2)
+Y_EXT <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT[,-ncol(Y_EXT)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
+library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
+# DATA
+{
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+}
+# head(data2); summary(data2)
+X <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X)), X)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X)-1
+N = nrow(data2)
+Y_EXT <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT[,-ncol(Y_EXT)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+X_EXT
+ReferenceF
+dist3 <- new(ReferenceF)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+data2$ill = relevel(data2$ill, ref = "2")
+(multinom0 <- multinom(ill ~ gender + university, data=data2))
+marital.nz
+vignette("multinomial-party1")
+vignette("multinomial-party2")
+vignette("multinomial-travel")
+travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
+library(VGAM)
+travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
+data(ModeChoice, package="Ecdat")
+travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
+head(ModeChoice)
+head(ModeChoice); summary(ModeChoice)
+rownames(ModeChoice)
+head(ModeChoice); summary(ModeChoice)
+travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
+travelmode
+ModeChoice$mode
+travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
+head(ModeChoice); summary(ModeChoice)
+travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
+colnames(travelmode) <- c("air","train","bus","car")
+ModeChoice$hinc
+matrix(ModeChoice$hinc, byrow = T, ncol = 4)
+# Aca estan cada 4 la eleccion, asì lo necesito en mi modelo
+head(ModeChoice); summary(ModeChoice)
+travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
+colnames(travelmode) <- c("air","train","bus","car")
+travelhinc <- matrix(ModeChoice$hinc, byrow = T, ncol = 4)
+travelhinc <- travelhinc[,1]
+travelhinc
+travelhinc <- travelhinc[,1]
+travelinvt <- matrix(ModeChoice$invt, byrow = T, ncol = 4)
+colnames(travelinvt) <- c("invtair","invttrain","invtbus","invtcar")
+travelgc <- matrix(ModeChoice$gc, byrow = T, ncol = 4)
+colnames(travelgc) <- c("gcair","gctrain","gcbus","gccar")
+travelinvt <- sweep(travelinvt[,-1], 1, travelinvt[,1])
+travelgc <- sweep(travelgc[,-1], 1, travelgc[,1])
+Invt <- travelinvt[,1]
+Gc <- travelgc[,1]
+traveldat <- cbind(travelhinc, travelinvt, Invt, travelgc, Gc)
+traveldat <- as.data.frame(traveldat)
+head(traveldat)
+X_EXT
+head(traveldat)
+head(travelmode)
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+head(data2); summary(data2)
+X <- data2[,c("gender","university")]
+X
+Y_EXT <- to.dummy(data2$ill, "category")
+Y_EXT
+vglm(Y_EXT ~ . data = X_EXT, multinomial())
+vglm(Y_EXT ~ . , data = X_EXT, multinomial())
+head(travelmode)
+vglm(Y_EXT ~ . , data = as.data.frame(X_EXT), multinomial())
+dim(Y_EXT)
+dim(X_EXT)
+X <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X)), X)
+vglm(Y_EXT ~ . , data = as.data.frame(X), multinomial())
+dim(X)
+dim(Y_EXT)
+dim(X)
+head(X)
+X <- data2[,c("gender","university")]
+vglm(Y_EXT ~ . , data = as.data.frame(X), multinomial())
+(multinom0 <- multinom(ill ~ gender + university, data=data2))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial()))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 2))))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 2)))
+X_1 <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X_1)), X_1)
+Y_EXT_1 <- to.dummy(data2$ill, "category")
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 2)))
+data2$ill = relevel(data2$ill, ref = "2")
+(multinom0 <- multinom(ill ~ gender + university, data=data2))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 1)))
+vignette("ordinal-knee1")
+library(pack)
+devtools::load_all(".")
+data2$ill = relevel(data2$ill, ref = "2")
+(multinom0 <- multinom(ill ~ gender + university, data=data2))
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+X_1 <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X_1)), X_1)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X_1)
+N = nrow(data2)
+Y_EXT_1 <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT_1[,-ncol(Y_EXT_1)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+# DATA
+{
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+}
+head(data2); summary(data2)
+X_1 <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X_1)), X_1)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X_1)
+N = nrow(data2)
+Y_EXT_1 <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT_1[,-ncol(Y_EXT_1)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+data2$ill = relevel(data2$ill, ref = "2")
+(multinom0 <- multinom(ill ~ gender + university, data=data2))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), cumulative(link = "logit")))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 1)))
+# DATA
+{
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+}
+head(data2); summary(data2)
+X_1 <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X_1)), X_1)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X_1)
+N = nrow(data2)
+Y_EXT_1 <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT_1[,-ncol(Y_EXT_1)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 1)))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial()))
+library(VGAM)
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 1)))
+# DATA
+{
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+}
+head(data2); summary(data2)
+X_1 <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X_1)), X_1)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X_1)
+N = nrow(data2)
+Y_EXT_1 <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT_1[,-ncol(Y_EXT_1)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+data2$ill = relevel(data2$ill, ref = "2")
+(multinom0 <- multinom(ill ~ gender + university, data=data2))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 1)))
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), cumulative(link = "logit")))
+X_1
+as.data.frame(X_1)
+library(VGAM)
+data(ModeChoice, package="Ecdat")
+# Aca estan cada 4 la eleccion, asì lo necesito en mi modelo
+head(ModeChoice); summary(ModeChoice)
+(vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 1)))
+Y_EXT_1
+(multinom0 <- multinom(ill ~ gender + university, data=data2))
+CumulativeF
+dist3 <- new(CumulativeF)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+CumulativeF
+dist3 <- new(CumulativeF)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+library(pack)
+CumulativeF
+dist3 <- new(CumulativeF)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(pack)
+devtools::load_all(".")
+CumulativeF
+dist3 <- new(CumulativeF)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+K
+P
+N
+Q
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+CumulativeF
+dist3 <- new(CumulativeF)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+CumulativeF
+dist3 <- new(CumulativeF)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+Y_EXT
+X_EXT
+devtools::load_all(".")
+CumulativeF
+dist3 <- new(CumulativeF)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+dist4 <- new(CumulativeF)
+dist4$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+CumulativeF
+dist4 <- new(CumulativeF)
+dist4$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+dist3 <- new(CumulativeF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+dist3$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+devtools::load_all(".")
+library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
+library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
+# # DATA
+{
+# Libraries
+library(dobson)
+# Data
+beetle
+i=1
+beetle_ext <- data.frame(x = as.matrix(rep(beetle[i,1],beetle[i,2])), y= c(rep(1,beetle[i,3]), rep(0,beetle[i,2]-beetle[i,3]) ))
+for (i in 2:nrow(beetle)) {
+beetle_ext <- rbind(beetle_ext,data.frame(x = as.matrix(rep(beetle[i,1],beetle[i,2])), y= c(rep(1,beetle[i,3]), rep(0,beetle[i,2]-beetle[i,3]))))
+}
+beetle_ext <- as.data.frame(beetle_ext)
+names(beetle_ext) <- c("x", "y")
+head(beetle_ext)
+# Matrix and vectors
+X = as.matrix(data.frame(x0 = as.vector(rep(1,nrow(beetle_ext))), x1 = as.vector(unlist(as.vector(beetle_ext$x)))))
+Y = beetle_ext$y
+Y = matrix(Y)
+beta = as.matrix(rep(0,2))
+mu = as.matrix(X)%*%beta
+}
+{
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+attach(addiction)
+ill <- as.factor(ill)
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university")]
+data1 <- data1[order(data1[,c("ill")]),]
+data1 <- data1[order(data1[,c("gender")]),]
+data1 <- data1[order(data1[,c("university")]),]
+data2 <- na.omit(data1)
+}
+head(data2); summary(data2)
+X_1 <- data2[,c("gender","university")]
+X <- cbind("inter" = rep(1, nrow(X_1)), X_1)
+K = length(unique(data2$ill))
+Q = K-1
+P = ncol(X_1)
+N = nrow(data2)
+Y_EXT_1 <- to.dummy(data2$ill, "category")
+Y_EXT <- Y_EXT_1[,-ncol(Y_EXT_1)]
+Y_EXT <- as.vector(t((Y_EXT)))
+X_EXT <- kronecker(as.matrix(X), diag(Q))
+CumulativeF
+dist4 <- new(CumulativeF)
+dist4$GLMcum(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+ReferenceF
+dist3 <- new(ReferenceF)
+dist3$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q)
+library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
+library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
+library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
+library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
+library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
+install.packages("varhandle")
+library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
+library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)

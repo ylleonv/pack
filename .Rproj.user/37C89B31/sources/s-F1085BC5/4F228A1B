@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1579775564329.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4F228A1B",
+    "lastKnownWriteTime" : 1579865489,
+    "last_content_update" : 1579865489831,
+    "path" : "~/Desktop/pack/src/fisher.cpp",
+    "project_path" : "src/fisher.cpp",
+    "properties" : {
+        "cursorPosition" : "17,23",
+        "scrollLine" : "12"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}

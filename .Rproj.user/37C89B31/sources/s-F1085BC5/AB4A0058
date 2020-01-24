@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1579775918988.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "AB4A0058",
+    "lastKnownWriteTime" : 1579540350,
+    "last_content_update" : 1579540350,
+    "path" : "~/Desktop/pack/src/distribution.h",
+    "project_path" : "src/distribution.h",
+    "properties" : {
+        "cursorPosition" : "71,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "h"
+}

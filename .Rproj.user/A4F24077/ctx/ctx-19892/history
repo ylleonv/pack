@@ -1,0 +1,455 @@
+devtools::load_all(".")
+# Using modules
+# We need to tell R that we want to use a C++11 compiler
+Sys.setenv("PKG_CXXFLAGS"="-std=c++11")
+pkgbuild::compile_dll()
+library(pack)
+stud <- new(Student, name = "Ben", age = 26, male = T)
+stud <- new(distribution)
+stud <- new(Student, name = "Ben", age = 26, male = T)
+str(stud)
+stud$LikesBlue()
+getLoadedDLLs()
+# Using modules
+# We need to tell R that we want to use a C++11 compiler
+Sys.setenv("PKG_CXXFLAGS"="-std=c++11")
+pkgbuild::compile_dll()
+library(devtools)
+library(tidyverse)
+library(fs)
+library(Rcpp)
+library(pack)
+library(pack)
+library(pack)
+devtools::load_all(".")
+distribution
+dist10 <- new(distribution, vector = (c(1,2,8,9,5,5,4,8,8)))
+Logistic
+dist1 <- new(Logistic, vector = c(1,2,8,9,5,5,4,8,8))
+dist1$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+devtools::load_all(".")
+devtools::load_all(".")
+distribution
+dist10 <- new(distribution, vector = (c(1,2,8,9,5,5,4,8,8)))
+Logistic
+dist1 <- new(Logistic, vector = c(1,2,8,9,5,5,4,8,8))
+dist1 <- new(Logistic)
+dist1
+dist1$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist10 <- new(distribution))
+dist10 <- new(distribution)
+dist3 <- new(FisherScoring, vector = c(1,2,8,9,5,5,4,8,8))
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$VarianceBinomial(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1,2,8,9,5,5,4,8,8))
+library(pack)
+distribution
+library(pack)
+dist10 <- new(distribution)
+Logistic
+Logistic
+devtools::load_all(".")
+Logistic
+dist1 <- new(Logistic)
+dist1$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+Probit
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1,2,8,9,5,5,4,8,8))
+dist1$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist1 <- new(Logistic)
+devtools::load_all(".")
+library(pack)
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1))
+library(pack)
+devtools::load_all(".")
+distribution
+dist10 <- new(distribution)
+Logistic
+dist1 <- new(Logistic)
+dist1$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1))
+dist3$VarianceBinomial(vector = c(1,2,5))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1,2,5))
+devtools::load_all(".")
+library(pack)
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1,2,5))
+devtools::load_all(".")
+FisherScoring
+library(pack)
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1,2,5))
+dist3$VarianceBinomial(vector = c(1,2,5,5,8,7,))
+dist3$VarianceBinomial(vector = c(1,2,5,5,8,7,0.2))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vector = c(1,2,5,5,8,7,0.2))
+dist3$VarianceBinomial(c(1,2,5,5,8,7,0.2))
+dist3$VarianceBinomial(c(1,2,5,5,8,7,0.2))
+dist2 <- new(Probit, vector = c(1,2,8,9,5,5,4,8,8))
+dist2$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist1 <- new(Logistic)
+dist1$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+FisherScoring
+Logistic
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(c(1,2,5,5,8,7,0.2))
+dist3$VarianceBinomial(vectordis = c(1,2,5,5,8,7,0.2))
+dist3$VarianceBinomial(vectordis = "s")
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(vectordis = c(1,2,5,5,8,7,0.2))
+devtools::load_all(".")
+library(pack)
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+FisherScoring
+dist3$VarianceBinomial(vectordis = c(1,2,5,5,8,7,0.2))
+dist1 <- new(Logistic)
+dist1$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+FisherScoring
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+Probit
+dist2 <- new(Probit, vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist2 <- new(Probit)
+dist2$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+devtools::load_all(".")
+library(pack)
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist2 <- new(Probit)
+dist2$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+devtools::load_all(".")
+library(pack)
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+devtools::load_all(".")
+library(pack)
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+library(pack)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10))
+FisherScoring
+library(pack)
+FisherScoring
+devtools::load_all(".")
+FisherScoring
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10), X_M  = c(1,2,8,9,5,5,4,8,8,9,5,10), Y_M = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+c(1,2,8,9,5,5,4,8,8,9,5,10),
+c(1,2,8,9,5,5,4,8,8,9,5,10))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = c(1,2,8,9,5,5,4,8,8,9,5,10),
+Y_M = c(1,2,8,9,5,5,4,8,8,9,5,10))
+c(1,2,8,9,5,5,4,8,8,9,5,10)
+matrix(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+FisherScoring
+devtools::load_all(".")
+dist3 <- new(FisherScoring)
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+devtools::load_all(".")
+library(pack)
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+# Using modules
+# We need to tell R that we want to use a C++11 compiler
+Sys.setenv("PKG_CXXFLAGS"="-std=c++11")
+pkgbuild::compile_dll()
+library(pack)
+library(pack)
+library(pack)
+library(pack)
+library(pack)
+devtools::load_all(".")
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+devtools::load_all(".")
+dist1 <- new(Logistic)
+dist1$InverseLinkCumulativeFunction(c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+devtools::load_all(".")
+library(pack)
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+devtools::load_all(".")
+RcppArmadillo.package.skeleton()
+library(devtools)
+library(tidyverse)
+library(fs)
+library(Rcpp)
+library(RcppArmadillo)
+library(pack)
+library(Rcpp)
+library(RcppArmadillo)
+library(fs)
+library(devtools)
+library(tidyverse)
+library(pack)
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+library(pack)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+library(pack)
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+library(pack)
+devtools::load_all(".")
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+library(pack)
+library(pack)
+library(pack)
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+library(pack)
+)
+matrix(c(1,2,8,9,5,5,4,8,8,9,5,10))
+matrix(c(1,2,8,9,5,5,4,8,8,9,5,10),
+c(1,2,8,9,5,5,4,8,8,9,5,10))
+as.matrix(c(1,2,8,9,5,5,4,8,8,9,5,10),
+c(1,2,8,9,5,5,4,8,8,9,5,10))
+matrix(x = c(1,2,8,9,5,5,4,8,8,9,5,10),
+x1 = c(1,2,8,9,5,5,4,8,8,9,5,10))
+data.frame(x = c(1,2,8,9,5,5,4,8,8,9,5,10),
+x1 = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = data.frame(x = c(1,2,8,9,5,5,4,8,8,9,5,10),
+x1 = c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+dist3 <- new(FisherScoring)
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = data.frame(x = c(1,2,8,9,5,5,4,8,8,9,5,10),
+x1 = c(1,2,8,9,5,5,4,8,8,9,5,10)),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+a1 = data.frame(x = c(1,2,8,9,5,5,4,8,8,9,5,10),
+x1 = c(1,2,8,9,5,5,4,8,8,9,5,10))
+as.matrix(a1)
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = as.matrix(a1),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+dist3 <- new(FisherScoring)
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = as.matrix(a1),
+Y_M = matrix(c(1,2,8,9,5,5,4,8,8,9,5,10)))
+matrix(1:9, nrow = 3, ncol = 3)
+dist3 <- new(FisherScoring)
+dist3$VarianceBinomial(c(1,2,8,9,5,5,4,8,8,9,5,10),
+X_M  = matrix(1:9, nrow = 3, ncol = 3),
+Y_M = matrix(c(1,2,8)))
+dist3$VarianceBinomial(c(1,2,8),
+X_M  = matrix(1:9, nrow = 3, ncol = 3),
+Y_M = matrix(c(1,2,8)))
+library(pack)
+devtools::load_all(".")
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(vectordis = c(1,2,8),
+X_M  = matrix(1:9, nrow = 3, ncol = 3),
+Y_M = matrix(c(1,2,8)))
+devtools::load_all(".")
+library(pack)
+dist3 <- new(FisherScoring)
+dist3$InverseLinkCumulativeFunction(vector = c(1,2,8,9,5,5,4,8,8,9,5,10))
+dist3$VarianceBinomial(vectordis = c(1,2,8),
+X_M  = matrix(1:9, nrow = 3, ncol = 3),
+Y_M = matrix(c(1,2,8)))
+library(pack)
+devtools::load_all(".")
+FisherScoring
+dist3 <- new(FisherScoring)
+dist3$VarianceBinomial(vectordis = c(1,2,8),
+X_M  = matrix(1:9, nrow = 3, ncol = 3),
+Y_M = matrix(c(1,2,8)))
+library(pack)
+devtools::load_all(".")

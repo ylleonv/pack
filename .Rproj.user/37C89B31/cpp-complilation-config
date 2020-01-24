@@ -1,0 +1,24 @@
+{
+    "args" : [
+        "-I/usr/lib/llvm-6.0/lib/clang/6.0.0/include",
+        "-I/usr/bin/../lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0",
+        "-I/usr/bin/../lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/x86_64-linux-gnu/c++/7.4.0",
+        "-I/usr/bin/../lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/backward",
+        "-I/usr/include/clang/6.0.0/include",
+        "-I/usr/local/include",
+        "-I/usr/include/x86_64-linux-gnu",
+        "-I/usr/include",
+        "-I/home/leonvelasco/R/x86_64-pc-linux-gnu-library/3.4/Rcpp/include",
+        "-I/home/leonvelasco/R/x86_64-pc-linux-gnu-library/3.4/RcppArmadillo/include",
+        "-I/home/leonvelasco/R/x86_64-pc-linux-gnu-library/3.4/RcppEigen/include",
+        "-I/usr/share/R/include",
+        "-DNDEBUG",
+        "-fpic",
+        "-fdebug-prefix-map=/build/r-base-AitvI6/r-base-3.4.4=.",
+        "-fstack-protector-strong",
+        "-D_FORTIFY_SOURCE=2"
+    ],
+    "hash" : "1579516215",
+    "is_cpp" : true,
+    "pch" : "Rcpp"
+}

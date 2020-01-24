@@ -187,3 +187,22 @@ arma::vec Gompertz::InverseLinkDensityFunction(arma::vec vector ){
   return vector;
 }
 
+RCPP_MODULE(exportmod){
+  using namespace Rcpp ;
+  class_<distribution>("distribution")
+    .constructor()
+  ;
+}
+
+RCPP_MODULE(exportmoddev){
+  using namespace Rcpp ;
+  class_<distribution>("distribution")
+    .constructor()
+  ;
+  class_<Logistic>("Logistic")
+    .derives<distribution>("distribution")
+    .constructor()
+    .method( "InverseLinkCumulativeFunction", &Logistic::InverseLinkCumulativeFunction )
+  ;
+}
+
