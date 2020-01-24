@@ -1,6 +1,10 @@
 #ifndef DISTRIBUTION_H
 #define DISTRIBUTION_H
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a2c45f04bfe1c4bc8eb9be0778af64684ad35010
 #include <RcppArmadillo.h>
 #include <RcppEigen.h>
 
