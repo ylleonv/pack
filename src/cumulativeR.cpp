@@ -1,4 +1,3 @@
-#include "distribution.h"
 #include "cumulativeR.h"
 using namespace std;
 using namespace Rcpp ;
@@ -118,8 +117,6 @@ Eigen::MatrixXd CumulativeR::GLMcum(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT
       X_M_i = X_EXT.block(i*Q , 0 , Q , X_EXT.cols());
       Y_M_i = Y_EXT.segment(i*Q ,Q);
       eta = X_M_i * BETA;
-
-      // pi = CumulativeR::inverse_logistic(eta);
 
       if(link == "logistic"){
         pi = CumulativeR::inverse_logistic(eta);
