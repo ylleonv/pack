@@ -1,6 +1,5 @@
 #ifndef REFERENCEF_H_
 #define REFERENCEF_H_
-#include <RcppArmadillo.h>
 #include "distribution.h"
 
 class ReferenceF : public Logistic, Probit, Cauchit, Student, Gumbel, Gompertz{
@@ -16,6 +15,8 @@ public:
 
   virtual Eigen::VectorXd inverse_probit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_probit(const Eigen::VectorXd& eta) const ;
+
+  Eigen::MatrixXd lnatural(Eigen::VectorXd vector) ;
 
   Eigen::MatrixXd GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link);
 

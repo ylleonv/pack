@@ -3,19 +3,14 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 #include "distribution.h"
-#include <iostream>
 #include <boost/math/distributions/logistic.hpp>
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/distributions/cauchy.hpp>
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/students_t.hpp>
+
 using namespace boost::math;
 using namespace std;
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
-#include <RcppArmadillo.h>
-#include <RcppEigen.h>
-
 using namespace Rcpp ;
 
 distribution::distribution(void) {
@@ -47,29 +42,27 @@ Probit::Probit(void) {
 
 
 arma::vec Logistic::InverseLinkCumulativeFunction(arma::vec vector){
-  logistic_distribution<> myLogistic1(0., 1.);
+  boost::math::logistic dist(0., 1.);
   for (int i = 0; i<=vector.size()-1; i++)
-    vector[i] = cdf(myLogistic1, vector[i]);
+    vector[i] = boost::math::cdf(dist, vector(i));
   return vector;
 }
 
 arma::vec Logistic::InverseLinkDensityFunction(arma::vec vector){
-  logistic_distribution<> myLogistic1(0., 1.);
+  boost::math::logistic dist(0., 1.);
   for (int i = 0; i<=vector.size()-1; i++)
-    vector[i] = pdf(myLogistic1, vector[i]);
+    vector[i] = boost::math::pdf(dist, vector(i));
   return vector;
 }
 
 // For constant values
 double Logistic::cdf_logit(const double& value) const
 {
-  logistic_distribution<> myLogistic1(0., 1.);
-  return cdf(myLogistic1, value);
+  boost::math::logistic dist(0., 1.);
+  return boost::math::cdf(dist, value);
 }
 double Logistic::pdf_logit(const double& value) const
 {
-  // logistic_distribution<> myLogistic1(0., 1.);
-  // return pdf(myLogistic1, value);
   boost::math::logistic dist(0., 1.);
   return boost::math::pdf(dist, value);
 }

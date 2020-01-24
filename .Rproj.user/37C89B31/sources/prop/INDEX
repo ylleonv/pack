@@ -8,6 +8,7 @@
 ~%2FDesktop%2Fpack%2FR%2Fzzz.R="1977FA1D"
 ~%2FDesktop%2Fpack%2Fsrc%2FRcppExports.cpp="5667591B"
 ~%2FDesktop%2Fpack%2Fsrc%2FcumulativeR.cpp="F54B2651"
+~%2FDesktop%2Fpack%2Fsrc%2FcumulativeR.h="41F8F497"
 ~%2FDesktop%2Fpack%2Fsrc%2Fdistribution.cpp="50F51CDA"
 ~%2FDesktop%2Fpack%2Fsrc%2Fdistribution.h="3B9AF71A"
 ~%2FDesktop%2Fpack%2Fsrc%2Ffisher.cpp="1B4027E8"
@@ -20,4 +21,5 @@
 ~%2FDesktop%2Fpack%2Fsrc%2FsequentialR.cpp="D4016DA7"
 ~%2FDesktop%2Ftry_pack_v1.R="F195F903"
 ~%2FDownloads%2F0_Preliminary.R="9E6594F9"
+~%2FR%2Fx86_64-pc-linux-gnu-library%2F3.4%2FBH%2Finclude%2Fboost%2Fmath%2Fdistributions%2Flogistic.hpp="C6ABDA02"
 ~%2FR%2Fx86_64-pc-linux-gnu-library%2F3.4%2FRcpp%2Finclude%2FRcpp.h="1AAE1220"

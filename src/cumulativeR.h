@@ -1,8 +1,6 @@
 #ifndef CUMULATIVER_H_
 #define CUMULATIVER_H_
-#include <RcppArmadillo.h>
 #include "distribution.h"
-#include <boost/math/distributions/logistic.hpp>
 
 class CumulativeR : public Logistic, Probit, Cauchit{
 public:

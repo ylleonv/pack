@@ -1,16 +1,7 @@
-#include <iostream>
 #include "distribution.h"
 #include "cumulativeR.h"
 using namespace std;
 using namespace Rcpp ;
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
-#include <RcppArmadillo.h>
-#include <RcppEigen.h>
-#include <boost/math/distributions/logistic.hpp>
-
-// [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::depends(RcppArmadillo)]]
 
 CumulativeR::CumulativeR(void) {
   Rcout << "CumulativeR is being created" << endl;
@@ -71,13 +62,6 @@ Eigen::MatrixXd CumulativeR::inverse_derivative_cauchit(const Eigen::VectorXd& e
   for(size_t j=0; j<eta.rows(); ++j)
   { F(j,j) = Cauchit::cdf_cauchit( eta(j) ); }
   return (F * R);
-}
-
-Eigen::VectorXd InverseLinkDensityFunction1(Eigen::VectorXd vector){
-  boost::math::logistic dist(0., 1.);
-  for (int i = 0; i<=vector.size()-1; i++)
-    vector[i] = boost::math::pdf(dist, vector[i]);
-  return vector;
 }
 
 // Eigen::VectorXd exponential(Eigen::VectorXd vector){
@@ -174,6 +158,13 @@ Eigen::MatrixXd CumulativeR::GLMcum(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT
   return BETA;
 }
 
+
+RCPP_MODULE(cumulativemodule){
+  Rcpp::class_<CumulativeR>("CumulativeR")
+  .constructor()
+  .method( "GLMcum", &CumulativeR::GLMcum )
+  ;
+}
 
 
 

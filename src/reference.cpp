@@ -1,16 +1,7 @@
-#include <iostream>
 #include "distribution.h"
 #include "reference.h"
 using namespace std;
 using namespace Rcpp ;
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
-#include <RcppArmadillo.h>
-#include <RcppEigen.h>
-#include <boost/math/distributions/logistic.hpp>
-
-// [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::depends(RcppArmadillo)]]
 
 ReferenceF::ReferenceF(void) {
   Rcout << "Reference is being created" << endl;
@@ -23,11 +14,11 @@ Eigen::VectorXd ReferenceF::inverse_logistic(const Eigen::VectorXd& eta) const
   for(int j=0; j<eta.size(); ++j)
   {
     double number ;
-    number = cdf_logit(eta(j));
+    number = Logistic::cdf_logit(eta(j));
     pi1[j] = number / ( 1-number );
     norm1 += pi1[j];
   }
-  return in_open_corner(pi1/norm1);
+  return (pi1/norm1);
 }
 
 Eigen::MatrixXd ReferenceF::inverse_derivative_logistic(const Eigen::VectorXd& eta2) const
@@ -36,7 +27,7 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_logistic(const Eigen::VectorXd& e
   Eigen::MatrixXd D1 = Eigen::MatrixXd::Zero(pi1.rows(),pi1.rows());
   for(int j=0; j<eta2.rows(); ++j)
   { D1(j,j) = pdf_logit( eta2(j) ) /
-    (cdf_logit(eta2(j)) * (1-cdf_logit(eta2(j))));
+    (Logistic::cdf_logit(eta2(j)) * (1-Logistic::cdf_logit(eta2(j))));
   }
   return D1 * ( Eigen::MatrixXd(pi1.asDiagonal()) - pi1 * pi1.transpose().eval() );
 }
@@ -47,7 +38,7 @@ Eigen::VectorXd ReferenceF::inverse_probit(const Eigen::VectorXd& eta) const
   double norm1 = 1.;
   for(size_t j=0; j<eta.size(); ++j)
   {
-    pi[j] = cdf_probit( eta(j) ) / ( 1-cdf_probit( eta(j) ) );
+    pi[j] = Probit::cdf_probit( eta(j) ) / ( 1-Probit::cdf_probit( eta(j) ) );
     norm1 += pi[j];
   }
   return in_open_corner(pi/norm1);
@@ -59,16 +50,16 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_probit(const Eigen::VectorXd& eta
   Eigen::MatrixXd D = Eigen::MatrixXd::Zero(pi.rows(),pi.rows());
   for(size_t j=0; j<pi.rows(); ++j)
   { D(j,j) = pdf_probit( eta(j) ) /
-    ( std::max(1e-10, std::min(1-1e-6,cdf_probit(eta(j)))) *
-      std::max(1e-10, std::min(1-1e-6, 1-cdf_probit(eta(j)))) ); }
+    ( std::max(1e-10, std::min(1-1e-6,Probit::cdf_probit(eta(j)))) *
+      std::max(1e-10, std::min(1-1e-6, 1-Probit::cdf_probit(eta(j)))) ); }
   return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
 }
 
-Eigen::VectorXd lnatural(Eigen::VectorXd vector){
-  for (size_t i = 0; i<=vector.size(); i++)
-    vector[i] = log(vector[i]);
-  return vector;
-}
+// Eigen::VectorXd ReferenceF::lnatural(Eigen::VectorXd vector){
+//   for (size_t i = 0; i<=vector.size(); i++)
+//     vector[i] = std::log(vector[i]);
+//   return vector;
+// }
 
 
 Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link){
@@ -102,9 +93,9 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT,
     Eigen::MatrixXd W_in = D * Cov_i.inverse();
     Eigen::MatrixXd Score_i = X_M_i.transpose() * W_in * (Y_M_i - pi);
     Eigen::MatrixXd F_i = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
-    double llikelihood_prev = (Y_M_i.transpose()*lnatural(pi))  ;
-    double llikelihood3 = (1-(Y_M_i.sum()*std::log( 1 - pi.sum())));
-    llikelihood_prev =  llikelihood_prev + llikelihood3;
+    // double llikelihood_prev = (Y_M_i.transpose()*ReferenceF::lnatural(pi))  ;
+    // double llikelihood3 = (1-(Y_M_i.sum()*std::log( 1 - pi.sum())));
+    // llikelihood_prev =  llikelihood_prev + llikelihood3;
 
     for (i=1; i < N; i++){
       X_M_i = X_EXT.block(i*Q , 0 , Q , X_EXT.cols());
@@ -126,10 +117,10 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT,
       Score_i = Score_i + Score_i_2;
       Eigen::MatrixXd F_i_2 = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
       F_i = F_i + F_i_2;
-      double llikelihood1 = (Y_M_i.transpose()*lnatural(pi))  ;
-      llikelihood3 = (1-(Y_M_i.sum()*std::log( 1 - pi.sum())));
-      llikelihood1 =  llikelihood1 + llikelihood3;
-      llikelihood_prev = llikelihood_prev + llikelihood1;
+      // double llikelihood1 = (Y_M_i.transpose()*ReferenceF::lnatural(pi))  ;
+      // llikelihood3 = (1-(Y_M_i.sum()*std::log( 1 - pi.sum())));
+      // llikelihood1 =  llikelihood1 + llikelihood3;
+      // llikelihood_prev = llikelihood_prev + llikelihood1;
     }
     // Stop criteria Tutz
     Eigen::VectorXd beta_old = BETA;

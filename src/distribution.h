@@ -1,8 +1,6 @@
 #ifndef DISTRIBUTION_H
 #define DISTRIBUTION_H
 
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
 #include <RcppArmadillo.h>
 #include <RcppEigen.h>
 

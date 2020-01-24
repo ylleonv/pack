@@ -1,18 +1,7 @@
-#include <iostream>
-#include "distribution.h"
 #include "fisher.h"
-using namespace std;
-using namespace Rcpp ;
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
-#include <RcppArmadillo.h>
-#include <RcppEigen.h>
-
-// [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::depends(RcppArmadillo)]]
 
 FisherScoring::FisherScoring(void) {
-  Rcout << "FisherScoring is being created" << endl;
+  Rcpp::Rcout << "FisherScoring is being created" << std::endl;
 }
 
 arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
@@ -109,11 +98,11 @@ arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
     n_iter = n_iter + 1;
   }
 
-  Rcout << "Number of iterations" << endl;
-  Rcout << n_iter << endl;
+  Rcpp::Rcout << "Number of iterations" << std::endl;
+  Rcpp::Rcout << n_iter << std::endl;
 
-  Rcout << "Deviance" << endl;
-  Rcout << Deviance << endl;
+  Rcpp::Rcout << "Deviance" << std::endl;
+  Rcpp::Rcout << Deviance << std::endl;
 
   return beta;
 }

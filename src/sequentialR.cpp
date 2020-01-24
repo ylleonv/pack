@@ -1,12 +1,7 @@
-#include <iostream>
 #include "distribution.h"
 #include "sequentialR.h"
 using namespace std;
 using namespace Rcpp ;
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
-#include <RcppArmadillo.h>
-#include <RcppEigen.h>
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppArmadillo)]]
