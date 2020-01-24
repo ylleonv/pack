@@ -13,7 +13,7 @@ using namespace Rcpp ;
 // [[Rcpp::depends(RcppArmadillo)]]
 
 ReferenceF::ReferenceF(void) {
-  cout << "Reference is being created" << endl;
+  Rcout << "Reference is being created" << endl;
 }
 
 Eigen::VectorXd ReferenceF::inverse_logistic(const Eigen::VectorXd& eta) const
@@ -137,12 +137,12 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT,
     check_tutz = ((BETA - beta_old).norm())/(beta_old.norm());
     // ll_vector.resize(iteration);
     // ll_vector(iteration-1) = (double) llikelihood_prev;
-    // cout << "Log Likelihood" << endl;
-    // cout << ll_vector(iteration-1) << endl;
+    // Rcout << "Log Likelihood" << endl;
+    // Rcout << ll_vector(iteration-1) << endl;
     iteration = iteration + 1;
   }
-  cout << "Number of iterations" << endl;
-  cout << iteration-2 << endl;
+  Rcout << "Number of iterations" << endl;
+  Rcout << iteration-2 << endl;
   return BETA;
 }
 

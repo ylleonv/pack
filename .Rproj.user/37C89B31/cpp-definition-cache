@@ -137,7 +137,7 @@
                 "column" : 18,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 65,
+                "line" : 64,
                 "name" : "cdf_logit(const double &)",
                 "parent_name" : "Logistic",
                 "usr" : "c:@S@Logistic@F@cdf_logit#&1d#1"
@@ -146,7 +146,7 @@
                 "column" : 18,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 70,
+                "line" : 69,
                 "name" : "pdf_logit(const double &)",
                 "parent_name" : "Logistic",
                 "usr" : "c:@S@Logistic@F@pdf_logit#&1d#1"
@@ -155,7 +155,7 @@
                 "column" : 16,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 78,
+                "line" : 77,
                 "name" : "cdf_probit(const double &)",
                 "parent_name" : "Probit",
                 "usr" : "c:@S@Probit@F@cdf_probit#&1d#1"
@@ -164,7 +164,7 @@
                 "column" : 16,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 83,
+                "line" : 82,
                 "name" : "pdf_probit(const double &)",
                 "parent_name" : "Probit",
                 "usr" : "c:@S@Probit@F@pdf_probit#&1d#1"
@@ -173,7 +173,7 @@
                 "column" : 19,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 90,
+                "line" : 89,
                 "name" : "InverseLinkCumulativeFunction(arma::vec)",
                 "parent_name" : "Probit",
                 "usr" : "c:@S@Probit@F@InverseLinkCumulativeFunction#$@N@arma@S@Col>#d#"
@@ -182,7 +182,7 @@
                 "column" : 19,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 96,
+                "line" : 95,
                 "name" : "InverseLinkDensityFunction(arma::vec)",
                 "parent_name" : "Probit",
                 "usr" : "c:@S@Probit@F@InverseLinkDensityFunction#$@N@arma@S@Col>#d#"
@@ -191,7 +191,7 @@
                 "column" : 17,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 107,
+                "line" : 106,
                 "name" : "cdf_cauchit(const double &)",
                 "parent_name" : "Cauchit",
                 "usr" : "c:@S@Cauchit@F@cdf_cauchit#&1d#1"
@@ -200,7 +200,7 @@
                 "column" : 20,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 115,
+                "line" : 113,
                 "name" : "InverseLinkCumulativeFunction(arma::vec)",
                 "parent_name" : "Cauchit",
                 "usr" : "c:@S@Cauchit@F@InverseLinkCumulativeFunction#$@N@arma@S@Col>#d#"
@@ -209,7 +209,7 @@
                 "column" : 20,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 123,
+                "line" : 121,
                 "name" : "InverseLinkDensityFunction(arma::vec)",
                 "parent_name" : "Cauchit",
                 "usr" : "c:@S@Cauchit@F@InverseLinkDensityFunction#$@N@arma@S@Col>#d#"
@@ -218,7 +218,7 @@
                 "column" : 20,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 135,
+                "line" : 133,
                 "name" : "InverseLinkCumulativeFunction(arma::vec)",
                 "parent_name" : "Student",
                 "usr" : "c:@S@Student@F@InverseLinkCumulativeFunction#$@N@arma@S@Col>#d#"
@@ -227,7 +227,7 @@
                 "column" : 20,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 142,
+                "line" : 140,
                 "name" : "InverseLinkDensityFunction(arma::vec)",
                 "parent_name" : "Student",
                 "usr" : "c:@S@Student@F@InverseLinkDensityFunction#$@N@arma@S@Col>#d#"
@@ -236,7 +236,7 @@
                 "column" : 19,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 153,
+                "line" : 151,
                 "name" : "InverseLinkCumulativeFunction(arma::vec)",
                 "parent_name" : "Gumbel",
                 "usr" : "c:@S@Gumbel@F@InverseLinkCumulativeFunction#$@N@arma@S@Col>#d#"
@@ -245,7 +245,7 @@
                 "column" : 19,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 161,
+                "line" : 159,
                 "name" : "InverseLinkDensityFunction(arma::vec)",
                 "parent_name" : "Gumbel",
                 "usr" : "c:@S@Gumbel@F@InverseLinkDensityFunction#$@N@arma@S@Col>#d#"
@@ -254,7 +254,7 @@
                 "column" : 21,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 173,
+                "line" : 171,
                 "name" : "InverseLinkCumulativeFunction(arma::vec)",
                 "parent_name" : "Gompertz",
                 "usr" : "c:@S@Gompertz@F@InverseLinkCumulativeFunction#$@N@arma@S@Col>#d#"
@@ -263,14 +263,14 @@
                 "column" : 21,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 181,
+                "line" : 179,
                 "name" : "InverseLinkDensityFunction(arma::vec)",
                 "parent_name" : "Gompertz",
                 "usr" : "c:@S@Gompertz@F@InverseLinkDensityFunction#$@N@arma@S@Col>#d#"
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
-        "file_last_write" : 1579866794.000000
+        "file_last_write" : 1579878402.000000
     },
     {
         "definitions" : [
@@ -373,12 +373,6 @@
     },
     {
         "definitions" : [
-        ],
-        "file" : "/home/leonvelasco/Desktop/pack/src/glue.cpp",
-        "file_last_write" : 1579865489.000000
-    },
-    {
-        "definitions" : [
             {
                 "column" : 29,
                 "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
@@ -435,7 +429,7 @@
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
-        "file_last_write" : 1579260006.000000
+        "file_last_write" : 1579867449.000000
     },
     {
         "definitions" : [

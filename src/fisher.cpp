@@ -12,7 +12,7 @@ using namespace Rcpp ;
 // [[Rcpp::depends(RcppArmadillo)]]
 
 FisherScoring::FisherScoring(void) {
-  cout << "FisherScoring is being created" << endl;
+  Rcout << "FisherScoring is being created" << endl;
 }
 
 arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){

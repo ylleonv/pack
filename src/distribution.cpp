@@ -19,7 +19,7 @@ using namespace std;
 using namespace Rcpp ;
 
 distribution::distribution(void) {
-  cout << "Distribution is being created" << endl;
+  Rcout << "Distribution is being created" << endl;
 }
 
 Eigen::VectorXd Logistic::in_open_corner(const Eigen::VectorXd& p) const
@@ -38,11 +38,11 @@ Eigen::VectorXd Logistic::in_open_corner(const Eigen::VectorXd& p) const
 }
 
 Logistic::Logistic(void) {
-  cout << "Logistic is being created" << endl;
+  Rcout << "Logistic is being created" << endl;
 }
 
 Probit::Probit(void) {
-  cout << "Probit is being created" << endl;
+  Rcout << "Probit is being created" << endl;
 }
 
 
@@ -61,7 +61,6 @@ arma::vec Logistic::InverseLinkDensityFunction(arma::vec vector){
 }
 
 // For constant values
-
 double Logistic::cdf_logit(const double& value) const
 {
   logistic_distribution<> myLogistic1(0., 1.);
@@ -101,7 +100,7 @@ arma::vec Probit::InverseLinkDensityFunction(arma::vec vector ){
 }
 
 Cauchit::Cauchit(void) {
-  cout << "Cauchit is being created" << endl;
+  Rcout << "Cauchit is being created" << endl;
 }
 
 double Cauchit::cdf_cauchit(const double& value) const
@@ -111,7 +110,6 @@ double Cauchit::cdf_cauchit(const double& value) const
   boost::math::cauchy_distribution<> extreme_value(_location, _scale);
   return cdf(extreme_value, value);
 }
-
 arma::vec Cauchit::InverseLinkCumulativeFunction(arma::vec vector ){
   double _location = 0.0;
   double _scale =1.0;
@@ -130,7 +128,7 @@ arma::vec Cauchit::InverseLinkDensityFunction(arma::vec vector ){
 }
 
 Student::Student(void) {
-  cout << "Student is being created" << endl;
+  Rcout << "Student is being created" << endl;
 }
 arma::vec Student::InverseLinkCumulativeFunction(arma::vec vector ){
   double _degrees = 1.0;
@@ -148,7 +146,7 @@ arma::vec Student::InverseLinkDensityFunction(arma::vec vector ){
 }
 
 Gumbel::Gumbel(void) {
-  cout << "Gumbel is being created" << endl;
+  Rcout << "Gumbel is being created" << endl;
 }
 arma::vec Gumbel::InverseLinkCumulativeFunction(arma::vec vector ){
   double _location = 0.0;
@@ -168,7 +166,7 @@ arma::vec Gumbel::InverseLinkDensityFunction(arma::vec vector ){
 }
 
 Gompertz::Gompertz(void) {
-  cout << "Gompertz is being created" << endl;
+  Rcout << "Gompertz is being created" << endl;
 }
 arma::vec Gompertz::InverseLinkCumulativeFunction(arma::vec vector ){
   double _location = 0.0;

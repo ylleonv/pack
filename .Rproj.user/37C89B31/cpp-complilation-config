@@ -9,6 +9,7 @@
         "-I/usr/include/x86_64-linux-gnu",
         "-I/usr/include",
         "-I/home/leonvelasco/R/x86_64-pc-linux-gnu-library/3.4/Rcpp/include",
+        "-I/home/leonvelasco/R/x86_64-pc-linux-gnu-library/3.4/BH/include",
         "-I/home/leonvelasco/R/x86_64-pc-linux-gnu-library/3.4/RcppArmadillo/include",
         "-I/home/leonvelasco/R/x86_64-pc-linux-gnu-library/3.4/RcppEigen/include",
         "-I/usr/share/R/include",
@@ -18,7 +19,7 @@
         "-fstack-protector-strong",
         "-D_FORTIFY_SOURCE=2"
     ],
-    "hash" : "1579516215",
+    "hash" : "1579878431",
     "is_cpp" : true,
     "pch" : "Rcpp"
 }

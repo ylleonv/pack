@@ -13,7 +13,7 @@ using namespace Rcpp ;
 // [[Rcpp::depends(RcppArmadillo)]]
 
 CumulativeR::CumulativeR(void) {
-  cout << "CumulativeR is being created" << endl;
+  Rcout << "CumulativeR is being created" << endl;
 }
 
 Eigen::VectorXd CumulativeR::inverse_logistic(const Eigen::VectorXd& eta) const

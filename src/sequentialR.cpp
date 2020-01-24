@@ -12,7 +12,7 @@ using namespace Rcpp ;
 // [[Rcpp::depends(RcppArmadillo)]]
 
 SequentialR::SequentialR(void) {
-  cout << "SequentialR is being created" << endl;
+  Rcout << "SequentialR is being created" << endl;
 }
 
 Eigen::VectorXd SequentialR::inverse_logistic(const Eigen::VectorXd& eta) const
@@ -150,14 +150,14 @@ Eigen::MatrixXd SequentialR::GLMseq(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT
 
     BETA = BETA + (F_i.inverse() * Score_i);
 
-    //     cout << "ll" << endl;
-    //     cout << llikelihood1 << endl;
+    //     Rcout << "ll" << endl;
+    //     Rcout << llikelihood1 << endl;
 
-    // cout << "Beta" << endl;
-    // cout << BETA << endl;
+    // Rcout << "Beta" << endl;
+    // Rcout << BETA << endl;
   }
-  // cout << "ll" << endl;
-  // cout << llikelihood1 << endl;
+  // Rcout << "ll" << endl;
+  // Rcout << llikelihood1 << endl;
   return BETA;
 }
 
