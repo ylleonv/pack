@@ -1,5 +1,4 @@
 ## usethis namespace: start
-#' @export fishder
 #' @import Rcpp
 #' @useDynLib pack, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
