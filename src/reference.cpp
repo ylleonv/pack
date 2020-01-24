@@ -146,6 +146,12 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT,
   return BETA;
 }
 
+RCPP_MODULE(referencemodule){
+  Rcpp::class_<ReferenceF>("ReferenceF")
+  .constructor()
+  .method( "GLMref", &ReferenceF::GLMref )
+  ;
+}
 
 
 

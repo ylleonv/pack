@@ -11,11 +11,13 @@ using namespace Rcpp;
 RcppExport SEXP _rcpp_module_boot_exportmod();
 RcppExport SEXP _rcpp_module_boot_exportmoddev();
 RcppExport SEXP _rcpp_module_boot_fishder();
+RcppExport SEXP _rcpp_module_boot_referencemodule();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_exportmod", (DL_FUNC) &_rcpp_module_boot_exportmod, 0},
     {"_rcpp_module_boot_exportmoddev", (DL_FUNC) &_rcpp_module_boot_exportmoddev, 0},
     {"_rcpp_module_boot_fishder", (DL_FUNC) &_rcpp_module_boot_fishder, 0},
+    {"_rcpp_module_boot_referencemodule", (DL_FUNC) &_rcpp_module_boot_referencemodule, 0},
     {NULL, NULL, 0}
 };
 
