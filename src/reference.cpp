@@ -55,17 +55,16 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_probit(const Eigen::VectorXd& eta
   return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
 }
 
-// Eigen::VectorXd ReferenceF::lnatural(Eigen::VectorXd vector){
-//   for (size_t i = 0; i<=vector.size(); i++)
-//     vector[i] = std::log(vector[i]);
-//   return vector;
-// }
-
-
-Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link){
+Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link){
   // const int Q = K-1 ;
   // const int P = X_M.cols() -1 ;
   // const int N = X_M.n_cols ;
+  Eigen::VectorXd Ones = Eigen::VectorXd::Ones(X_M.rows());
+  Eigen::MatrixXd X_EXT(Ones.rows(), Ones.cols() + X_M.cols());
+  X_EXT << Ones, X_M;
+
+  X_EXT = kroneckerProduct(X_EXT,Eigen::MatrixXd::Identity(K-1,K-1)).eval();
+
   Eigen::MatrixXd BETA = Eigen::MatrixXd::Zero((P+1)*Q,1);
   int iteration = 1;
   double check_tutz = 1.0;
@@ -93,9 +92,8 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT,
     Eigen::MatrixXd W_in = D * Cov_i.inverse();
     Eigen::MatrixXd Score_i = X_M_i.transpose() * W_in * (Y_M_i - pi);
     Eigen::MatrixXd F_i = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
-    // double llikelihood_prev = (Y_M_i.transpose()*ReferenceF::lnatural(pi))  ;
-    // double llikelihood3 = (1-(Y_M_i.sum()*std::log( 1 - pi.sum())));
-    // llikelihood_prev =  llikelihood_prev + llikelihood3;
+
+    double LogLik = (Y_M_i.transpose().eval()*Eigen::VectorXd(pi.array().log())) + ( (1 - Y_M_i.sum()) * std::log(1 - pi.sum()) );
 
     for (i=1; i < N; i++){
       X_M_i = X_EXT.block(i*Q , 0 , Q , X_EXT.cols());
@@ -117,23 +115,18 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT,
       Score_i = Score_i + Score_i_2;
       Eigen::MatrixXd F_i_2 = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
       F_i = F_i + F_i_2;
-      // double llikelihood1 = (Y_M_i.transpose()*ReferenceF::lnatural(pi))  ;
-      // llikelihood3 = (1-(Y_M_i.sum()*std::log( 1 - pi.sum())));
-      // llikelihood1 =  llikelihood1 + llikelihood3;
-      // llikelihood_prev = llikelihood_prev + llikelihood1;
+      LogLik = LogLik + (Y_M_i.transpose().eval()*Eigen::VectorXd(pi.array().log())) + ( (1 - Y_M_i.sum()) * std::log(1 - pi.sum()) );
     }
     // Stop criteria Tutz
     Eigen::VectorXd beta_old = BETA;
     BETA = BETA + (F_i.inverse() * Score_i);
     check_tutz = ((BETA - beta_old).norm())/(beta_old.norm());
-    // ll_vector.resize(iteration);
-    // ll_vector(iteration-1) = (double) llikelihood_prev;
-    // Rcout << "Log Likelihood" << endl;
-    // Rcout << ll_vector(iteration-1) << endl;
+    Rcout << "Log Likelihood" << endl;
+    Rcout << LogLik << endl;
     iteration = iteration + 1;
   }
   Rcout << "Number of iterations" << endl;
-  Rcout << iteration-2 << endl;
+  Rcout << iteration << endl;
   return BETA;
 }
 

@@ -4,29 +4,26 @@ FisherScoring::FisherScoring(void) {
   Rcpp::Rcout << "FisherScoring is being created" << std::endl;
 }
 
-arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
-
+Eigen::MatrixXd FisherScoring::GLMm(Eigen::MatrixXd X_M, Eigen::VectorXd Y_M, std::string link){
   //    Create initial beta
-  const int N = X_M.n_rows ;
-  const int K = X_M.n_cols ;
-  arma::mat beta(K, 1);
-  beta.fill(0.0) ; // initialize betas to 0
+  const int N = X_M.rows() ;
+  const int K = X_M.cols() ;
+  // initialize betas to 0
+  Eigen::MatrixXd beta = Eigen::MatrixXd::Zero(K,1);
 
-  // logistic = false;
-  arma::vec Mu;
-  arma::mat D_M;
-  arma::mat Cov;
-  Eigen::MatrixXd eigen_B;
+  Eigen::VectorXd Mu;
+  Eigen::VectorXd D_M;
+  Eigen::VectorXd Deviance;
+  double LogLik;
+
   double check_tutz = 1.0;
   double tol = 0.001;
   int n_iter = -1;
 
-  arma::vec Deviance;
-
   //    algorithm
   while (check_tutz > tol){
     // Vector of probabilities:
-    arma::mat eta = X_M * beta;
+    Eigen::MatrixXd eta = X_M * beta;
     if(link == "logistic"){
       Mu = Logistic::InverseLinkCumulativeFunction(eta);
       D_M = Logistic::InverseLinkDensityFunction(eta);
@@ -49,61 +46,40 @@ arma::mat FisherScoring::GLMm(arma::mat X_M, arma::mat Y_M, std::string link){
 
 
     //  D
-    D_M = arma::diagmat(D_M);
+    Eigen::MatrixXd D_M1 = Eigen::MatrixXd(D_M.asDiagonal());
 
-    //  Covariance
-    Cov = diagvec(Mu*(1-Mu).t());
-    Cov = diagmat(Cov);
+    // Covariance
+    Eigen::VectorXd Ones = Eigen::VectorXd::Ones(Mu.rows());
+    Eigen::MatrixXd Covinv = ((Eigen::VectorXd(Mu.array()*(Ones-Mu).array())).asDiagonal()).inverse();
 
-    Eigen::MatrixXd CovEig = Eigen::Map<Eigen::MatrixXd>(Cov.memptr(),
-                                                         Cov.n_rows,
-                                                         Cov.n_cols);
-    CovEig = CovEig.inverse();
-    arma::mat Covinv = arma::mat(CovEig.data(), CovEig.rows(), CovEig.cols(),
-                                 false, false);
+    Eigen::MatrixXd Score = X_M.transpose() * (D_M1 * Covinv) *  (Y_M-Mu);
 
-    // First derivative - ScoreFunction:
-    arma::mat Score = X_M.t() * (D_M * Covinv) *  (Y_M-Mu);
-
-    //  W
-    arma::mat W_M = (D_M * Covinv) * D_M;
-
-    // Why this line does not work?
-    // arma::mat W_M = D_M * inv(diagmat(Cov)) * D_M;
-
-    // //   Second derivate - FisherInformation
-    arma::mat dffm;
-    dffm = -X_M.t() * (W_M * X_M) ;
-
-    eigen_B = Eigen::Map<Eigen::MatrixXd>(dffm.memptr(),
-                                          dffm.n_rows,
-                                          dffm.n_cols);
-    eigen_B = eigen_B.inverse();
-    dffm = arma::mat(eigen_B.data(), eigen_B.rows(), eigen_B.cols(),
-                     false, false);
+    // W
+    Eigen::MatrixXd W_M = (D_M1 * Covinv) * D_M1;
+    // Second derivate - FisherInformation
+    Eigen::MatrixXd dffm = (-X_M.transpose() * (W_M * X_M)).inverse() ;
 
     // Stop criteria Tutz
-    arma::vec beta_old = beta;
-    arma::vec beta_new = beta - (dffm * Score);
-    check_tutz = (arma::norm(beta_new - beta_old))/arma::norm(beta_old);
-    // cout << n_iter << endl;
-    // cout << check_tutz << endl;
+    Eigen::VectorXd beta_old = beta;
+    Eigen::VectorXd beta_new = beta - (dffm * Score);
+    check_tutz = ((beta_new - beta_old).norm())/(beta_old.norm());
+    // // Deviance for ungrouped -> bernulli
+    // // Deviance = -2*(Y_M.transpose()*log(Mu)) + ((1-Y_M.transpose())*log(1-Mu));
 
-    // Deviance for ungrouped -> bernulli
-    Deviance = -2*(Y_M.t()*log(Mu)) + ((1-Y_M.t())*log(1-Mu));
-
+    // LogLik
+    LogLik = (Y_M.transpose()*Eigen::VectorXd(Mu.array().log())) + ( ((Ones - Y_M).array() * ( (Ones - Mu).array()).log()).sum() );
     beta = beta_new;
-    // beta.print();
-
     n_iter = n_iter + 1;
   }
 
   Rcpp::Rcout << "Number of iterations" << std::endl;
   Rcpp::Rcout << n_iter << std::endl;
 
-  Rcpp::Rcout << "Deviance" << std::endl;
-  Rcpp::Rcout << Deviance << std::endl;
+  // Rcpp::Rcout << "Deviance" << std::endl;
+  // Rcpp::Rcout << Deviance << std::endl;
 
+  Rcpp::Rcout << "LogLik" << std::endl;
+  Rcpp::Rcout << LogLik << std::endl;
   return beta;
 }
 

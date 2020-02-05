@@ -14,8 +14,8 @@ public:
 class Logistic : virtual distribution{
 public:
   Eigen::VectorXd Quantile(Eigen::VectorXd vectordis1);
-  arma::vec InverseLinkCumulativeFunction(arma::vec vectordis);
-  arma::vec InverseLinkDensityFunction(arma::vec vectordis);
+  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
   virtual Eigen::VectorXd in_open_corner(const Eigen::VectorXd& p) const;
 
   virtual double cdf_logit(const double& value) const;
@@ -26,8 +26,8 @@ public:
 
 class Probit : public distribution{
 public:
-  arma::vec InverseLinkCumulativeFunction(arma::vec vectordis);
-  arma::vec InverseLinkDensityFunction(arma::vec vectordis);
+  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
 
   virtual double cdf_probit(const double& value) const;
   virtual double pdf_probit(const double& value) const;
@@ -37,8 +37,8 @@ public:
 
 class Cauchit : public distribution{
 public:
-  arma::vec InverseLinkCumulativeFunction(arma::vec vectordis);
-  arma::vec InverseLinkDensityFunction(arma::vec vectordis);
+  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
 
   virtual double cdf_cauchit(const double& value) const;
 
@@ -47,22 +47,22 @@ public:
 
 class Student : public distribution{
 public:
-  arma::vec InverseLinkCumulativeFunction(arma::vec vectordis);
-  arma::vec InverseLinkDensityFunction(arma::vec vectordis);
+  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
   Student();
 };
 
 class Gumbel : public distribution{
 public:
-  arma::vec InverseLinkCumulativeFunction(arma::vec vectordis);
-  arma::vec InverseLinkDensityFunction(arma::vec vectordis);
+  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
   Gumbel();
 };
 
 class Gompertz : public distribution{
 public:
-  arma::vec InverseLinkCumulativeFunction(arma::vec vectordis);
-  arma::vec InverseLinkDensityFunction(arma::vec vectordis);
+  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
   Gompertz();
 };
 

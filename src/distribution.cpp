@@ -41,17 +41,17 @@ Probit::Probit(void) {
 }
 
 
-arma::vec Logistic::InverseLinkCumulativeFunction(arma::vec vector){
+Eigen::VectorXd Logistic::InverseLinkCumulativeFunction(Eigen::VectorXd vector){
   boost::math::logistic dist(0., 1.);
-  for (int i = 0; i<=vector.size()-1; i++)
-    vector[i] = boost::math::cdf(dist, vector(i));
+  for (int i = 0; i<=vector.rows()-1; i++)
+    vector(i) = boost::math::cdf(dist, vector(i));
   return vector;
 }
 
-arma::vec Logistic::InverseLinkDensityFunction(arma::vec vector){
+Eigen::VectorXd Logistic::InverseLinkDensityFunction(Eigen::VectorXd vector){
   boost::math::logistic dist(0., 1.);
   for (int i = 0; i<=vector.size()-1; i++)
-    vector[i] = boost::math::pdf(dist, vector(i));
+    vector(i) = boost::math::pdf(dist, vector(i));
   return vector;
 }
 
@@ -79,15 +79,15 @@ double Probit::pdf_probit(const double& value) const
 }
 
 
-arma::vec Probit::InverseLinkCumulativeFunction(arma::vec vector ){
+Eigen::VectorXd Probit::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   boost::math::normal norm;
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = cdf(norm, vector(i));
   return vector;
 }
-arma::vec Probit::InverseLinkDensityFunction(arma::vec vector ){
+Eigen::VectorXd Probit::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   boost::math::normal norm;
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(norm, vector(i));
   return vector;
 }
@@ -103,19 +103,19 @@ double Cauchit::cdf_cauchit(const double& value) const
   boost::math::cauchy_distribution<> extreme_value(_location, _scale);
   return cdf(extreme_value, value);
 }
-arma::vec Cauchit::InverseLinkCumulativeFunction(arma::vec vector ){
+Eigen::VectorXd Cauchit::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
   double _scale =1.0;
   boost::math::cauchy_distribution<> extreme_value(_location, _scale);
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = cdf(extreme_value, vector(i));
   return vector;
 }
-arma::vec Cauchit::InverseLinkDensityFunction(arma::vec vector ){
+Eigen::VectorXd Cauchit::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
   double _scale =1.0;
   boost::math::cauchy_distribution<> extreme_value(_location, _scale);
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(extreme_value, vector(i));
   return vector;
 }
@@ -123,17 +123,17 @@ arma::vec Cauchit::InverseLinkDensityFunction(arma::vec vector ){
 Student::Student(void) {
   Rcout << "Student is being created" << endl;
 }
-arma::vec Student::InverseLinkCumulativeFunction(arma::vec vector ){
+Eigen::VectorXd Student::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _degrees = 1.0;
   boost::math::students_t_distribution<> student(_degrees);
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = cdf(student, vector(i));
   return vector;
 }
-arma::vec Student::InverseLinkDensityFunction(arma::vec vector ){
+Eigen::VectorXd Student::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   double _degrees = 1.0;
   boost::math::students_t_distribution<> student(_degrees);
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(student, vector(i));
   return vector;
 }
@@ -141,19 +141,19 @@ arma::vec Student::InverseLinkDensityFunction(arma::vec vector ){
 Gumbel::Gumbel(void) {
   Rcout << "Gumbel is being created" << endl;
 }
-arma::vec Gumbel::InverseLinkCumulativeFunction(arma::vec vector ){
+Eigen::VectorXd Gumbel::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
   double _scale =1.0;
   boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = cdf(extreme_value, vector(i));
   return vector;
 }
-arma::vec Gumbel::InverseLinkDensityFunction(arma::vec vector ){
+Eigen::VectorXd Gumbel::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
   double _scale =1.0;
   boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(extreme_value, vector(i));
   return vector;
 }
@@ -161,19 +161,19 @@ arma::vec Gumbel::InverseLinkDensityFunction(arma::vec vector ){
 Gompertz::Gompertz(void) {
   Rcout << "Gompertz is being created" << endl;
 }
-arma::vec Gompertz::InverseLinkCumulativeFunction(arma::vec vector ){
+Eigen::VectorXd Gompertz::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
   double _scale =1.0;
   boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = 1-cdf(extreme_value, -vector(i));
   return vector;
 }
-arma::vec Gompertz::InverseLinkDensityFunction(arma::vec vector ){
+Eigen::VectorXd Gompertz::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
   double _scale =1.0;
   boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
-  for (int i = 0; i<=vector.n_elem-1; i++)
+  for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(extreme_value, -vector(i));
   return vector;
 }

@@ -5,10 +5,7 @@
 class FisherScoring : public Logistic, Probit, Cauchit, Student, Gumbel, Gompertz{
 public:
   FisherScoring();
-  const arma::mat X_M;
-  const arma::mat Y_M;
-  std::string link;
-  arma::mat GLMm(const arma::mat X_M, const arma::mat Y_M, std::string link);
+  Eigen::MatrixXd GLMm(Eigen::MatrixXd X_M, Eigen::VectorXd Y_M, std::string link);
 };
 
 #endif
