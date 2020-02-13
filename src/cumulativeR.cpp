@@ -63,18 +63,6 @@ Eigen::MatrixXd CumulativeR::inverse_derivative_cauchit(const Eigen::VectorXd& e
   return (F * R);
 }
 
-// Eigen::VectorXd exponential(Eigen::VectorXd vector){
-//   for (size_t i = 0; i<=vector.size(); i++)
-//     vector[i] = exp(vector[i]);
-//   return vector;
-// }
-//
-// Eigen::VectorXd lnatural(Eigen::VectorXd vector){
-//   for (size_t i = 0; i<=vector.size(); i++)
-//     vector[i] = log(vector[i]);
-//   return vector;
-// }
-
 Eigen::MatrixXd CumulativeR::GLMcum(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link){
   // const int Q = K-1 ;
   // const int P = X_M.cols() -1 ;

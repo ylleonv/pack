@@ -3,6 +3,9 @@
 using namespace std;
 using namespace Rcpp ;
 
+#include <algorithm>    // std::sort
+#include <vector>
+
 ReferenceF::ReferenceF(void) {
   Rcout << "Reference is being created" << endl;
 }
@@ -55,78 +58,115 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_probit(const Eigen::VectorXd& eta
   return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
 }
 
-Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link){
-  // const int Q = K-1 ;
-  // const int P = X_M.cols() -1 ;
-  // const int N = X_M.n_cols ;
-  Eigen::VectorXd Ones = Eigen::VectorXd::Ones(X_M.rows());
-  Eigen::MatrixXd X_EXT(Ones.rows(), Ones.cols() + X_M.cols());
-  X_EXT << Ones, X_M;
+Eigen::VectorXd sort_vector(Eigen::VectorXd x1) {
+  NumericVector V(x1.data(), x1.data() + x1.size());
+  int x=0;
+  std::iota(V.begin(),V.end(),x++);
+  sort( V.begin(),V.end(), [&](int i,int j){return x1[i]<x1[j];} );
+  Eigen::Map<Eigen::VectorXd> XS(Rcpp::as<Eigen::Map<Eigen::VectorXd> >(V));
+  return XS;
+}
 
-  X_EXT = kroneckerProduct(X_EXT,Eigen::MatrixXd::Identity(K-1,K-1)).eval();
+Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A)
+{
+  Eigen::VectorXd vec1 = sort_vector(A.col(0));
+  Eigen::MatrixXd B = A.row(vec1(0));
+  for (int i = 1; i < A.rows(); ++i) {
+    B.conservativeResize(B.rows()+1, B.cols());
+    B.row(B.rows()-1) = A.row(vec1(i));
+  }
+  return B;
+}
 
+Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std::string link){
+  const int P = X_M.cols() ;
+  const int N = X_M.rows() ;
+  Eigen::MatrixXd Full_M(X_M.rows(), 1 + X_M.cols());
+  Full_M << Y_V, X_M;
+  Eigen::MatrixXd B_1 = sorted_rows(Full_M);
+
+  std::vector<int> Unique_k(B_1.col(0).data(), B_1.data() + B_1.rows());
+  int K = std::set<int>( Unique_k.begin(), Unique_k.end() ).size();
+  int Q = K-1 ;
+
+  Eigen::VectorXd B = B_1.col(0);
+  Eigen::MatrixXd Y_init2 = Eigen::MatrixXd::Zero(B_1.rows(), K);
+
+  for (int i_1 = 0; i_1 < Y_init2.rows(); ++i_1){
+    Y_init2(i_1,B[i_1]) = 1;
+  }
+
+  Eigen::MatrixXd Y_init = Y_init2.leftCols(Q);
+  Eigen::MatrixXd X_init = B_1.rightCols(P);
+  Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(X_init.rows());
+  Eigen::MatrixXd X_EXT(Ones1.rows(), 1 + X_init.cols());
+  X_EXT << Ones1, X_init;
+  X_EXT = kroneckerProduct(X_EXT,Eigen::MatrixXd::Identity(Q,Q)).eval();
   Eigen::MatrixXd BETA = Eigen::MatrixXd::Zero((P+1)*Q,1);
   int iteration = 1;
+
   double check_tutz = 1.0;
 
-  // for (int iteration=1; iteration < 40; iteration++){
-  while (check_tutz > 1e-6){
-    Eigen::VectorXd ll_vector;
-    int i = 0;
-    Eigen::MatrixXd X_M_i = X_EXT.block(i*Q , 0 , Q , X_EXT.cols());
-    Eigen::VectorXd Y_M_i = Y_EXT.segment(i*Q , Q);
-    Eigen::VectorXd eta = X_M_i * BETA;
-    Eigen::VectorXd pi ;
-    if(link == "logistic"){
-      pi = ReferenceF::inverse_logistic(eta);
-    }else if(link == "probit"){
-      pi = ReferenceF::inverse_probit(eta);
-    }
-    Eigen::MatrixXd Cov_i = Eigen::MatrixXd(pi.asDiagonal()) - (pi*pi.transpose());
-    Eigen::MatrixXd D ;
-    if(link == "logistic"){
-      D = ReferenceF::inverse_derivative_logistic(eta);
-    }else if(link == "probit"){
-      D = ReferenceF::inverse_derivative_probit(eta);
-    }
-    Eigen::MatrixXd W_in = D * Cov_i.inverse();
-    Eigen::MatrixXd Score_i = X_M_i.transpose() * W_in * (Y_M_i - pi);
-    Eigen::MatrixXd F_i = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
-
-    double LogLik = (Y_M_i.transpose().eval()*Eigen::VectorXd(pi.array().log())) + ( (1 - Y_M_i.sum()) * std::log(1 - pi.sum()) );
-
-    for (i=1; i < N; i++){
-      X_M_i = X_EXT.block(i*Q , 0 , Q , X_EXT.cols());
-      Y_M_i = Y_EXT.segment(i*Q ,Q);
-      eta = X_M_i * BETA;
+    // for (int iteration=1; iteration < 40; iteration++){
+    while (check_tutz > 1e-6){
+      Eigen::VectorXd ll_vector;
+      int i = 0;
+      Eigen::MatrixXd X_M_i = X_EXT.block(i*Q , 0 , Q , X_EXT.cols());
+      Eigen::VectorXd Y_M_i = Y_init.row(i);
+      // Eigen::VectorXd Y_M_i = Y_EXT.segment(i*Q , Q);
+      Eigen::VectorXd eta = X_M_i * BETA;
+      Eigen::VectorXd pi ;
       if(link == "logistic"){
         pi = ReferenceF::inverse_logistic(eta);
       }else if(link == "probit"){
         pi = ReferenceF::inverse_probit(eta);
       }
-      Cov_i = Eigen::MatrixXd(pi.asDiagonal()) - (pi*pi.transpose());
+      Eigen::MatrixXd Cov_i = Eigen::MatrixXd(pi.asDiagonal()) - (pi*pi.transpose());
+      Eigen::MatrixXd D ;
       if(link == "logistic"){
         D = ReferenceF::inverse_derivative_logistic(eta);
       }else if(link == "probit"){
         D = ReferenceF::inverse_derivative_probit(eta);
       }
-      W_in = D * Cov_i.inverse();
-      Eigen::MatrixXd Score_i_2 = X_M_i.transpose() * W_in * (Y_M_i - pi);
-      Score_i = Score_i + Score_i_2;
-      Eigen::MatrixXd F_i_2 = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
-      F_i = F_i + F_i_2;
-      LogLik = LogLik + (Y_M_i.transpose().eval()*Eigen::VectorXd(pi.array().log())) + ( (1 - Y_M_i.sum()) * std::log(1 - pi.sum()) );
+      Eigen::MatrixXd W_in = D * Cov_i.inverse();
+      Eigen::MatrixXd Score_i = X_M_i.transpose() * W_in * (Y_M_i - pi);
+      Eigen::MatrixXd F_i = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
+
+      double LogLik = (Y_M_i.transpose().eval()*Eigen::VectorXd(pi.array().log())) + ( (1 - Y_M_i.sum()) * std::log(1 - pi.sum()) );
+
+      for (i=1; i < N; i++){
+        X_M_i = X_EXT.block(i*Q , 0 , Q , X_EXT.cols());
+        Y_M_i = Y_init.row(i);
+        // Eigen::VectorXd Y_M_i = Y_EXT.segment(i*Q , Q);
+        eta = X_M_i * BETA;
+        if(link == "logistic"){
+          pi = ReferenceF::inverse_logistic(eta);
+        }else if(link == "probit"){
+          pi = ReferenceF::inverse_probit(eta);
+        }
+        Cov_i = Eigen::MatrixXd(pi.asDiagonal()) - (pi*pi.transpose());
+        if(link == "logistic"){
+          D = ReferenceF::inverse_derivative_logistic(eta);
+        }else if(link == "probit"){
+          D = ReferenceF::inverse_derivative_probit(eta);
+        }
+        W_in = D * Cov_i.inverse();
+        Eigen::MatrixXd Score_i_2 = X_M_i.transpose() * W_in * (Y_M_i - pi);
+        Score_i = Score_i + Score_i_2;
+        Eigen::MatrixXd F_i_2 = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
+        F_i = F_i + F_i_2;
+        LogLik = LogLik + (Y_M_i.transpose().eval()*Eigen::VectorXd(pi.array().log())) + ( (1 - Y_M_i.sum()) * std::log(1 - pi.sum()) );
+      }
+      // Stop criteria Tutz
+      Eigen::VectorXd beta_old = BETA;
+      BETA = BETA + (F_i.inverse() * Score_i);
+      check_tutz = ((BETA - beta_old).norm())/(beta_old.norm());
+      Rcout << "Log Likelihood" << endl;
+      Rcout << LogLik << endl;
+      iteration = iteration + 1;
     }
-    // Stop criteria Tutz
-    Eigen::VectorXd beta_old = BETA;
-    BETA = BETA + (F_i.inverse() * Score_i);
-    check_tutz = ((BETA - beta_old).norm())/(beta_old.norm());
-    Rcout << "Log Likelihood" << endl;
-    Rcout << LogLik << endl;
-    iteration = iteration + 1;
-  }
-  Rcout << "Number of iterations" << endl;
-  Rcout << iteration << endl;
+    Rcout << "Number of iterations" << endl;
+    Rcout << iteration << endl;
   return BETA;
 }
 
@@ -136,7 +176,3 @@ RCPP_MODULE(referencemodule){
   .method( "GLMref", &ReferenceF::GLMref )
   ;
 }
-
-
-
-

@@ -1,31 +1,35 @@
+#
+# # Libraries ---------------------------------------------------------------
+#
+#
 # library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
 # library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
 # library(VGAM)
 #
 # # Initial configuration ---------------------------------------------------
 #
-# load_all()
-# check()
-# use_mit_license("Lorena LEON")
-# check()
-# document()
+# # load_all()
+# # check()
+# # use_mit_license("Lorena LEON")
+# # check()
+# # document()
 #
-# usethis::use_rcpp()
+# # usethis::use_rcpp()
 # # NO funciona timestwo y he creado el paquete siguiendo los pasos del libro
-# timesTwo(5)
+# # timesTwo(5)
 # # Cuando hago esto por segunda vez, funciona.
-# usethis::use_rcpp()
+# # usethis::use_rcpp()
 #
-# use_package("forcats")
-# use_package("RcppArmadillo",type = "LinkingTo")
-# use_package("RcppEigen",type = "LinkingTo")
+# # use_package("forcats")
+# # use_package("RcppArmadillo",type = "LinkingTo")
+# # use_package("RcppEigen",type = "LinkingTo")
 # # Problema de rcpparmadillo not include solo se cambia el orden como sigue:
 # # LinkingTo:
 # # Rcpp,
 # # RcppArmadillo,
 # # RcppEigen
-# use_package("RcppEigen",type = "Imports")
-# use_package("RcppArmadillo",type = "Imports")
+# # use_package("RcppEigen",type = "Imports")
+# # use_package("RcppArmadillo",type = "Imports")
 # #error "The file 'Rcpp.h' should not be included. Please correct to include only 'RcppArmadillo.h'."
 # # Borre del distribution.h el include rcpp
 # getLoadedDLLs()
@@ -87,8 +91,8 @@
 # # Probit
 # FisherScoring
 # dist3 <- new(FisherScoring)
-# a3 = dist3$GLMm(X_M = X,
-#                 Y_M = Y,
+# a3 = dist3$GLMm(X_M = as.matrix(X),
+#                 Y_M = as.matrix(Y),
 #                 link = "probit")
 #
 # # Cauchit
@@ -150,12 +154,21 @@
 #   Y_EXT <- Y_EXT_1[,-ncol(Y_EXT_1)]
 #   Y_EXT <- as.vector(t((Y_EXT)))
 #   X_EXT <- kronecker(as.matrix(X), diag(Q))
+#
+#   Y_vector <- as.matrix(as.numeric(as.character(data2$ill)))
 # }
 #
 # ReferenceF
 # dist1 <- new(ReferenceF)
-# dist1$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "logistic")
-# dist1$GLMref(as.matrix(X_EXT), as.matrix(Y_EXT), K, P, N, Q, link = "probit")
+# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic")
+#
+#
+#
+# table(Y_vector)
+# str(Y_vector)
+#
+# summary(Y_vector)
+# dim(as.matrix(X_1))
 #
 # CumulativeR
 # dist2 <- new(CumulativeR)
