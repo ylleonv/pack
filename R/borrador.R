@@ -37,6 +37,8 @@
 # pkgbuild::compile_dll()
 # compileAttributes()
 #
+# loadModule()
+# load_all()
 #
 # # Binomial case -----------------------------------------------------------
 #
@@ -64,6 +66,8 @@
 #   beta = as.matrix(rep(0,2))
 #   mu = as.matrix(X)%*%beta
 # }
+# dyn.unload()
+# R_useDynamicSymbols(dll, TRUE)
 #
 # # Pruebas con librerìa usual
 #
@@ -152,12 +156,33 @@
 #   Y_vector <- as.matrix(as.numeric(as.character(data2$ill)))
 # }
 #
+#
+# Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
+# ma1 = (as.matrix(cbind((Polviews2$party), (Polviews2$gender))))
+# Y_ej2 <- as.matrix(as.numeric(as.character(Polviews2$ideology)))
+# M2<-sapply(Polviews2[,c( "gender" , "party")],unclass)
+# # str(Y_vector)
+# # str(Y_ej2)
+# #
+# # summary(Y_ej2-1)
+#
+#
 # ReferenceF
 # dist1 <- new(ReferenceF)
 # dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
 # dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "complete" )
 # dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
 # dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
+#
+# summary(as.matrix(X_1))
+# summary(as.matrix(M2-1))
+#
+# ReferenceF
+# dist1 <- new(ReferenceF)
+# dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
+# dist1$GLMref(as.matrix(M2[,2]-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
+# dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
+#
 #
 # CumulativeR
 # dist2 <- new(CumulativeR)
@@ -180,10 +205,6 @@
 # dist4$GLMadj(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
 # dist4$GLMadj(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
 #
-# Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
-# ma1 = (as.matrix(cbind((Polviews2$party), (Polviews2$gender))))
-# str(X_1)
-# str(ma1)
 #
 # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "cauchit", design = "proportional" )
 #
@@ -193,64 +214,7 @@
 #
 # dist1$GLMref(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
 #
-# Y_ej2 <- as.matrix(as.numeric(as.character(Polviews2$ideology)))
-# str(Y_vector)
-# str(Y_ej2)
-#
-# summary(Y_ej2-1)
-#
-# as.vector(Polviews2$ideology)
-# as.integer(Polviews2[, c("party", "gender")])
-#
-# M2<-sapply(Polviews2[,c("party", "gender")],unclass)
-# str(M2)
-# str(as.matrix(M2))
-#
-# # Pruebas con la librerìa usual
-#
-# data2$ill = relevel(data2$ill, ref = "2")
-# (multinom0 <- multinom(ill ~ gender + university, data=data2))
-#
-# dim(Y_EXT)
-# head(X)
-#
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), multinomial(refLevel = 3)))
-#
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), acat(link = "logitlink"),
-#       trace = TRUE, maxit = 1))
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), acat(link = "loglink"),
-#       trace = TRUE, maxit = 1))
-#
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), cumulative(link = "logit")))
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), cumulative(link = "probit")))
-#
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), sratio(link = "logit")))
-# (vglm(Y_EXT_1 ~ . , data = as.data.frame(X_1), sratio(link = "probit")))
 #
 #
-# # Others ------------------------------------------------------------------
-# vignette("ordinal-knee1")
-#
-# data(ModeChoice, package="Ecdat")
-# # Aca estan cada 4 la eleccion, asì lo necesito en mi modelo
-# head(ModeChoice); summary(ModeChoice)
-#
-# travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
-# colnames(travelmode) <- c("air","train","bus","car")
-# travelhinc <- matrix(ModeChoice$hinc, byrow = T, ncol = 4)
-# travelhinc <- travelhinc[,1]
-# travelinvt <- matrix(ModeChoice$invt, byrow = T, ncol = 4)
-# colnames(travelinvt) <- c("invtair","invttrain","invtbus","invtcar")
-# travelgc <- matrix(ModeChoice$gc, byrow = T, ncol = 4)
-# colnames(travelgc) <- c("gcair","gctrain","gcbus","gccar")
-# travelinvt <- sweep(travelinvt[,-1], 1, travelinvt[,1])
-# travelgc <- sweep(travelgc[,-1], 1, travelgc[,1])
-# Invt <- travelinvt[,1]
-# Gc <- travelgc[,1]
-# traveldat <- cbind(travelhinc, travelinvt, Invt, travelgc, Gc)
-# traveldat <- as.data.frame(traveldat)
-#
-# head(traveldat)
-# head(travelmode)
 #
 #

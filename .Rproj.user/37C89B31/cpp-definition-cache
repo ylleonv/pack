@@ -1,15 +1,87 @@
 [
     {
         "definitions" : [
+            {
+                "column" : 28,
+                "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.cpp",
+                "kind" : 7,
+                "line" : 14,
+                "name" : "inverse_logistic(const Eigen::VectorXd &)",
+                "parent_name" : "AdjacentR",
+                "usr" : "c:@S@AdjacentR@F@inverse_logistic#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
+            },
+            {
+                "column" : 28,
+                "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.cpp",
+                "kind" : 7,
+                "line" : 27,
+                "name" : "inverse_derivative_logistic(const Eigen::VectorXd &)",
+                "parent_name" : "AdjacentR",
+                "usr" : "c:@S@AdjacentR@F@inverse_derivative_logistic#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
+            },
+            {
+                "column" : 28,
+                "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.cpp",
+                "kind" : 7,
+                "line" : 39,
+                "name" : "inverse_probit(const Eigen::VectorXd &)",
+                "parent_name" : "AdjacentR",
+                "usr" : "c:@S@AdjacentR@F@inverse_probit#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
+            },
+            {
+                "column" : 28,
+                "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.cpp",
+                "kind" : 7,
+                "line" : 52,
+                "name" : "inverse_derivative_probit(const Eigen::VectorXd &)",
+                "parent_name" : "AdjacentR",
+                "usr" : "c:@S@AdjacentR@F@inverse_derivative_probit#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
+            },
+            {
+                "column" : 28,
+                "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.cpp",
+                "kind" : 7,
+                "line" : 64,
+                "name" : "inverse_cauchit(const Eigen::VectorXd &)",
+                "parent_name" : "AdjacentR",
+                "usr" : "c:@S@AdjacentR@F@inverse_cauchit#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
+            },
+            {
+                "column" : 28,
+                "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.cpp",
+                "kind" : 7,
+                "line" : 77,
+                "name" : "inverse_derivative_cauchit(const Eigen::VectorXd &)",
+                "parent_name" : "AdjacentR",
+                "usr" : "c:@S@AdjacentR@F@inverse_derivative_cauchit#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
+            },
+            {
+                "column" : 28,
+                "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.cpp",
+                "kind" : 7,
+                "line" : 89,
+                "name" : "GLMadj(Eigen::MatrixXd, Eigen::MatrixXd, std::string, std::string)",
+                "parent_name" : "AdjacentR",
+                "usr" : "c:@S@AdjacentR@F@GLMadj#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#S0_#$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#S1_#"
+            }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.cpp",
-        "file_last_write" : 1579196580.000000
+        "file_last_write" : 1581943233.000000
     },
     {
         "definitions" : [
+            {
+                "column" : 7,
+                "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.h",
+                "kind" : 2,
+                "line" : 5,
+                "name" : "AdjacentR",
+                "parent_name" : "",
+                "usr" : "c:@S@AdjacentR"
+            }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/adjacentR.h",
-        "file_last_write" : 1579196582.000000
+        "file_last_write" : 1581943233.000000
     },
     {
         "definitions" : [
@@ -108,7 +180,7 @@
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/cumulativeR.cpp",
-        "file_last_write" : 1581939735.000000
+        "file_last_write" : 1581940447.000000
     },
     {
         "definitions" : [
@@ -236,10 +308,19 @@
                 "usr" : "c:@S@Cauchit@F@cdf_cauchit#&1d#1"
             },
             {
-                "column" : 26,
+                "column" : 17,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
                 "line" : 126,
+                "name" : "pdf_cauchit(const double &)",
+                "parent_name" : "Cauchit",
+                "usr" : "c:@S@Cauchit@F@pdf_cauchit#&1d#1"
+            },
+            {
+                "column" : 26,
+                "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
+                "kind" : 7,
+                "line" : 134,
                 "name" : "InverseLinkCumulativeFunction(Eigen::VectorXd)",
                 "parent_name" : "Cauchit",
                 "usr" : "c:@S@Cauchit@F@InverseLinkCumulativeFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -248,7 +329,7 @@
                 "column" : 26,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 134,
+                "line" : 142,
                 "name" : "InverseLinkDensityFunction(Eigen::VectorXd)",
                 "parent_name" : "Cauchit",
                 "usr" : "c:@S@Cauchit@F@InverseLinkDensityFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -257,7 +338,7 @@
                 "column" : 26,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 146,
+                "line" : 154,
                 "name" : "InverseLinkCumulativeFunction(Eigen::VectorXd)",
                 "parent_name" : "Student",
                 "usr" : "c:@S@Student@F@InverseLinkCumulativeFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -266,7 +347,7 @@
                 "column" : 26,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 153,
+                "line" : 161,
                 "name" : "InverseLinkDensityFunction(Eigen::VectorXd)",
                 "parent_name" : "Student",
                 "usr" : "c:@S@Student@F@InverseLinkDensityFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -275,7 +356,7 @@
                 "column" : 25,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 164,
+                "line" : 172,
                 "name" : "InverseLinkCumulativeFunction(Eigen::VectorXd)",
                 "parent_name" : "Gumbel",
                 "usr" : "c:@S@Gumbel@F@InverseLinkCumulativeFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -284,7 +365,7 @@
                 "column" : 25,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 172,
+                "line" : 180,
                 "name" : "InverseLinkDensityFunction(Eigen::VectorXd)",
                 "parent_name" : "Gumbel",
                 "usr" : "c:@S@Gumbel@F@InverseLinkDensityFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -293,7 +374,7 @@
                 "column" : 27,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 184,
+                "line" : 192,
                 "name" : "InverseLinkCumulativeFunction(Eigen::VectorXd)",
                 "parent_name" : "Gompertz",
                 "usr" : "c:@S@Gompertz@F@InverseLinkCumulativeFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -302,7 +383,7 @@
                 "column" : 27,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 192,
+                "line" : 200,
                 "name" : "InverseLinkDensityFunction(Eigen::VectorXd)",
                 "parent_name" : "Gompertz",
                 "usr" : "c:@S@Gompertz@F@InverseLinkDensityFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -311,7 +392,7 @@
                 "column" : 17,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 6,
-                "line" : 201,
+                "line" : 209,
                 "name" : "sort_vector(Eigen::VectorXd)",
                 "parent_name" : "",
                 "usr" : "c:@F@sort_vector#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -320,14 +401,14 @@
                 "column" : 17,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 6,
-                "line" : 210,
+                "line" : 218,
                 "name" : "sorted_rows(Eigen::MatrixXd)",
                 "parent_name" : "",
                 "usr" : "c:@F@sorted_rows#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#"
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
-        "file_last_write" : 1581939882.000000
+        "file_last_write" : 1581943434.000000
     },
     {
         "definitions" : [
@@ -371,7 +452,7 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 61,
+                "line" : 66,
                 "name" : "Student",
                 "parent_name" : "",
                 "usr" : "c:@S@Student"
@@ -380,7 +461,7 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 68,
+                "line" : 73,
                 "name" : "Gumbel",
                 "parent_name" : "",
                 "usr" : "c:@S@Gumbel"
@@ -389,14 +470,14 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 75,
+                "line" : 80,
                 "name" : "Gompertz",
                 "parent_name" : "",
                 "usr" : "c:@S@Gompertz"
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
-        "file_last_write" : 1581938982.000000
+        "file_last_write" : 1581947445.000000
     },
     {
         "definitions" : [
@@ -447,22 +528,13 @@
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
-        "file_last_write" : 1581939735.000000
+        "file_last_write" : 1581952711.000000
     },
     {
         "definitions" : [
-            {
-                "column" : 7,
-                "file" : "/home/leonvelasco/Desktop/pack/src/reference.h",
-                "kind" : 2,
-                "line" : 5,
-                "name" : "ReferenceF",
-                "parent_name" : "",
-                "usr" : "c:@S@ReferenceF"
-            }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/reference.h",
-        "file_last_write" : 1581938885.000000
+        "file_last_write" : 1581958215.000000
     },
     {
         "definitions" : [
@@ -506,14 +578,14 @@
                 "column" : 30,
                 "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.cpp",
                 "kind" : 7,
-                "line" : 76,
-                "name" : "GLMseq(Eigen::MatrixXd, Eigen::VectorXd, int, int, int, int, std::string)",
+                "line" : 64,
+                "name" : "GLMseq(Eigen::MatrixXd, Eigen::MatrixXd, std::string, std::string)",
                 "parent_name" : "SequentialR",
-                "usr" : "c:@S@SequentialR@F@GLMseq#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#I#I#I#I#$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#"
+                "usr" : "c:@S@SequentialR@F@GLMseq#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#S0_#$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#S1_#"
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.cpp",
-        "file_last_write" : 1581671776.000000
+        "file_last_write" : 1581940748.000000
     },
     {
         "definitions" : [
@@ -528,6 +600,6 @@
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.h",
-        "file_last_write" : 1581671776.000000
+        "file_last_write" : 1581940748.000000
     }
 ]

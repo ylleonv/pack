@@ -128,8 +128,8 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std
   Eigen::MatrixXd Score_i_2 ;
   Eigen::MatrixXd F_i_2 ;
 
-  // for (int iteration=1; iteration < 40; iteration++){
-  while (check_tutz > 1e-6){
+  // for (int iteration=1; iteration < 18; iteration++){
+    while (check_tutz > 0.0001){
 
     Eigen::MatrixXd Score_i = Eigen::MatrixXd::Zero(BETA.rows(),1);
     Eigen::MatrixXd F_i = Eigen::MatrixXd::Zero(BETA.rows(), BETA.rows());
@@ -141,12 +141,8 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std
     for (int i=0; i < N; i++){
       // Block of size (p,q), starting at (i,j): matrix.block(i,j,p,q);
       X_M_i = X_EXT.block(i*Q , 0 , Q , X_EXT.cols());
-
-      // X_M_i = X_EXT3.block(i*Q , 0 , Q , Q+P);;
-
       Y_M_i = Y_init.row(i);
       eta = X_M_i * BETA;
-
       // Vector pi depends on selected link
 
       if(link == "logistic"){
@@ -168,10 +164,12 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std
     // Stop criteria Tutz
     Eigen::VectorXd beta_old = BETA;
     BETA = BETA + (F_i.inverse() * Score_i);
-    check_tutz = ((BETA - beta_old).norm())/(beta_old.norm());
+    check_tutz = ((BETA - beta_old).norm())/(beta_old.norm()+check_tutz);
     Rcout << "Log Likelihood" << endl;
     Rcout << LogLik << endl;
     iteration = iteration + 1;
+    Rcout << "Beta" << endl;
+    Rcout << BETA << endl;
   }
   Rcout << "Number of iterations" << endl;
   Rcout << iteration << endl;
