@@ -16,6 +16,26 @@ distribution::distribution(void) {
   Rcout << "Distribution is being created" << endl;
 }
 
+Eigen::VectorXd distribution::sort_vector(Eigen::VectorXd x1) {
+  NumericVector V(x1.data(), x1.data() + x1.size());
+  int x=0;
+  std::iota(V.begin(),V.end(),x++);
+  sort( V.begin(),V.end(), [&](int i,int j){return x1[i]<x1[j];} );
+  Eigen::Map<Eigen::VectorXd> XS(Rcpp::as<Eigen::Map<Eigen::VectorXd> >(V));
+  return XS;
+}
+
+Eigen::MatrixXd distribution::sorted_rows(Eigen::MatrixXd A)
+{
+  Eigen::VectorXd vec1 = distribution::sort_vector(A.col(0));
+  Eigen::MatrixXd B = A.row(vec1(0));
+  for (int i = 1; i < A.rows(); ++i) {
+    B.conservativeResize(B.rows()+1, B.cols());
+    B.row(B.rows()-1) = A.row(vec1(i));
+  }
+  return B;
+}
+
 Eigen::VectorXd Logistic::in_open_corner(const Eigen::VectorXd& p) const
 {
   Eigen::VectorXd pi = p;
@@ -68,14 +88,14 @@ double Logistic::pdf_logit(const double& value) const
 double Probit::cdf_probit(const double& value) const
 {
   boost::math::normal norm;
-  return cdf(norm, value);
+  return boost::math::cdf(norm, value);
 }
 
 
 double Probit::pdf_probit(const double& value) const
 {
   boost::math::normal norm;
-  return cdf(norm, value);
+  return boost::math::pdf(norm, value);
 }
 
 
@@ -103,6 +123,14 @@ double Cauchit::cdf_cauchit(const double& value) const
   boost::math::cauchy_distribution<> extreme_value(_location, _scale);
   return cdf(extreme_value, value);
 }
+double Cauchit::pdf_cauchit(const double& value) const
+{
+  double _location = 0.0;
+  double _scale =1.0;
+  boost::math::cauchy_distribution<> extreme_value(_location, _scale);
+  return pdf(extreme_value, value);
+}
+
 Eigen::VectorXd Cauchit::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
   double _scale =1.0;
@@ -176,6 +204,26 @@ Eigen::VectorXd Gompertz::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(extreme_value, -vector(i));
   return vector;
+}
+
+Eigen::VectorXd sort_vector(Eigen::VectorXd x1) {
+  NumericVector V(x1.data(), x1.data() + x1.size());
+  int x=0;
+  std::iota(V.begin(),V.end(),x++);
+  sort( V.begin(),V.end(), [&](int i,int j){return x1[i]<x1[j];} );
+  Eigen::Map<Eigen::VectorXd> XS(Rcpp::as<Eigen::Map<Eigen::VectorXd> >(V));
+  return XS;
+}
+
+Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A)
+{
+  Eigen::VectorXd vec1 = sort_vector(A.col(0));
+  Eigen::MatrixXd B = A.row(vec1(0));
+  for (int i = 1; i < A.rows(); ++i) {
+    B.conservativeResize(B.rows()+1, B.cols());
+    B.row(B.rows()-1) = A.row(vec1(i));
+  }
+  return B;
 }
 
 RCPP_MODULE(exportmod){

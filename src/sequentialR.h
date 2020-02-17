@@ -12,7 +12,7 @@ public:
   virtual Eigen::VectorXd inverse_probit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_probit(const Eigen::VectorXd& eta) const;
 
-  Eigen::MatrixXd GLMseq(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link);
+  Eigen::MatrixXd GLMseq(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std::string link,  std::string design);
 
 
 };

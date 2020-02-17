@@ -2,7 +2,7 @@
 #define REFERENCEF_H_
 #include "distribution.h"
 
-class ReferenceF : public Logistic, Probit, Cauchit, Student, Gumbel, Gompertz{
+class ReferenceF : public virtual Logistic, Probit, Cauchit, Student, Gumbel, Gompertz{
 public:
   ReferenceF();
 

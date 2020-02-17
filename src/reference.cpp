@@ -55,26 +55,6 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_probit(const Eigen::VectorXd& eta
   return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
 }
 
-Eigen::VectorXd sort_vector(Eigen::VectorXd x1) {
-  NumericVector V(x1.data(), x1.data() + x1.size());
-  int x=0;
-  std::iota(V.begin(),V.end(),x++);
-  sort( V.begin(),V.end(), [&](int i,int j){return x1[i]<x1[j];} );
-  Eigen::Map<Eigen::VectorXd> XS(Rcpp::as<Eigen::Map<Eigen::VectorXd> >(V));
-  return XS;
-}
-
-Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A)
-{
-  Eigen::VectorXd vec1 = sort_vector(A.col(0));
-  Eigen::MatrixXd B = A.row(vec1(0));
-  for (int i = 1; i < A.rows(); ++i) {
-    B.conservativeResize(B.rows()+1, B.cols());
-    B.row(B.rows()-1) = A.row(vec1(i));
-  }
-  return B;
-}
-
 Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std::string link, std::string design){
 
   // Number of explanatory variables
@@ -88,7 +68,7 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std
   Full_M << Y_V, X_M;
 
   // Order by Y
-  Eigen::MatrixXd Full_M_ordered = sorted_rows(Full_M);
+  Eigen::MatrixXd Full_M_ordered = distribution::sorted_rows(Full_M);
 
   // Count number of unique categories (K) in Y
   std::vector<int> Unique_k(Full_M_ordered.col(0).data(), Full_M_ordered.data() + Full_M_ordered.rows());
@@ -150,10 +130,6 @@ Eigen::MatrixXd ReferenceF::GLMref(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std
 
   // for (int iteration=1; iteration < 40; iteration++){
   while (check_tutz > 1e-6){
-
-    // // Elemnts for cumulative sums
-    // Eigen::MatrixXd Score_i = Eigen::MatrixXd::Zero((P+1)*Q,1);
-    // Eigen::MatrixXd F_i = Eigen::MatrixXd::Zero((P+1)*Q,(P+1)*Q);
 
     Eigen::MatrixXd Score_i = Eigen::MatrixXd::Zero(BETA.rows(),1);
     Eigen::MatrixXd F_i = Eigen::MatrixXd::Zero(BETA.rows(), BETA.rows());

@@ -3,16 +3,15 @@
 
 #include <RcppEigen.h>
 using namespace std;
+using namespace Rcpp;
 
 class distribution{
 public:
   double _epsilon_0 = 1e-10;
   double _epsilon_1 = 1e-6;
-
+  Eigen::VectorXd sort_vector(Eigen::VectorXd x1) ;
+  Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A) ;
   distribution(int x)  { cout << "distribution::distribution(int ) called" << endl;   }
-
-  // virtual double cdf1(const double& value) const;
-
   distribution();
 };
 
@@ -49,35 +48,41 @@ public:
   Probit();
 };
 
-class Cauchit : public distribution{
+class Cauchit : virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
 
   virtual double cdf_cauchit(const double& value) const;
+  virtual double pdf_cauchit(const double& value) const;
+
+  Cauchit(int x):distribution(x)   {
+    cout<<"Cauchit::Cauchit(int ) called"<< endl;
+  }
 
   Cauchit();
 };
 
-class Student : public distribution{
+class Student :  virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
   Student();
 };
 
-class Gumbel : public distribution{
+class Gumbel :  virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
   Gumbel();
 };
 
-class Gompertz : public distribution{
+class Gompertz : virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
   Gompertz();
 };
+
 
 #endif

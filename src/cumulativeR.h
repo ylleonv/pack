@@ -2,7 +2,7 @@
 #define CUMULATIVER_H_
 #include "distribution.h"
 
-class CumulativeR : public Logistic, Probit, Cauchit{
+class CumulativeR : virtual public distribution, Logistic, Probit, Cauchit{
 public:
   CumulativeR();
 
@@ -15,7 +15,7 @@ public:
   virtual Eigen::VectorXd inverse_cauchit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_cauchit(const Eigen::VectorXd& eta) const;
 
-  Eigen::MatrixXd GLMcum(Eigen::MatrixXd X_EXT, Eigen::VectorXd Y_EXT, int K, int P, int N, int Q, std::string link);
+  Eigen::MatrixXd GLMcum(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std::string link,  std::string design);
 
 
 };
