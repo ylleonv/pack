@@ -152,14 +152,14 @@ Student::Student(void) {
   Rcout << "Student is being created" << endl;
 }
 Eigen::VectorXd Student::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
-  double _degrees = 1.0;
+  double _degrees = 2.0;
   boost::math::students_t_distribution<> student(_degrees);
   for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = cdf(student, vector(i));
   return vector;
 }
 Eigen::VectorXd Student::InverseLinkDensityFunction(Eigen::VectorXd vector ){
-  double _degrees = 1.0;
+  double _degrees = 2.0;
   boost::math::students_t_distribution<> student(_degrees);
   for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(student, vector(i));

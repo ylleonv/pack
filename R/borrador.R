@@ -2,7 +2,7 @@
 # # Libraries ---------------------------------------------------------------
 # library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
 # library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
-# library(VGAM)
+# library(VGAM) ; library(dobson)
 #
 # # Initial configuration ---------------------------------------------------
 #
@@ -44,10 +44,6 @@
 #
 # # # DATA
 # {
-#   # Libraries
-#   library(dobson)
-#
-#   # Data
 #   beetle
 #   i=1
 #   beetle_ext <- data.frame(x = as.matrix(rep(beetle[i,1],beetle[i,2])), y= c(rep(1,beetle[i,3]), rep(0,beetle[i,2]-beetle[i,3]) ))
@@ -66,8 +62,6 @@
 #   beta = as.matrix(rep(0,2))
 #   mu = as.matrix(X)%*%beta
 # }
-# dyn.unload()
-# R_useDynamicSymbols(dll, TRUE)
 #
 # # Pruebas con librerìa usual
 #
@@ -86,9 +80,9 @@
 # # Logit
 # FisherScoring
 # dist3 <- new(FisherScoring)
-# a3 = dist3$GLMm(X_M = X,
-#                 Y_M = Y,
-#                 link = "logistic")
+# dist3$GLMm(X_M = X,
+#            Y_M = Y,
+#            link = "logistic")
 #
 # # Probit
 # dist3 <- new(FisherScoring)
@@ -102,22 +96,21 @@
 #            Y_M = Y,
 #            link = "cauchit")
 #
-# # Student_1
+# # Student 2 freedom degrees
 # FisherScoring
 # dist3 <- new(FisherScoring)
 # dist3$GLMm(X_M = X,
 #            Y_M = Y,
 #            link = "student")
+#
 # # anadir otro parametro para los grados de libertad
 #
 # # Gumbel
 # dist3$GLMm(X_M = X,
-#            Y_M =  ,
+#            Y_M =  Y,
 #            link = "gumbel")
 #
 # # Gompertz
-# FisherScoring
-# dist3 <- new(FisherScoring)
 # dist3$GLMm(X_M = X,
 #            Y_M = Y,
 #            link = "gompertz")
@@ -156,40 +149,21 @@
 #   Y_vector <- as.matrix(as.numeric(as.character(data2$ill)))
 # }
 #
-#
-# Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
-# ma1 = (as.matrix(cbind((Polviews2$party), (Polviews2$gender))))
-# Y_ej2 <- as.matrix(as.numeric(as.character(Polviews2$ideology)))
-# M2<-sapply(Polviews2[,c( "gender" , "party")],unclass)
-# # str(Y_vector)
-# # str(Y_ej2)
-# #
-# # summary(Y_ej2-1)
-#
-#
 # ReferenceF
 # dist1 <- new(ReferenceF)
-# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
 # dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "complete" )
-# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
+# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
 # dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
-#
-# summary(as.matrix(X_1))
-# summary(as.matrix(M2-1))
-#
-# ReferenceF
-# dist1 <- new(ReferenceF)
-# dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-# dist1$GLMref(as.matrix(M2[,2]-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-# dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
+# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
 #
 #
 # CumulativeR
 # dist2 <- new(CumulativeR)
-# dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
 # dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "logistic", design = "complete" )
-# dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
+# dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
 # dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
+# dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
+#
 #
 # SequentialR
 # dist3 <- new(SequentialR)
@@ -206,15 +180,26 @@
 # dist4$GLMadj(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
 #
 #
-# dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "cauchit", design = "proportional" )
-#
-# dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
-# dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-#
-#
-# dist1$GLMref(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
-#
-#
-#
-#
+# # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "cauchit", design = "proportional" )
+# # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
+# # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
+# #
+# # dist1$GLMref(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
+# # Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
+# # ma1 = (as.matrix(cbind((Polviews2$party), (Polviews2$gender))))
+# # Y_ej2 <- as.matrix(as.numeric(as.character(Polviews2$ideology)))
+# # M2<-sapply(Polviews2[,c( "party", "gender" )],unclass)
+# # # str(Y_vector)
+# # # str(Y_ej2)
+# # #
+# # # summary(Y_ej2-1)
+# # summary(as.matrix(X_1))
+# # summary(as.matrix(M2-1))
+# # summary(M2)
+# # view(M2)
+# # ReferenceF
+# # dist1 <- new(ReferenceF)
+# # dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
+# # dist1$GLMref(as.matrix(M2[,2]-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
+# # dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
 #
