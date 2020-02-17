@@ -5,8 +5,6 @@
 class CumulativeR : public Logistic, Probit, Cauchit{
 public:
   CumulativeR();
-  const arma::mat X_M;
-  const arma::mat Y_M;
 
   virtual Eigen::VectorXd inverse_logistic(const Eigen::VectorXd& eta1) const;
   virtual Eigen::MatrixXd inverse_derivative_logistic(const Eigen::VectorXd& eta) const ;

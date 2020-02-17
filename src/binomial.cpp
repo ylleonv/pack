@@ -1,10 +1,13 @@
-#include "fisher.h"
+#include "binomial.h"
+using namespace std;
+using namespace Rcpp ;
 
 FisherScoring::FisherScoring(void) {
   Rcpp::Rcout << "FisherScoring is being created" << std::endl;
 }
 
 Eigen::MatrixXd FisherScoring::GLMm(Eigen::MatrixXd X_M, Eigen::VectorXd Y_M, std::string link){
+
   //    Create initial beta
   const int N = X_M.rows() ;
   const int K = X_M.cols() ;

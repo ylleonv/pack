@@ -4,7 +4,6 @@ using namespace std;
 using namespace Rcpp ;
 
 // [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::depends(RcppArmadillo)]]
 
 SequentialR::SequentialR(void) {
   Rcout << "SequentialR is being created" << endl;

@@ -86,7 +86,8 @@
 # dist3 <- new(FisherScoring)
 # a3 = dist3$GLMm(X_M = X,
 #                 Y_M = Y,
-#                 link = "logistic")
+#                 link = "logistic",
+#                 par_entrada = "a")
 #
 # # Probit
 # FisherScoring
@@ -160,9 +161,11 @@
 #
 # ReferenceF
 # dist1 <- new(ReferenceF)
-# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic")
+# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
+# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "complete" )
 #
-#
+# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
+# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
 #
 # table(Y_vector)
 # str(Y_vector)

@@ -14,6 +14,36 @@
     {
         "definitions" : [
             {
+                "column" : 32,
+                "file" : "/home/leonvelasco/Desktop/pack/src/binomial.cpp",
+                "kind" : 7,
+                "line" : 9,
+                "name" : "GLMm(Eigen::MatrixXd, Eigen::VectorXd, std::string)",
+                "parent_name" : "FisherScoring",
+                "usr" : "c:@S@FisherScoring@F@GLMm#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#"
+            }
+        ],
+        "file" : "/home/leonvelasco/Desktop/pack/src/binomial.cpp",
+        "file_last_write" : 1581701387.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 7,
+                "file" : "/home/leonvelasco/Desktop/pack/src/binomial.h",
+                "kind" : 2,
+                "line" : 5,
+                "name" : "FisherScoring",
+                "parent_name" : "",
+                "usr" : "c:@S@FisherScoring"
+            }
+        ],
+        "file" : "/home/leonvelasco/Desktop/pack/src/binomial.h",
+        "file_last_write" : 1581701387.000000
+    },
+    {
+        "definitions" : [
+            {
                 "column" : 30,
                 "file" : "/home/leonvelasco/Desktop/pack/src/cumulativeR.cpp",
                 "kind" : 7,
@@ -93,7 +123,7 @@
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/cumulativeR.h",
-        "file_last_write" : 1579885358.000000
+        "file_last_write" : 1581671627.000000
     },
     {
         "definitions" : [
@@ -101,7 +131,7 @@
                 "column" : 27,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 20,
+                "line" : 19,
                 "name" : "in_open_corner(const Eigen::VectorXd &)",
                 "parent_name" : "Logistic",
                 "usr" : "c:@S@Logistic@F@in_open_corner#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
@@ -110,7 +140,7 @@
                 "column" : 27,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 44,
+                "line" : 42,
                 "name" : "InverseLinkCumulativeFunction(Eigen::VectorXd)",
                 "parent_name" : "Logistic",
                 "usr" : "c:@S@Logistic@F@InverseLinkCumulativeFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -119,7 +149,7 @@
                 "column" : 27,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 51,
+                "line" : 49,
                 "name" : "InverseLinkDensityFunction(Eigen::VectorXd)",
                 "parent_name" : "Logistic",
                 "usr" : "c:@S@Logistic@F@InverseLinkDensityFunction#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -128,7 +158,7 @@
                 "column" : 18,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 59,
+                "line" : 57,
                 "name" : "cdf_logit(const double &)",
                 "parent_name" : "Logistic",
                 "usr" : "c:@S@Logistic@F@cdf_logit#&1d#1"
@@ -137,7 +167,7 @@
                 "column" : 18,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 64,
+                "line" : 62,
                 "name" : "pdf_logit(const double &)",
                 "parent_name" : "Logistic",
                 "usr" : "c:@S@Logistic@F@pdf_logit#&1d#1"
@@ -146,7 +176,7 @@
                 "column" : 16,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
                 "kind" : 7,
-                "line" : 70,
+                "line" : 68,
                 "name" : "cdf_probit(const double &)",
                 "parent_name" : "Probit",
                 "usr" : "c:@S@Probit@F@cdf_probit#&1d#1"
@@ -261,7 +291,7 @@
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/distribution.cpp",
-        "file_last_write" : 1580754022.000000
+        "file_last_write" : 1581699115.000000
     },
     {
         "definitions" : [
@@ -278,7 +308,7 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 14,
+                "line" : 19,
                 "name" : "Logistic",
                 "parent_name" : "",
                 "usr" : "c:@S@Logistic"
@@ -287,7 +317,7 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 27,
+                "line" : 36,
                 "name" : "Probit",
                 "parent_name" : "",
                 "usr" : "c:@S@Probit"
@@ -296,7 +326,7 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 38,
+                "line" : 52,
                 "name" : "Cauchit",
                 "parent_name" : "",
                 "usr" : "c:@S@Cauchit"
@@ -305,7 +335,7 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 48,
+                "line" : 62,
                 "name" : "Student",
                 "parent_name" : "",
                 "usr" : "c:@S@Student"
@@ -314,7 +344,7 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 55,
+                "line" : 69,
                 "name" : "Gumbel",
                 "parent_name" : "",
                 "usr" : "c:@S@Gumbel"
@@ -323,44 +353,14 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
                 "kind" : 2,
-                "line" : 62,
+                "line" : 76,
                 "name" : "Gompertz",
                 "parent_name" : "",
                 "usr" : "c:@S@Gompertz"
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/distribution.h",
-        "file_last_write" : 1580752581.000000
-    },
-    {
-        "definitions" : [
-            {
-                "column" : 32,
-                "file" : "/home/leonvelasco/Desktop/pack/src/fisher.cpp",
-                "kind" : 7,
-                "line" : 7,
-                "name" : "GLMm(Eigen::MatrixXd, Eigen::VectorXd, std::string)",
-                "parent_name" : "FisherScoring",
-                "usr" : "c:@S@FisherScoring@F@GLMm#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#"
-            }
-        ],
-        "file" : "/home/leonvelasco/Desktop/pack/src/fisher.cpp",
-        "file_last_write" : 1580830668.000000
-    },
-    {
-        "definitions" : [
-            {
-                "column" : 7,
-                "file" : "/home/leonvelasco/Desktop/pack/src/fisher.h",
-                "kind" : 2,
-                "line" : 5,
-                "name" : "FisherScoring",
-                "parent_name" : "",
-                "usr" : "c:@S@FisherScoring"
-            }
-        ],
-        "file" : "/home/leonvelasco/Desktop/pack/src/fisher.h",
-        "file_last_write" : 1580755935.000000
+        "file_last_write" : 1581701387.000000
     },
     {
         "definitions" : [
@@ -368,7 +368,7 @@
                 "column" : 29,
                 "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
                 "kind" : 7,
-                "line" : 13,
+                "line" : 12,
                 "name" : "inverse_logistic(const Eigen::VectorXd &)",
                 "parent_name" : "ReferenceF",
                 "usr" : "c:@S@ReferenceF@F@inverse_logistic#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
@@ -377,16 +377,7 @@
                 "column" : 29,
                 "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
                 "kind" : 7,
-                "line" : 27,
-                "name" : "inverse_derivative_logistic(const Eigen::VectorXd &)",
-                "parent_name" : "ReferenceF",
-                "usr" : "c:@S@ReferenceF@F@inverse_derivative_logistic#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
-            },
-            {
-                "column" : 29,
-                "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
-                "kind" : 7,
-                "line" : 38,
+                "line" : 24,
                 "name" : "inverse_probit(const Eigen::VectorXd &)",
                 "parent_name" : "ReferenceF",
                 "usr" : "c:@S@ReferenceF@F@inverse_probit#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
@@ -395,7 +386,16 @@
                 "column" : 29,
                 "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
                 "kind" : 7,
-                "line" : 50,
+                "line" : 36,
+                "name" : "inverse_derivative_logistic(const Eigen::VectorXd &)",
+                "parent_name" : "ReferenceF",
+                "usr" : "c:@S@ReferenceF@F@inverse_derivative_logistic#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
+            },
+            {
+                "column" : 29,
+                "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
+                "kind" : 7,
+                "line" : 47,
                 "name" : "inverse_derivative_probit(const Eigen::VectorXd &)",
                 "parent_name" : "ReferenceF",
                 "usr" : "c:@S@ReferenceF@F@inverse_derivative_probit#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
@@ -404,7 +404,7 @@
                 "column" : 17,
                 "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
                 "kind" : 6,
-                "line" : 61,
+                "line" : 58,
                 "name" : "sort_vector(Eigen::VectorXd)",
                 "parent_name" : "",
                 "usr" : "c:@F@sort_vector#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#"
@@ -413,7 +413,7 @@
                 "column" : 17,
                 "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
                 "kind" : 6,
-                "line" : 70,
+                "line" : 67,
                 "name" : "sorted_rows(Eigen::MatrixXd)",
                 "parent_name" : "",
                 "usr" : "c:@F@sorted_rows#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#"
@@ -422,14 +422,14 @@
                 "column" : 29,
                 "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
                 "kind" : 7,
-                "line" : 81,
-                "name" : "GLMref(Eigen::MatrixXd, Eigen::MatrixXd, std::string)",
+                "line" : 78,
+                "name" : "GLMref(Eigen::MatrixXd, Eigen::MatrixXd, std::string, std::string)",
                 "parent_name" : "ReferenceF",
-                "usr" : "c:@S@ReferenceF@F@GLMref#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#S0_#$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#"
+                "usr" : "c:@S@ReferenceF@F@GLMref#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#S0_#$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#S1_#"
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/reference.cpp",
-        "file_last_write" : 1581616454.000000
+        "file_last_write" : 1581780084.000000
     },
     {
         "definitions" : [
@@ -444,7 +444,7 @@
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/reference.h",
-        "file_last_write" : 1581594901.000000
+        "file_last_write" : 1581779673.000000
     },
     {
         "definitions" : [
@@ -452,7 +452,7 @@
                 "column" : 30,
                 "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.cpp",
                 "kind" : 7,
-                "line" : 13,
+                "line" : 12,
                 "name" : "inverse_logistic(const Eigen::VectorXd &)",
                 "parent_name" : "SequentialR",
                 "usr" : "c:@S@SequentialR@F@inverse_logistic#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
@@ -461,7 +461,7 @@
                 "column" : 30,
                 "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.cpp",
                 "kind" : 7,
-                "line" : 25,
+                "line" : 24,
                 "name" : "inverse_derivative_logistic(const Eigen::VectorXd &)",
                 "parent_name" : "SequentialR",
                 "usr" : "c:@S@SequentialR@F@inverse_derivative_logistic#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
@@ -470,7 +470,7 @@
                 "column" : 30,
                 "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.cpp",
                 "kind" : 7,
-                "line" : 39,
+                "line" : 38,
                 "name" : "inverse_probit(const Eigen::VectorXd &)",
                 "parent_name" : "SequentialR",
                 "usr" : "c:@S@SequentialR@F@inverse_probit#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
@@ -479,7 +479,7 @@
                 "column" : 30,
                 "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.cpp",
                 "kind" : 7,
-                "line" : 51,
+                "line" : 50,
                 "name" : "inverse_derivative_probit(const Eigen::VectorXd &)",
                 "parent_name" : "SequentialR",
                 "usr" : "c:@S@SequentialR@F@inverse_derivative_probit#&1$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#1"
@@ -488,14 +488,14 @@
                 "column" : 30,
                 "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.cpp",
                 "kind" : 7,
-                "line" : 77,
+                "line" : 76,
                 "name" : "GLMseq(Eigen::MatrixXd, Eigen::VectorXd, int, int, int, int, std::string)",
                 "parent_name" : "SequentialR",
                 "usr" : "c:@S@SequentialR@F@GLMseq#$@N@Eigen@S@Matrix>#d#VI-1#VI-1#VI0#VI-1#VI-1#$@N@Eigen@S@Matrix>#d#VI-1#VI1#VI0#VI-1#VI1#I#I#I#I#$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#"
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.cpp",
-        "file_last_write" : 1579885358.000000
+        "file_last_write" : 1581671776.000000
     },
     {
         "definitions" : [
@@ -503,13 +503,13 @@
                 "column" : 7,
                 "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.h",
                 "kind" : 2,
-                "line" : 6,
+                "line" : 5,
                 "name" : "SequentialR",
                 "parent_name" : "",
                 "usr" : "c:@S@SequentialR"
             }
         ],
         "file" : "/home/leonvelasco/Desktop/pack/src/sequentialR.h",
-        "file_last_write" : 1578999464.000000
+        "file_last_write" : 1581671776.000000
     }
 ]

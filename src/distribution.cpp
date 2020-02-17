@@ -1,6 +1,5 @@
 // [[Rcpp::depends(BH)]]
 // [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::depends(RcppArmadillo)]]
 
 #include "distribution.h"
 #include <boost/math/distributions/logistic.hpp>
@@ -40,7 +39,6 @@ Probit::Probit(void) {
   Rcout << "Probit is being created" << endl;
 }
 
-
 Eigen::VectorXd Logistic::InverseLinkCumulativeFunction(Eigen::VectorXd vector){
   boost::math::logistic dist(0., 1.);
   for (int i = 0; i<=vector.rows()-1; i++)
@@ -72,6 +70,8 @@ double Probit::cdf_probit(const double& value) const
   boost::math::normal norm;
   return cdf(norm, value);
 }
+
+
 double Probit::pdf_probit(const double& value) const
 {
   boost::math::normal norm;
@@ -185,15 +185,15 @@ RCPP_MODULE(exportmod){
   ;
 }
 
-RCPP_MODULE(exportmoddev){
-  using namespace Rcpp ;
-  class_<distribution>("distribution")
-    .constructor()
-  ;
-  class_<Logistic>("Logistic")
-    .derives<distribution>("distribution")
-    .constructor()
-    .method( "InverseLinkCumulativeFunction", &Logistic::InverseLinkCumulativeFunction )
-  ;
-}
+// RCPP_MODULE(exportmoddev){
+//   using namespace Rcpp ;
+//   class_<distribution>("distribution")
+//     .constructor()
+//   ;
+//   class_<Logistic>("Logistic")
+//     .derives<distribution>("distribution")
+//     .constructor()
+//     .method( "InverseLinkCumulativeFunction", &Logistic::InverseLinkCumulativeFunction )
+//   ;
+// }
 

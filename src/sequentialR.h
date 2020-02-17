@@ -1,13 +1,10 @@
 #ifndef SEQUENTIALR_H_
 #define SEQUENTIALR_H_
-#include <RcppArmadillo.h>
 #include "distribution.h"
 
 class SequentialR : public Logistic, Probit{
 public:
   SequentialR();
-  const arma::mat X_M;
-  const arma::mat Y_M;
 
   virtual Eigen::VectorXd inverse_logistic(const Eigen::VectorXd& eta1) const;
   virtual Eigen::MatrixXd inverse_derivative_logistic(const Eigen::VectorXd& eta) const ;
