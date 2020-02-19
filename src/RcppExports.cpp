@@ -11,6 +11,7 @@ RcppExport SEXP _rcpp_module_boot_adjacentmodule();
 RcppExport SEXP _rcpp_module_boot_fishder();
 RcppExport SEXP _rcpp_module_boot_cumulativemodule();
 RcppExport SEXP _rcpp_module_boot_exportmod();
+RcppExport SEXP _rcpp_module_boot_exportmoddev();
 RcppExport SEXP _rcpp_module_boot_referencemodule();
 RcppExport SEXP _rcpp_module_boot_sequentialmodule();
 
@@ -19,6 +20,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_fishder", (DL_FUNC) &_rcpp_module_boot_fishder, 0},
     {"_rcpp_module_boot_cumulativemodule", (DL_FUNC) &_rcpp_module_boot_cumulativemodule, 0},
     {"_rcpp_module_boot_exportmod", (DL_FUNC) &_rcpp_module_boot_exportmod, 0},
+    {"_rcpp_module_boot_exportmoddev", (DL_FUNC) &_rcpp_module_boot_exportmoddev, 0},
     {"_rcpp_module_boot_referencemodule", (DL_FUNC) &_rcpp_module_boot_referencemodule, 0},
     {"_rcpp_module_boot_sequentialmodule", (DL_FUNC) &_rcpp_module_boot_sequentialmodule, 0},
     {NULL, NULL, 0}

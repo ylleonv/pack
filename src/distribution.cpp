@@ -267,15 +267,15 @@ RCPP_MODULE(exportmod){
   ;
 }
 
-// RCPP_MODULE(exportmoddev){
-//   using namespace Rcpp ;
-//   class_<distribution>("distribution")
-//     .constructor()
-//   ;
-//   class_<Logistic>("Logistic")
-//     .derives<distribution>("distribution")
-//     .constructor()
-//     .method( "InverseLinkCumulativeFunction", &Logistic::InverseLinkCumulativeFunction )
-//   ;
-// }
+RCPP_MODULE(exportmoddev){
+  using namespace Rcpp ;
+  class_<distribution>("distribution")
+    .constructor()
+  ;
+  class_<Logistic>("Logistic")
+    .derives<distribution>("distribution")
+    .constructor()
+    .method( "InverseLinkCumulativeFunction", &Logistic::InverseLinkCumulativeFunction )
+  ;
+}
 
