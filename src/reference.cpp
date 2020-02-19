@@ -55,6 +55,7 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_probit(const Eigen::VectorXd& eta
   return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
 }
 
+
 Eigen::MatrixXd ReferenceF::GLMref(std::string response,
                                    StringVector explanatory_complete,
                                    StringVector explanatory_proportional,
@@ -179,6 +180,7 @@ Eigen::MatrixXd ReferenceF::GLMref(std::string response,
   return BETA;
 }
 
+// [[Rcpp::export]]
 RCPP_MODULE(referencemodule){
   Rcpp::class_<ReferenceF>("ReferenceF")
   .constructor()
