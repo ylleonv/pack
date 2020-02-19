@@ -4,6 +4,7 @@
 
 class ReferenceF : public virtual Logistic, Probit, Cauchit, Student, Gumbel, Gompertz{
 public:
+
   ReferenceF();
 
   virtual Eigen::VectorXd inverse_logistic(const Eigen::VectorXd& eta1) const;
@@ -12,7 +13,12 @@ public:
   virtual Eigen::VectorXd inverse_probit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_probit(const Eigen::VectorXd& eta) const ;
 
-  Eigen::MatrixXd GLMref(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std::string link,  std::string design);
+  Eigen::MatrixXd GLMref(std::string response,
+                         StringVector explanatory_complete,
+                         StringVector explanatory_proportional,
+                         std::string distribution,
+                         NumericVector categories_order,
+                         DataFrame dataframe);
 
 };
 

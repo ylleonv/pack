@@ -1,4 +1,3 @@
-#
 # # Libraries ---------------------------------------------------------------
 # library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
 # library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
@@ -36,8 +35,6 @@
 # Sys.setenv("PKG_CXXFLAGS"="-std=c++11")
 # pkgbuild::compile_dll()
 # compileAttributes()
-#
-# loadModule()
 # load_all()
 #
 # # Binomial case -----------------------------------------------------------
@@ -107,7 +104,7 @@
 #
 # # Gumbel
 # dist3$GLMm(X_M = X,
-#            Y_M =  Y,
+#            Y_M = Y,
 #            link = "gumbel")
 #
 # # Gompertz
@@ -147,59 +144,88 @@
 #   X_EXT <- kronecker(as.matrix(X), diag(Q))
 #
 #   Y_vector <- as.matrix(as.numeric(as.character(data2$ill)))
+#   data2$ill_y <- as.matrix(as.numeric(as.character(data2$ill)))
 # }
+#
+# summary(data2)
 #
 # ReferenceF
 # dist1 <- new(ReferenceF)
-# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "complete" )
-# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
-# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
-# dist1$GLMref(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
+#
+# dist1$GLMref(response = "ill_y",
+#              explanatory_complete = c("intercept","university"),
+#              explanatory_proportional = c("gender"),
+#              distribution = "logistic",
+#              categories_order = c(0,1,2),
+#              dataframe = data2 )
+#
+# dist1$GLMref(response = "ill_y",
+#              explanatory_complete = c("intercept","university"),
+#              explanatory_proportional = c("gender"),
+#              distribution = "logistic",
+#              categories_order = c(0,2,1),
+#              dataframe = data2 )
+#
+# dist1$GLMref(response = "ill_y",
+#              explanatory_complete = c("gender", "intercept"),
+#              explanatory_proportional = "university",
+#              distribution = "logistic",
+#              dataframe = data2 )
+#
+# dist1$GLMref(response = "ill_y",
+#              explanatory_complete = "university",
+#              explanatory_proportional = c("gender", "intercept"),
+#              distribution = "probit",
+#              dataframe = data2 )
+#
+# dist1$GLMref(as.matrix(X_1[,1]), as.matrix(X_1[,2]), Y_vector, distribution = "logistic", design = "complete" )
+# dist1$GLMref(as.matrix(X_1), Y_vector, distribution = "logistic", design = "proportional" )
+# dist1$GLMref(as.matrix(X_1), Y_vector, distribution = "probit", design = "complete" )
+# dist1$GLMref(as.matrix(X_1), Y_vector, distribution = "probit", design = "proportional" )
 #
 #
 # CumulativeR
 # dist2 <- new(CumulativeR)
-# dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "logistic", design = "complete" )
-# dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
-# dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
-# dist2$GLMcum(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
+# dist2$GLMcum(as.matrix(X_1), Y_vector, link = "logistic", design = "complete" )
+# dist2$GLMcum(as.matrix(X_1), Y_vector, link = "logistic", design = "proportional" )
+# dist2$GLMcum(as.matrix(X_1), Y_vector, link = "probit", design = "complete" )
+# dist2$GLMcum(as.matrix(X_1), Y_vector, link = "probit", design = "proportional" )
 #
 #
 # SequentialR
 # dist3 <- new(SequentialR)
-# dist3$GLMseq(as.matrix(X_1),  Y_vector, link = "logistic", design = "complete" )
-# dist3$GLMseq(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
-# dist3$GLMseq(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
-# dist3$GLMseq(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
+# dist3$GLMseq(as.matrix(X_1), Y_vector, link = "logistic", design = "complete" )
+# dist3$GLMseq(as.matrix(X_1), Y_vector, link = "logistic", design = "proportional" )
+# dist3$GLMseq(as.matrix(X_1), Y_vector, link = "probit", design = "complete" )
+# dist3$GLMseq(as.matrix(X_1), Y_vector, link = "probit", design = "proportional" )
 #
 # AdjacentR
 # dist4 <- new(AdjacentR)
-# dist4$GLMadj(as.matrix(X_1),  Y_vector, link = "logistic", design = "complete" )
-# dist4$GLMadj(as.matrix(X_1),  Y_vector, link = "logistic", design = "proportional" )
-# dist4$GLMadj(as.matrix(X_1),  Y_vector, link = "probit", design = "complete" )
-# dist4$GLMadj(as.matrix(X_1),  Y_vector, link = "probit", design = "proportional" )
+# dist4$GLMadj(as.matrix(X_1), Y_vector, link = "logistic", design = "complete" )
+# dist4$GLMadj(as.matrix(X_1), Y_vector, link = "logistic", design = "proportional" )
+# dist4$GLMadj(as.matrix(X_1), Y_vector, link = "probit", design = "complete" )
+# dist4$GLMadj(as.matrix(X_1), Y_vector, link = "probit", design = "proportional" )
 #
 #
 # # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "cauchit", design = "proportional" )
 # # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
 # # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-# #
 # # dist1$GLMref(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
-# # Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
-# # ma1 = (as.matrix(cbind((Polviews2$party), (Polviews2$gender))))
-# # Y_ej2 <- as.matrix(as.numeric(as.character(Polviews2$ideology)))
-# # M2<-sapply(Polviews2[,c( "party", "gender" )],unclass)
-# # # str(Y_vector)
-# # # str(Y_ej2)
-# # #
-# # # summary(Y_ej2-1)
-# # summary(as.matrix(X_1))
-# # summary(as.matrix(M2-1))
-# # summary(M2)
-# # view(M2)
-# # ReferenceF
-# # dist1 <- new(ReferenceF)
-# # dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-# # dist1$GLMref(as.matrix(M2[,2]-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-# # dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
+# Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
+#
+# table(Polviews2$ideology , Polviews2$party)
+#
+# Y_ej2 <- as.matrix(as.numeric(as.character(Polviews2$ideology)))
+# M2<-sapply(Polviews2[,c( "party", "gender" )],unclass)
+# Polviews2[Polviews2$party == "repub" && Polviews2$ideology == 1,]
+#
+# colSums(is.na(M2))
+# table(M2)
+# dist1 <- new(ReferenceF)
+# dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
+# dist1$GLMref(as.matrix(M2[,1]-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
+# dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
+#
+# dist1 <- new(AdjacentR)
+# dist1$GLMadj(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
 #

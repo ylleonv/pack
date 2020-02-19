@@ -25,6 +25,19 @@ Eigen::VectorXd distribution::sort_vector(Eigen::VectorXd x1) {
   return XS;
 }
 
+DataFrame distribution::sort_by_user(DataFrame A, NumericVector order)
+{
+  NumericVector y_1 = A[0];
+  NumericVector y_n(y_1.length());
+  for (int element_order = 0 ; element_order < order.length(); element_order++){
+    LogicalVector v0 = (y_1 == order[element_order]);
+    y_n[v0] = element_order;
+  }
+  A[0] = y_n;
+  DataFrame B = A;
+  return B;
+}
+
 Eigen::MatrixXd distribution::sorted_rows(Eigen::MatrixXd A)
 {
   Eigen::VectorXd vec1 = distribution::sort_vector(A.col(0));
@@ -34,6 +47,27 @@ Eigen::MatrixXd distribution::sorted_rows(Eigen::MatrixXd A)
     B.row(B.rows()-1) = A.row(vec1(i));
   }
   return B;
+}
+
+Eigen::MatrixXd distribution::select_data(DataFrame x1, std::string response,
+                            StringVector explanatory_complete,
+                            StringVector explanatory_proportional,
+                            NumericVector order) {
+  // Zero initialization
+  NumericVector a1(1);
+  a1[0] = x1.findName(response);
+  for (int element = 0 ; element < explanatory_complete.size() ; element++ ){
+    String element_1 = explanatory_complete[element];
+    a1.push_back(x1.findName(element_1));
+  }
+  for (int element = 0 ; element < explanatory_proportional.size() ; element++ ){
+    String element_1 = explanatory_proportional[element];
+    a1.push_back(x1.findName(element_1));
+  }
+  x1 = distribution::sort_by_user(x1[a1], order);
+  NumericMatrix x2 = internal::convert_using_rfunction(x1, "as.matrix");
+  Eigen::Map<Eigen::MatrixXd> P = as<Eigen::Map<Eigen::MatrixXd> >(x2);
+  return P;
 }
 
 Eigen::VectorXd Logistic::in_open_corner(const Eigen::VectorXd& p) const

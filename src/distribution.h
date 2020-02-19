@@ -9,8 +9,13 @@ class distribution{
 public:
   double _epsilon_0 = 1e-10;
   double _epsilon_1 = 1e-6;
+  DataFrame sort_by_user(DataFrame A, NumericVector order);
   Eigen::VectorXd sort_vector(Eigen::VectorXd x1) ;
   Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A) ;
+  Eigen::MatrixXd select_data(DataFrame x1, std::string response,
+                              StringVector explanatory_complete,
+                              StringVector explanatory_proportional,
+                              NumericVector order) ;
   distribution(int x)  { cout << "distribution::distribution(int ) called" << endl;   }
   distribution();
 };

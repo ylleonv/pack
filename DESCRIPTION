@@ -15,11 +15,11 @@ RoxygenNote: 7.0.2
 LinkingTo: 
     Rcpp,
     BH,
-    RcppArmadillo,
     RcppEigen
 Imports: 
     Rcpp,
     BH,
     forcats,
-    RcppEigen,
-    RcppArmadillo
+    RcppEigen
+Depends: 
+    Rcpp
