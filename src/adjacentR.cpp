@@ -3,8 +3,6 @@
 using namespace std;
 using namespace Rcpp ;
 
-#include <algorithm>    // std::sort
-
 // [[Rcpp::depends(RcppEigen)]]
 
 AdjacentR::AdjacentR(void) {

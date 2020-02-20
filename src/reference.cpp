@@ -3,7 +3,7 @@
 using namespace std;
 using namespace Rcpp ;
 
-#include <algorithm>    // std::sort
+// [[Rcpp::depends(RcppEigen)]]
 
 ReferenceF::ReferenceF(void) {
   Rcout << "Reference is being created" << endl;
