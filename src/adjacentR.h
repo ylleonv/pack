@@ -2,7 +2,7 @@
 #define ADJACENTR_H_
 #include "distribution.h"
 
-class AdjacentR : public virtual Logistic, Probit, Cauchit, Student, Gumbel, Gompertz{
+class AdjacentR : virtual public Logistic, Probit, Cauchit, Student, Gumbel, Gompertz{
 public:
   AdjacentR();
 

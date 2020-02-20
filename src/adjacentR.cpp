@@ -218,3 +218,4 @@ RCPP_MODULE(adjacentmodule){
   .method( "GLMadj", &AdjacentR::GLMadj)
   ;
 }
+
