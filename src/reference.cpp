@@ -6,7 +6,7 @@ using namespace Rcpp ;
 // [[Rcpp::depends(RcppEigen)]]
 
 ReferenceF::ReferenceF(void) {
-  Rcout << "Reference is being created" << endl;
+  Rcout << "Hola Ale, TQ" << endl;
 }
 
 Eigen::VectorXd ReferenceF::inverse_logistic(const Eigen::VectorXd& eta) const
