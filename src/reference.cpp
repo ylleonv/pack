@@ -55,7 +55,7 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_probit(const Eigen::VectorXd& eta
   return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
 }
 
-Eigen::MatrixXd ReferenceF::GLMref(std::string response,
+List ReferenceF::GLMref(std::string response,
                                    StringVector explanatory_complete,
                                    StringVector explanatory_proportional,
                                    std::string distribution,
@@ -137,6 +137,7 @@ Eigen::MatrixXd ReferenceF::GLMref(std::string response,
   Eigen::MatrixXd F_i_2 ;
   Eigen::VectorXd LogLikIter;
   LogLikIter = Eigen::MatrixXd::Zero(1,1) ;
+  double LogLik;
   // for (int iteration=1; iteration < 18; iteration++){
   // while (check_tutz > 0.0001){
   double epsilon = 0.0001 ;
@@ -145,7 +146,7 @@ Eigen::MatrixXd ReferenceF::GLMref(std::string response,
     Eigen::MatrixXd Score_i = Eigen::MatrixXd::Zero(BETA.rows(),1);
     Eigen::MatrixXd F_i = Eigen::MatrixXd::Zero(BETA.rows(), BETA.rows());
 
-    double LogLik = 0.;
+    LogLik = 0.;
 
     // Loop by subject
 
@@ -176,8 +177,6 @@ Eigen::MatrixXd ReferenceF::GLMref(std::string response,
     LogLikIter(iteration+1) = LogLik;
     Stop_criteria = (abs(LogLikIter(iteration+1) - LogLikIter(iteration))) / (epsilon + (abs(LogLikIter(iteration+1)))) ;
     Eigen::VectorXd beta_old = BETA;
-    Rcout << "Log Likelihood" << endl;
-    Rcout << LogLik << endl;
     BETA = BETA + (F_i.inverse() * Score_i);
     // check_tutz = ((BETA - beta_old).norm())/(beta_old.norm()+check_tutz);
     iteration = iteration + 1;
@@ -186,7 +185,12 @@ Eigen::MatrixXd ReferenceF::GLMref(std::string response,
   }
   Rcout << "Number of iterations" << endl;
   Rcout << iteration-1 << endl;
-  return BETA;
+  Rcout << "Log Likelihood" << endl;
+  Rcout << LogLik << endl;
+  Rcout << "Beta" << endl;
+  Rcout << BETA << endl;
+  return List::create(Named("Nb. iterations") = iteration-1 , Named("Coefficients") = BETA,
+                      Named("Log-likelihood") = LogLik);
 }
 
 // [[Rcpp::export]]

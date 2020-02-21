@@ -13,7 +13,7 @@ public:
   virtual Eigen::VectorXd inverse_probit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_probit(const Eigen::VectorXd& eta) const ;
 
-  Eigen::MatrixXd GLMref(std::string response,
+  List GLMref(std::string response,
                          StringVector explanatory_complete,
                          StringVector explanatory_proportional,
                          std::string distribution,
