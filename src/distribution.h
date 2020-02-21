@@ -86,6 +86,10 @@ class Gompertz : virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
+
+  virtual double cdf_gompertz(const double& value) const;
+  virtual double pdf_gompertz(const double& value) const;
+
   Gompertz();
 };
 

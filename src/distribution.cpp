@@ -244,6 +244,20 @@ Eigen::VectorXd Gompertz::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   return vector;
 }
 
+double Gompertz::cdf_gompertz(const double& value) const
+{
+  double _location = 0.0;
+  double _scale =1.0;
+  boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
+  return cdf(extreme_value, value);
+}
+double Gompertz::pdf_gompertz(const double& value) const
+{
+  double _location = 0.0;
+  double _scale =1.0;
+  boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
+  return pdf(extreme_value, value);
+}
 Eigen::VectorXd sort_vector(Eigen::VectorXd x1) {
   NumericVector V(x1.data(), x1.data() + x1.size());
   int x=0;

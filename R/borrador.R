@@ -1,7 +1,9 @@
+#
 # # Libraries ---------------------------------------------------------------
 # library(devtools);library(tidyverse);library(fs);library(Rcpp);library(RcppArmadillo);library(RcppEigen)
 # library(dplyr); library(tidyr); library(nnet); library(varhandle);library(catdata); library(magic)
 # library(VGAM) ; library(dobson)
+# library(gtools) # For permutations
 #
 # # Initial configuration ---------------------------------------------------
 #
@@ -114,7 +116,6 @@
 #
 #
 # # Multicategorical response -----------------------------------------------
-#
 # # DATA
 # {
 #   data(addiction)
@@ -146,12 +147,10 @@
 #   Y_vector <- as.matrix(as.numeric(as.character(data2$ill)))
 #   data2$ill_y <- as.matrix(as.numeric(as.character(data2$ill)))
 # }
-#
 # summary(data2)
 #
 # ReferenceF
 # dist1 <- new(ReferenceF)
-#
 # dist1$GLMref(response = "ill_y",
 #              explanatory_complete = c("intercept","university"),
 #              explanatory_proportional = c("gender"),
@@ -159,30 +158,140 @@
 #              categories_order = c(0,1,2),
 #              dataframe = data2 )
 #
+# dist1 <- new(ReferenceF)
+# dist1$GLMref(response = "ill_y",
+#              explanatory_complete = NA,
+#              explanatory_proportional = c("intercept","gender"),
+#              distribution = "logistic",
+#              categories_order = c(0,1,2),
+#              dataframe = data2 )
+#
+# dist1 <- new(ReferenceF)
 # dist1$GLMref(response = "ill_y",
 #              explanatory_complete = c("intercept","university"),
+#              explanatory_proportional = NA,
+#              distribution = "logistic",
+#              categories_order = c(0,1,2),
+#              dataframe = data2 )
+#
+# dist1 <- new(ReferenceF)
+# dist1$GLMref(response = "ill_y",
+#              explanatory_complete = NA,
 #              explanatory_proportional = c("gender"),
 #              distribution = "logistic",
-#              categories_order = c(0,2,1),
+#              categories_order = c(2,0,1),
 #              dataframe = data2 )
 #
+# dist1 <- new(ReferenceF)
 # dist1$GLMref(response = "ill_y",
-#              explanatory_complete = c("gender", "intercept"),
-#              explanatory_proportional = "university",
+#              explanatory_complete = c("intercept","university"),
+#              explanatory_proportional = NA,
 #              distribution = "logistic",
+#              categories_order = c(1,2,0),
 #              dataframe = data2 )
 #
 # dist1$GLMref(response = "ill_y",
-#              explanatory_complete = "university",
-#              explanatory_proportional = c("gender", "intercept"),
+#              explanatory_complete = c("intercept","university"),
+#              explanatory_proportional = NA,
 #              distribution = "probit",
+#              categories_order = c(0,1,2),
 #              dataframe = data2 )
 #
-# dist1$GLMref(as.matrix(X_1[,1]), as.matrix(X_1[,2]), Y_vector, distribution = "logistic", design = "complete" )
-# dist1$GLMref(as.matrix(X_1), Y_vector, distribution = "logistic", design = "proportional" )
-# dist1$GLMref(as.matrix(X_1), Y_vector, distribution = "probit", design = "complete" )
-# dist1$GLMref(as.matrix(X_1), Y_vector, distribution = "probit", design = "proportional" )
+# # DATA 2
+# {Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
+#   str(Polviews2)
+#   M2<-sapply(Polviews2[,c("ideology","party", "gender" )],unclass)-1
+#   str(M2); summary(M2)}
 #
+#
+# # All posible permutations
+# a1 = dist1$GLMref(response = "ideology",
+#                   explanatory_complete = c("intercept","party"),
+#                   explanatory_proportional = "gender",
+#                   distribution = "logistic",
+#                   categories_order = c(0,1,3,2,4),
+#                   dataframe = M2 )
+#
+# ## Reference
+# ### Invariance under permutations
+# # Multinomial logit model is invariant under all permutations of the response categories
+#
+# dist1 <- new(ReferenceF)
+# all_permutations = permutations(v=c(0,1,2,3,4),repeats.allowed=F, n = 5, r = 5)
+# Log_lik_Vec = NA
+# for (element in 1:nrow(all_permutations)){
+#   a1 = dist1$GLMref(response = "ideology",
+#                     explanatory_complete = c("intercept","party","gender"),
+#                     explanatory_proportional = NA,
+#                     distribution = "logistic",
+#                     categories_order = all_permutations[element,],
+#                     dataframe = M2 )
+#   Log_lik_Vec[element] = a1$`Log-likelihood`
+# }
+# Log_lik_Vec
+#
+# # We first estimate three reference model using the reference category 5 (default value).
+# dist1 <- new(ReferenceF)
+#
+# a1 = dist1$GLMref(response = "ideology",
+#                   explanatory_complete = c("intercept","party", "gender"),
+#                   explanatory_proportional = NA,
+#                   distribution = "logistic",
+#                   categories_order = c(0,1,2,3,4),
+#                   dataframe = M2)
+#
+# a2 = dist1$GLMref(response = "ideology",
+#                   explanatory_complete = NA,
+#                   explanatory_proportional = c("intercept","party", "gender"),
+#                   distribution = "logistic",
+#                   categories_order = c(0,1,2,3,4),
+#                   dataframe = M2)
+#
+# a3 = dist1$GLMref(response = "ideology",
+#                   explanatory_complete = NA,
+#                   explanatory_proportional = c("intercept","party", "gender"),
+#                   distribution = "cauchit",
+#                   categories_order = c(0,1,2,3,4),
+#                   dataframe = M2)
+# a1$`Log-likelihood`; a2$`Log-likelihood`; a3$`Log-likelihood`
+#
+# # Then we change the reference category and estimate again the three reference models:
+#
+# a1_2 = dist1$GLMref(response = "ideology",
+#                     explanatory_complete = c("intercept","party", "gender"),
+#                     explanatory_proportional = NA,
+#                     distribution = "logistic",
+#                     categories_order = c(0,1,2,4,3),
+#                     dataframe = M2)
+#
+# a2_2 = dist1$GLMref(response = "ideology",
+#                     explanatory_complete = NA,
+#                     explanatory_proportional = c("intercept","party", "gender"),
+#                     distribution = "logistic",
+#                     categories_order = c(0,1,2,4,3),
+#                     dataframe = M2)
+#
+# a3_2 = dist1$GLMref(response = "ideology",
+#                     explanatory_complete = NA,
+#                     explanatory_proportional = c("intercept","party", "gender"),
+#                     distribution = "cauchit",
+#                     categories_order = c(0,1,2,4,3),
+#                     dataframe = M2)
+#
+# a1_2$`Log-likelihood`; a2_2$`Log-likelihood`; a3_2$`Log-likelihood`
+#
+# # Adjacent models for ordinal response
+#
+# # Agresti (2010); Peyhardi et al. (2015) highlighted the equivalence between (adjacent, logistic, complete)
+# # and (reference, logistic, complete) models.
+#
+# dist2 <- new(AdjacentR)
+# adj_1 = dist2$GLMadj(response = "ideology",
+#                      explanatory_complete = c("intercept","party", "gender"),
+#                      explanatory_proportional = NA,
+#                      distribution = "logistic",
+#                      categories_order = c(0,1,2,4,3),
+#                      dataframe = M2)
 #
 # CumulativeR
 # dist2 <- new(CumulativeR)

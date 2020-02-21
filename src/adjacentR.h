@@ -16,7 +16,12 @@ public:
   virtual Eigen::VectorXd inverse_cauchit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_cauchit(const Eigen::VectorXd& eta) const ;
 
-  Eigen::MatrixXd GLMadj(Eigen::MatrixXd X_M, Eigen::MatrixXd Y_V, std::string link,  std::string design);
+  List GLMadj(std::string response,
+              StringVector explanatory_complete,
+              StringVector explanatory_proportional,
+              std::string distribution,
+              NumericVector categories_order,
+              DataFrame dataframe);
 };
 
 #endif

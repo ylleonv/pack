@@ -13,6 +13,9 @@ public:
   virtual Eigen::VectorXd inverse_probit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_probit(const Eigen::VectorXd& eta) const ;
 
+  virtual Eigen::VectorXd inverse_cauchit(const Eigen::VectorXd& eta) const;
+  virtual Eigen::MatrixXd inverse_derivative_cauchit(const Eigen::VectorXd& eta) const ;
+
   List GLMref(std::string response,
                          StringVector explanatory_complete,
                          StringVector explanatory_proportional,
