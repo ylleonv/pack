@@ -50,19 +50,23 @@ Eigen::MatrixXd distribution::sorted_rows(Eigen::MatrixXd A)
 }
 
 Eigen::MatrixXd distribution::select_data(DataFrame x1, std::string response,
-                            StringVector explanatory_complete,
-                            StringVector explanatory_proportional,
-                            NumericVector order) {
+                                          StringVector explanatory_complete,
+                                          StringVector explanatory_proportional,
+                                          NumericVector order) {
   // Zero initialization
   NumericVector a1(1);
   a1[0] = x1.findName(response);
   for (int element = 0 ; element < explanatory_complete.size() ; element++ ){
-    String element_1 = explanatory_complete[element];
-    a1.push_back(x1.findName(element_1));
+    if(explanatory_complete[0] != "NA"){
+      String element_1 = explanatory_complete[element];
+      a1.push_back(x1.findName(element_1));
+    }else {}
   }
-  for (int element = 0 ; element < explanatory_proportional.size() ; element++ ){
-    String element_1 = explanatory_proportional[element];
-    a1.push_back(x1.findName(element_1));
+  for (int element_p = 0 ; element_p < explanatory_proportional.size() ; element_p++ ){
+    if(explanatory_proportional[0] != "NA"){
+      String element_2 = explanatory_proportional[element_p];
+      a1.push_back(x1.findName(element_2));
+    }else {}
   }
   x1 = distribution::sort_by_user(x1[a1], order);
   NumericMatrix x2 = internal::convert_using_rfunction(x1, "as.matrix");

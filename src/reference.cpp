@@ -55,7 +55,6 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_probit(const Eigen::VectorXd& eta
   return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
 }
 
-
 Eigen::MatrixXd ReferenceF::GLMref(std::string response,
                                    StringVector explanatory_complete,
                                    StringVector explanatory_proportional,
@@ -63,9 +62,14 @@ Eigen::MatrixXd ReferenceF::GLMref(std::string response,
                                    NumericVector categories_order,
                                    DataFrame dataframe){
   // Number of explanatory variables
-  const int P_c = explanatory_complete.size() ;
-  const int P_p = explanatory_proportional.size() ;
-  const int P =  P_c +  P_p ;
+  int P_c = explanatory_complete.size();
+  if(explanatory_complete[0] == "NA"){P_c = 0; }
+
+  int P_p = explanatory_proportional.size();
+  if(explanatory_proportional[0] == "NA"){P_p = 0; }
+  // const int P_c = explanatory_complete.size() ;
+  // const int P_p = explanatory_proportional.size() ;
+  int P =  P_c +  P_p ;
   const int N = dataframe.nrows() ; // Number of observations
   // Add Intercept acording to user input
   Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(N);
@@ -96,17 +100,22 @@ Eigen::MatrixXd ReferenceF::GLMref(std::string response,
   Eigen::MatrixXd X_init = Full_M_ordered.rightCols(P);
   Eigen::MatrixXd X_EXT(2, 2);
 
-  Eigen::MatrixXd X_M_Complete_Ext(N*Q, P_c) ;
-  X_M_Complete_Ext << X_init.block(0,0, N , P_c);
-  // Expand matrix
-  X_M_Complete_Ext = kroneckerProduct(X_M_Complete_Ext,Eigen::MatrixXd::Identity(Q,Q)).eval();
+  Eigen::MatrixXd X_M_Complete_Ext;
+  if(P_c > 0){
+    // X_M_Complete_Ext << X_init.block(0,0, N , P_c);
+    X_M_Complete_Ext = kroneckerProduct(X_init.block(0,0, N , P_c),Eigen::MatrixXd::Identity(Q,Q)).eval();
+  }
+
 
   Eigen::MatrixXd X_M_Poportional_Ext(N*Q, P_p) ;
-  for (int x = -1; x < N-1; ++x) {
-    for (int j = (x+1)*Q ; j < (x+2)*Q; ++j){
-      X_M_Poportional_Ext.row(j) = (X_init.rightCols(P_p)).row(x+1);
+  if(P_p > 0){
+    for (int x = -1; x < N-1; ++x) {
+      for (int j = (x+1)*Q ; j < (x+2)*Q; ++j){
+        X_M_Poportional_Ext.row(j) = (X_init.rightCols(P_p)).row(x+1);
+      }
     }
   }
+
   X_EXT.conservativeResize( N*Q , X_M_Complete_Ext.cols()+X_M_Poportional_Ext.cols() );
   X_EXT << X_M_Complete_Ext, X_M_Poportional_Ext;
 
