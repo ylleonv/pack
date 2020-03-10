@@ -2,7 +2,7 @@
 #define REFERENCEF_H_
 #include "distribution.h"
 
-class ReferenceF : public virtual Logistic, Probit, Cauchit, Student, Gumbel, Gompertz{
+class ReferenceF : public virtual Logistic, Normal, Cauchit, Student, Gumbel, Gompertz{
 public:
 
   ReferenceF();
@@ -10,18 +10,26 @@ public:
   virtual Eigen::VectorXd inverse_logistic(const Eigen::VectorXd& eta1) const;
   virtual Eigen::MatrixXd inverse_derivative_logistic(const Eigen::VectorXd& eta) const ;
 
-  virtual Eigen::VectorXd inverse_probit(const Eigen::VectorXd& eta) const;
-  virtual Eigen::MatrixXd inverse_derivative_probit(const Eigen::VectorXd& eta) const ;
+  virtual Eigen::VectorXd inverse_normal(const Eigen::VectorXd& eta) const;
+  virtual Eigen::MatrixXd inverse_derivative_normal(const Eigen::VectorXd& eta) const ;
 
   virtual Eigen::VectorXd inverse_cauchit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_cauchit(const Eigen::VectorXd& eta) const ;
 
   List GLMref(std::string response,
-                         StringVector explanatory_complete,
-                         StringVector explanatory_proportional,
-                         std::string distribution,
-                         NumericVector categories_order,
-                         DataFrame dataframe);
+              StringVector explanatory_complete,
+              StringVector explanatory_proportional,
+              std::string distribution,
+              SEXP categories_order,
+              DataFrame dataframe);
+
+  List GLMref_ec(std::string response, std::string actual_response,
+                 std::string individuals,
+                 StringVector explanatory_complete,
+                 StringVector depend_y,
+                 std::string distribution,
+                 SEXP categories_order,
+                 DataFrame dataframe);
 
 };
 

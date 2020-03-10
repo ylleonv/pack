@@ -16,7 +16,36 @@ distribution::distribution(void) {
   Rcout << "Distribution is being created" << endl;
 }
 
-Eigen::VectorXd distribution::sort_vector(Eigen::VectorXd x1) {
+LogicalVector is_character(DataFrame A) {
+  LogicalVector res(A.cols());
+  for (int column = 0 ; column < A.cols() ; column++){
+    // bool a89 = (TYPEOF(A[column]) == STRSXP);
+    // bool a90 = ( TYPEOF(A[column]) == STRSXP || TYPEOF(A[column]) ==  INTSXP );
+    bool a90 = Rf_isFactor(A[column]) || (TYPEOF(A[column]) == STRSXP);
+    res[column] = a90;
+  }
+  return res;
+}
+
+template <int RTYPE>
+IntegerVector fast_factor_template( const Vector<RTYPE>& x ) {
+  Vector<RTYPE> levs = sort_unique(x);
+  IntegerVector out = match(x, levs);
+  out.attr("levels") = as<CharacterVector>(levs);
+  out.attr("class") = "integer";
+  return out;
+}
+
+IntegerVector fast_factor( SEXP x ) {
+  switch( TYPEOF(x) ) {
+  case INTSXP: return fast_factor_template<INTSXP>(x);
+  case REALSXP: return fast_factor_template<REALSXP>(x);
+  case STRSXP: return fast_factor_template<STRSXP>(x);
+  }
+  return R_NilValue;
+}
+
+Eigen::VectorXd sort_vector_getindex(Eigen::VectorXd x1) {
   NumericVector V(x1.data(), x1.data() + x1.size());
   int x=0;
   std::iota(V.begin(),V.end(),x++);
@@ -25,22 +54,9 @@ Eigen::VectorXd distribution::sort_vector(Eigen::VectorXd x1) {
   return XS;
 }
 
-DataFrame distribution::sort_by_user(DataFrame A, NumericVector order)
+Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A)
 {
-  NumericVector y_1 = A[0];
-  NumericVector y_n(y_1.length());
-  for (int element_order = 0 ; element_order < order.length(); element_order++){
-    LogicalVector v0 = (y_1 == order[element_order]);
-    y_n[v0] = element_order;
-  }
-  A[0] = y_n;
-  DataFrame B = A;
-  return B;
-}
-
-Eigen::MatrixXd distribution::sorted_rows(Eigen::MatrixXd A)
-{
-  Eigen::VectorXd vec1 = distribution::sort_vector(A.col(0));
+  Eigen::VectorXd vec1 = sort_vector_getindex(A.col(0));
   Eigen::MatrixXd B = A.row(vec1(0));
   for (int i = 1; i < A.rows(); ++i) {
     B.conservativeResize(B.rows()+1, B.cols());
@@ -49,29 +65,299 @@ Eigen::MatrixXd distribution::sorted_rows(Eigen::MatrixXd A)
   return B;
 }
 
-Eigen::MatrixXd distribution::select_data(DataFrame x1, std::string response,
-                                          StringVector explanatory_complete,
-                                          StringVector explanatory_proportional,
-                                          NumericVector order) {
+NumericMatrix to_dummy(SEXP A)
+{
+  IntegerVector cha_to_fact = fast_factor(A);
+  CharacterVector levs1 = cha_to_fact.attr("levels");
+  int var_lev = levs1.length();
+  NumericMatrix B_Ma(cha_to_fact.length(), var_lev);
+  for (int i_1 = 0; i_1 < cha_to_fact.length(); ++i_1){
+    int col_ind = cha_to_fact[i_1] - 1;
+    B_Ma(i_1, col_ind) = 1;
+  }
+  if (var_lev != 2){
+    B_Ma = B_Ma( _ , Range(0,var_lev-2) );
+  } else {
+    B_Ma = B_Ma( _ , Range(1,var_lev-1) );
+  }
+  return B_Ma;
+}
+
+DataFrame sort_by_user(DataFrame A, SEXP order2)
+{
+  IntegerVector y_1 = (A[0]);
+  StringVector y_n(A.rows());
+  IntegerVector order = (fast_factor(order2));
+  CharacterVector levs1 = order.attr("levels");
+  CharacterVector levs2 = y_1.attr("levels");
+  if (is_true(all(levs1 == levs2))) {
+    for (int element_order = 0 ; element_order <= order.length(); element_order++){
+      LogicalVector v0 = (y_1 == order[element_order]);
+      y_n[v0] = element_order;
+    }
+    DataFrame B = A;
+    CharacterVector y_2 = as<CharacterVector>(y_n);
+    B[0] = y_2;
+    return B;
+  }stop("The response categories do not match the proposed order of entry");
+}
+
+List distribution::select_data(DataFrame x1, std::string response,
+                               StringVector explanatory_complete,
+                               StringVector explanatory_proportional,
+                               SEXP order) {
+
+  int P_c = explanatory_complete.size();
+  if(explanatory_complete[0] == "NA"){P_c = 0; }
+  Rcout << P_c << std::endl;
+  int P_p = explanatory_proportional.size();
+  if(explanatory_proportional[0] == "NA"){P_p = 0; }
+  Rcout << P_p << std::endl;
+  const int N = x1.nrows() ; // Number of observations
+
+  // ADD INTERCEPT
+  Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(x1.rows());
+  x1["intercept"] = Ones1;
+
   // Zero initialization
   NumericVector a1(1);
   a1[0] = x1.findName(response);
+  int n_com_cat = 0;
   for (int element = 0 ; element < explanatory_complete.size() ; element++ ){
     if(explanatory_complete[0] != "NA"){
       String element_1 = explanatory_complete[element];
       a1.push_back(x1.findName(element_1));
     }else {}
   }
+
+  // SOLO CONTEO
+  DataFrame x21 = x1[a1];
+  LogicalVector n_com_cat1 = is_character(x21);
+  n_com_cat = sum(n_com_cat1)-1;
+
+  // CONTINUA PARA AÑADUR PROPORTIONAL
   for (int element_p = 0 ; element_p < explanatory_proportional.size() ; element_p++ ){
     if(explanatory_proportional[0] != "NA"){
       String element_2 = explanatory_proportional[element_p];
       a1.push_back(x1.findName(element_2));
     }else {}
   }
-  x1 = distribution::sort_by_user(x1[a1], order);
-  NumericMatrix x2 = internal::convert_using_rfunction(x1, "as.matrix");
-  Eigen::Map<Eigen::MatrixXd> P = as<Eigen::Map<Eigen::MatrixXd> >(x2);
-  return P;
+
+  // SE CREA LA MATRIZ COMPLETA DONDE Y ES LA PRIMERA COLUMNA
+  DataFrame x23 = x1[a1];
+  // Just assign factor vector to categorical order proposed
+  DataFrame x2 = sort_by_user(x23, order); // solo reemplaza por nuevo orden
+
+  LogicalVector character_var = is_character(x2);
+  NumericMatrix X_com_cat_int( x2.nrows() , 1 ) ;
+
+  // Solo para conteo de categoricas completas
+  if(explanatory_complete[0] != "NA"){
+    for (int column_char = 1 ; column_char < P_c+1; column_char++){
+      if (character_var(column_char)){
+        NumericMatrix a2 = to_dummy(x2[column_char]);
+        X_com_cat_int = cbind(X_com_cat_int, a2);
+      }else{
+        NumericVector a3 = x2[column_char];
+        X_com_cat_int = cbind(X_com_cat_int, a3);
+      }
+    }
+  }
+  int col_com = X_com_cat_int.cols() - 1;
+  Rcout << col_com << std::endl;
+
+  NumericMatrix result_m( x2.nrows() , 1 ) ;
+  for (int column_char1 = 0 ; column_char1 < x2.cols(); column_char1++){
+    if(character_var[column_char1] == TRUE){
+      NumericMatrix a8 = to_dummy(x2[column_char1]);
+      result_m = cbind(result_m, a8);
+    }
+    else{
+      NumericVector a9 = x2[column_char1];
+      result_m = cbind(result_m, a9);
+    }
+  }
+
+  IntegerVector a4 = fast_factor(x2[0]);
+  CharacterVector levs1 = a4.attr("levels");
+  int K = levs1.length();
+  int Q = K-1;
+  NumericVector a5 = as<NumericVector>(a4);
+  result_m = result_m(_, Range(1,result_m.cols()-1));
+  result_m = cbind(a5,result_m);
+  Eigen::Map<Eigen::MatrixXd> P = as<Eigen::Map<Eigen::MatrixXd> >(result_m);
+  P = sorted_rows(P);
+  Eigen::MatrixXd P1 = P.rightCols(P.cols()-1);
+  Eigen::MatrixXd Y_ext = P1.leftCols(K-1);
+  Eigen::MatrixXd Com_ext = P1.block(0 , K-1 , P1.rows() , col_com );
+  Eigen::MatrixXd Pro_ext = P1.rightCols(P1.cols() - Com_ext.cols() - Y_ext.cols()) ;
+
+  // return List::create(_["Y_ext"] = Y_ext,
+  //                     _["Com_ext"] = Com_ext,
+  //                     _["Pro_ext"] = Pro_ext);
+
+  Eigen::MatrixXd X_EXT(2, 2);
+  Eigen::MatrixXd X_M_Complete_Ext;
+  if(P_c > 0){
+    X_M_Complete_Ext = Eigen::kroneckerProduct(Com_ext,Eigen::MatrixXd::Identity(Q,Q)).eval();
+  }
+  Eigen::MatrixXd X_M_Poportional_Ext(N*Q, Pro_ext.cols()) ;
+  if(P_p > 0){
+    for (int x = -1; x < N-1; ++x) {
+      for (int j = (x+1)*Q ; j < (x+2)*Q; ++j){
+        X_M_Poportional_Ext.row(j) = (Pro_ext).row(x+1);
+      }
+    }
+  }
+  X_EXT.conservativeResize( N*Q , X_M_Complete_Ext.cols()+X_M_Poportional_Ext.cols() );
+  X_EXT << X_M_Complete_Ext, X_M_Poportional_Ext;
+
+  return List::create(_["Y_ext"] = Y_ext,
+                      _["X_EXT"] = X_EXT);
+}
+
+List distribution::select_data_nested(DataFrame x1, std::string response, std::string actual_response,
+                        std::string individuals,
+                        StringVector explanatory_complete,
+                        StringVector depend_y,
+                        SEXP order) {
+
+  const int N = x1.nrows() ;
+
+  // ADD INTERCEPT
+  Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(N);
+  x1["intercept"] = Ones1;
+
+  NumericVector a1(1);
+  a1[0] = x1.findName(response);
+  a1.push_back(x1.findName(individuals));
+  a1.push_back(x1.findName(actual_response));
+
+  for (int element = 0 ; element < explanatory_complete.size() ; element++ ){
+    if(explanatory_complete[0] != "NA"){
+      String element_1 = explanatory_complete[element];
+      a1.push_back(x1.findName(element_1));
+    }else {}
+  }
+  for (int element = 0 ; element < depend_y.size() ; element++ ){
+    if(depend_y[0] != "NA"){
+      String element_1 = depend_y[element];
+      a1.push_back(x1.findName(element_1));
+    }else {}
+  }
+
+  DataFrame x2 = sort_by_user(x1[a1], order); // solo reemplaza por nuevo orden
+  // SOLO PARA CONTEO DE NIVELES RESPUESTA
+  IntegerVector a4 = fast_factor(x2[0]);
+  CharacterVector levs1 = a4.attr("levels");
+  int K = levs1.length();
+  int Q = K-1;
+  NumericVector ref_cat(N) ;
+
+  for (int i = 0 ; i < N; i++){
+    if(a4[i] == K){
+      ref_cat[i] = 1;
+    }else {}
+  }
+
+  CharacterVector response_to_reemplace = x2[0];
+  x2[0] = x2[1];
+  x2[1] = response_to_reemplace; //ahora tienen los nombres opuestos
+
+  LogicalVector choice_ind  = x2[2];
+
+  NumericVector ind_response(N/K);
+  int iter = 0;
+  for (int i = 0; i < choice_ind.length(); i++) {
+    if (choice_ind[i]) {
+      ind_response[iter] = a4[i];
+      iter++;
+    } else {
+    }
+  }
+
+  NumericMatrix Y_ext = to_dummy(ind_response);
+
+  NumericVector a88(1);
+  if(explanatory_complete[0] != "NA"){
+    String element_1 = explanatory_complete[0];
+    a88[0] = x2.findName(element_1);
+    for (int element_p = 1 ; element_p < explanatory_complete.size() ; element_p++ ){
+      String element_2 = explanatory_complete[element_p];
+      a88.push_back(x2.findName(element_2));
+    }
+  }else {}
+  NumericMatrix complete_var = internal::convert_using_rfunction(x2[a88], "as.matrix");
+
+  NumericVector a89(1);
+  if(depend_y[0] != "NA"){
+    String element_1 = depend_y[0];
+    a89[0] = x2.findName(element_1);
+    for (int element_p = 1 ; element_p < depend_y.size() ; element_p++ ){
+      String element_2 = depend_y[element_p];
+      a89.push_back(x2.findName(element_2));
+    }
+  }else {}
+
+  NumericMatrix to_change44 = internal::convert_using_rfunction(x2[a89], "as.matrix");
+  to_change44 = cbind(to_change44, ref_cat);
+
+  NumericVector to_change_sub(N);
+  NumericMatrix vec;
+  NumericVector vec1, vec_ref , ref5;
+
+  // AHORA COMENZAMOS EL BUQLE POR INDIVIDUOS
+  for(int vector = 0 ; vector < depend_y.length(); vector++){
+    if(depend_y[0] != "NA"){
+      for(int indi = 1 ; indi <= (N/K) ; indi++)
+      {
+        vec = to_change44( Range(K*(indi-1),(indi*K)-1) , _);
+        vec1 = vec( _ , vector);
+        vec_ref = vec( _ , depend_y.size());
+        ref5 = vec1[vec_ref == 1];
+        for (int y = 1; y <= K; ++y)
+        {
+          to_change_sub[K*(indi-1)+y-1] = vec1[y-1] - ref5[0];
+        }
+      }
+      to_change44 = cbind(to_change44, to_change_sub);
+    }else {}
+  }
+  to_change44 = to_change44(_, Range(to_change44.cols()-depend_y.length(), to_change44.cols() - 1));
+  to_change44 = cbind(complete_var, to_change44);
+
+  // ELIMINO LA FILA DE REFERENCIA
+  NumericMatrix x52(Dimension(N- N/K, to_change44.ncol()));
+  NumericMatrix x_to_ext(Dimension(N/K, to_change44.ncol()-depend_y.length()));
+  int iter2 = 0;
+  int def = 0;
+  for (int i = 0; i < to_change44.nrow(); i++) {
+    if (ref_cat[i] != 1) {
+      x52.row(iter2) = to_change44.row(i);
+      iter2++;
+    } else {
+      x_to_ext.row(def) = to_change44.row(i);
+      def++;
+    }
+  }
+  Eigen::Map<Eigen::MatrixXd> P = as<Eigen::Map<Eigen::MatrixXd> >(x_to_ext);
+  Eigen::Map<Eigen::MatrixXd> ext_dep_y = as<Eigen::Map<Eigen::MatrixXd> >(x52);
+
+  Eigen::MatrixXd X_M_Complete_Ext = Eigen::kroneckerProduct(P, Eigen::MatrixXd::Identity(Q,Q)).eval();
+
+  Eigen::MatrixXd X_M_dep_y(X_M_Complete_Ext.rows(),X_M_Complete_Ext.cols()+ depend_y.length());
+
+  X_M_dep_y << X_M_Complete_Ext, ext_dep_y.rightCols(depend_y.length());
+
+  return List::create( _["x2"] = x2,
+                       _["to_change44"] = to_change44,
+                       _["ind_response"] = ind_response,
+                       _["X_M_dep_y"] = X_M_dep_y,
+                       _["x_to_ext"] = x_to_ext,
+                       _["ext_dep_y"] = ext_dep_y,
+                       _["X_M_Complete_Ext"] = X_M_Complete_Ext,
+                       _["Y_ext"] = Y_ext
+  );
 }
 
 Eigen::VectorXd Logistic::in_open_corner(const Eigen::VectorXd& p) const
@@ -93,8 +379,8 @@ Logistic::Logistic(void) {
   Rcout << "Logistic is being created" << endl;
 }
 
-Probit::Probit(void) {
-  Rcout << "Probit is being created" << endl;
+Normal::Normal(void) {
+  Rcout << "normal is being created" << endl;
 }
 
 Eigen::VectorXd Logistic::InverseLinkCumulativeFunction(Eigen::VectorXd vector){
@@ -123,27 +409,26 @@ double Logistic::pdf_logit(const double& value) const
   return boost::math::pdf(dist, value);
 }
 
-double Probit::cdf_probit(const double& value) const
+double Normal::cdf_normal(const double& value) const
 {
   boost::math::normal norm;
   return boost::math::cdf(norm, value);
 }
 
-
-double Probit::pdf_probit(const double& value) const
+double Normal::pdf_normal(const double& value) const
 {
   boost::math::normal norm;
   return boost::math::pdf(norm, value);
 }
 
 
-Eigen::VectorXd Probit::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
+Eigen::VectorXd Normal::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   boost::math::normal norm;
   for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = cdf(norm, vector(i));
   return vector;
 }
-Eigen::VectorXd Probit::InverseLinkDensityFunction(Eigen::VectorXd vector ){
+Eigen::VectorXd Normal::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   boost::math::normal norm;
   for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(norm, vector(i));
@@ -258,25 +543,7 @@ double Gompertz::pdf_gompertz(const double& value) const
   boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
   return pdf(extreme_value, value);
 }
-Eigen::VectorXd sort_vector(Eigen::VectorXd x1) {
-  NumericVector V(x1.data(), x1.data() + x1.size());
-  int x=0;
-  std::iota(V.begin(),V.end(),x++);
-  sort( V.begin(),V.end(), [&](int i,int j){return x1[i]<x1[j];} );
-  Eigen::Map<Eigen::VectorXd> XS(Rcpp::as<Eigen::Map<Eigen::VectorXd> >(V));
-  return XS;
-}
 
-Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A)
-{
-  Eigen::VectorXd vec1 = sort_vector(A.col(0));
-  Eigen::MatrixXd B = A.row(vec1(0));
-  for (int i = 1; i < A.rows(); ++i) {
-    B.conservativeResize(B.rows()+1, B.cols());
-    B.row(B.rows()-1) = A.row(vec1(i));
-  }
-  return B;
-}
 
 RCPP_MODULE(exportmod){
   using namespace Rcpp ;

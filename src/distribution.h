@@ -9,13 +9,21 @@ class distribution{
 public:
   double _epsilon_0 = 1e-10;
   double _epsilon_1 = 1e-6;
-  DataFrame sort_by_user(DataFrame A, NumericVector order);
-  Eigen::VectorXd sort_vector(Eigen::VectorXd x1) ;
-  Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A) ;
-  Eigen::MatrixXd select_data(DataFrame x1, std::string response,
+
+  // Eigen::VectorXd sort_vector(Eigen::VectorXd x1) ;
+  // Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A, int col_arrenge) ;
+  // DataFrame sort_by_user(DataFrame A, SEXP order2);
+  List select_data(DataFrame x1, std::string response,
                               StringVector explanatory_complete,
                               StringVector explanatory_proportional,
-                              NumericVector order) ;
+                              SEXP order) ;
+
+  List select_data_nested(DataFrame x1, std::string response,std::string actual_response,
+                                        std::string individuals,
+                                        StringVector explanatory_complete,
+                                        StringVector depend_y,
+                                        SEXP order);
+
   distribution(int x)  { cout << "distribution::distribution(int ) called" << endl;   }
   distribution();
 };
@@ -37,20 +45,19 @@ public:
   Logistic();
 };
 
-class Probit : virtual public distribution{
+class Normal : virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
 
-  virtual double cdf_probit(const double& value) const;
-  virtual double pdf_probit(const double& value) const;
+  virtual double cdf_normal(const double& value) const;
+  virtual double pdf_normal(const double& value) const;
 
-  Probit(int x):distribution(x)   {
-    cout<<"Probit::Probit(int ) called"<< endl;
+  Normal(int x):distribution(x)   {
+    cout<<"normal::normal(int ) called"<< endl;
   }
 
-
-  Probit();
+  Normal();
 };
 
 class Cauchit : virtual public distribution{

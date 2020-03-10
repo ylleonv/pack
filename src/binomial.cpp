@@ -7,13 +7,11 @@ FisherScoring::FisherScoring(void) {
 }
 
 Eigen::MatrixXd FisherScoring::GLMm(Eigen::MatrixXd X_M, Eigen::VectorXd Y_M, std::string link){
-
-  //    Create initial beta
+   //    Create initial beta
   const int N = X_M.rows() ;
   const int K = X_M.cols() ;
   // initialize betas to 0
   Eigen::MatrixXd beta = Eigen::MatrixXd::Zero(K,1);
-
   Eigen::VectorXd Mu;
   Eigen::VectorXd D_M;
   Eigen::VectorXd Deviance;
@@ -31,8 +29,8 @@ Eigen::MatrixXd FisherScoring::GLMm(Eigen::MatrixXd X_M, Eigen::VectorXd Y_M, st
       Mu = Logistic::InverseLinkCumulativeFunction(eta);
       D_M = Logistic::InverseLinkDensityFunction(eta);
     }else if(link == "probit"){
-      Mu = Probit::InverseLinkCumulativeFunction(eta);
-      D_M = Probit::InverseLinkDensityFunction(eta);
+      Mu = Normal::InverseLinkCumulativeFunction(eta);
+      D_M = Normal::InverseLinkDensityFunction(eta);
     }else if(link == "cauchit"){
       Mu = Cauchit::InverseLinkCumulativeFunction(eta);
       D_M = Cauchit::InverseLinkDensityFunction(eta);

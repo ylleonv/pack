@@ -46,7 +46,6 @@
 #   beetle
 #   i=1
 #   beetle_ext <- data.frame(x = as.matrix(rep(beetle[i,1],beetle[i,2])), y= c(rep(1,beetle[i,3]), rep(0,beetle[i,2]-beetle[i,3]) ))
-#
 #   for (i in 2:nrow(beetle)) {
 #     beetle_ext <- rbind(beetle_ext,data.frame(x = as.matrix(rep(beetle[i,1],beetle[i,2])), y= c(rep(1,beetle[i,3]), rep(0,beetle[i,2]-beetle[i,3]))))
 #   }
@@ -60,6 +59,10 @@
 #   Y = matrix(Y)
 #   beta = as.matrix(rep(0,2))
 #   mu = as.matrix(X)%*%beta
+#
+#   df_beetle <- data.frame(t(data.frame(matrix(unlist(beetle_ext), nrow=length(beetle_ext), byrow=T))))
+#   colnames(df_beetle) = c("x_beetle", "y_beetle")
+#
 # }
 #
 # # Pruebas con librerìa usual
@@ -71,7 +74,7 @@
 #   n_y=n-y
 #   beetle.mat=cbind(y,n_y)
 #   glm(beetle.mat~x, family = binomial(link = "logit"))
-#   glm(beetle.mat~x, family = binomial(link = "probit"))
+#   glm(beetle.mat~x, family = binomial(link = "normal"))
 #   glm(beetle.mat~x, family = binomial(link = "cauchit"))
 #   glm(beetle.mat~x, family = binomial(link = "cloglog"))
 # }
@@ -83,11 +86,39 @@
 #            Y_M = Y,
 #            link = "logistic")
 #
-# # Probit
+#
+# df_beetle$y_beetle <- as.factor(df_beetle$y_beetle)
+#
+# library(plyr)
+# df_beetle$y_beetle <- revalue(df_beetle$y_beetle, c("1"="one", "0"="zero"))
+#
+# str((df_beetle))
+# summary(df_beetle)
+#
+# dim(df_beetle)
+#
+# dist1 <- new(ReferenceF)
+# dist1$GLMref(response = "y_beetle",
+#              explanatory_complete = c("intercept","x_beetle"),
+#              explanatory_proportional = NA,
+#              distribution = "logistic",
+#              categories_order = c("zero", "one"),
+#              dataframe = df_beetle )
+#
+# # For same results than previous one
+# dist1 <- new(ReferenceF)
+# dist1$GLMref(response = "y_beetle",
+#              explanatory_complete = NA,
+#              explanatory_proportional = c("intercept","x_beetle"),
+#              distribution = "logistic",
+#              categories_order = c(0,1),
+#              dataframe = df_beetle )
+#
+# # normal
 # dist3 <- new(FisherScoring)
 # dist3$GLMm(X_M = as.matrix(X),
 #            Y_M = as.matrix(Y),
-#            link = "probit")
+#            link = "normal")
 #
 # # Cauchit
 # dist3 <- new(FisherScoring)
@@ -125,84 +156,140 @@
 #   attach(addiction)
 #   ill <- as.factor(ill)
 #   addiction$ill<-as.factor(addiction$ill)
-#   data1 <- addiction[,c("ill","gender","university")]
-#   data1 <- data1[order(data1[,c("ill")]),]
-#   data1 <- data1[order(data1[,c("gender")]),]
-#   data1 <- data1[order(data1[,c("university")]),]
+#   data1 <- addiction[,c("ill","gender","university", "age")]
 #   data2 <- na.omit(data1)
 #
-#   X_1 <- data2[,c("gender","university")]
-#   X <- cbind("inter" = rep(1, nrow(X_1)), X_1)
-#
-#   K = length(unique(data2$ill))
-#   Q = K-1
-#   P = ncol(X_1)
-#   N = nrow(data2)
-#
-#   Y_EXT_1 <- to.dummy(data2$ill, "category")
-#   Y_EXT <- Y_EXT_1[,-ncol(Y_EXT_1)]
-#   Y_EXT <- as.vector(t((Y_EXT)))
-#   X_EXT <- kronecker(as.matrix(X), diag(Q))
-#
-#   Y_vector <- as.matrix(as.numeric(as.character(data2$ill)))
-#   data2$ill_y <- as.matrix(as.numeric(as.character(data2$ill)))
 # }
 # summary(data2)
-#
-# ReferenceF
-# dist1 <- new(ReferenceF)
-# dist1$GLMref(response = "ill_y",
-#              explanatory_complete = c("intercept","university"),
-#              explanatory_proportional = c("gender"),
-#              distribution = "logistic",
-#              categories_order = c(0,1,2),
-#              dataframe = data2 )
+# colnames(data2)
+# str(data2) # RESPONSE FACTOR. COV AS INT
 #
 # dist1 <- new(ReferenceF)
-# dist1$GLMref(response = "ill_y",
-#              explanatory_complete = NA,
-#              explanatory_proportional = c("intercept","gender"),
-#              distribution = "logistic",
-#              categories_order = c(0,1,2),
-#              dataframe = data2 )
+# (mod1 <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -724.8664
+# (mod2 <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("0","2","1"), dataframe = data2 )) # -724.8664
+# (mod3 <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("1","2","0"), dataframe = data2 )) # -724.8664
+# (mod4 <- dist1$GLMref(response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept"),
+#                       distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -737.5639
+# (mod5 <- dist1$GLMref(response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept"),
+#                       distribution = "logistic", categories_order = c("0","2","1"), dataframe = data2 )) # -726.4392
+# (mod6 <- dist1$GLMref(response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept"),
+#                       distribution = "logistic", categories_order = c("1","2","0"), dataframe = data2 )) # -746.9176
 #
-# dist1 <- new(ReferenceF)
-# dist1$GLMref(response = "ill_y",
-#              explanatory_complete = c("intercept","university"),
-#              explanatory_proportional = NA,
-#              distribution = "logistic",
-#              categories_order = c(0,1,2),
-#              dataframe = data2 )
+# (mod7 <- dist1$GLMref(response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) #  -730.6547
+# (mod8 <- dist1$GLMref(response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("0","2","1"), dataframe = data2 )) #  -730.6547
+# (mod8 <- dist1$GLMref(response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("2","0","1"), dataframe = data2 )) #
+# (mod9 <- dist1$GLMref(response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("1","2","0"), dataframe = data2 )) #
 #
-# dist1 <- new(ReferenceF)
-# dist1$GLMref(response = "ill_y",
-#              explanatory_complete = NA,
-#              explanatory_proportional = c("gender"),
-#              distribution = "logistic",
-#              categories_order = c(2,0,1),
-#              dataframe = data2 )
+# (mod10 <- dist1$GLMref(response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("gender"),
+#                        distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -742.7698
+# (mod11 <- dist1$GLMref(response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept", "gender", "university"),
+#                        distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -737.4464
+# (mod12 <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept", "gender", "university"), explanatory_proportional = c("NA"),
+#                        distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -698.9851
+# # NO LO DEJA EL OTRO
+# (mod13 <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept", "gender", "university"), explanatory_proportional = c("age"),
+#                        distribution = "logistic", categories_order = c("1","2","0"), dataframe = data2 )) # -698.9851
+# # FUNCIONA
+# (mod13a <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept","age", "gender", "university"), explanatory_proportional = c("NA"),
+#                         distribution = "logistic", categories_order = c("1","2","0"), dataframe = data2 )) # -679.9081
+# (mod13a_1 <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept","age", "gender", "university"), explanatory_proportional = c("NA"),
+#                           distribution = "logistic", categories_order = c("0","2","1"), dataframe = data2 )) # -679.9081
+# (mod13b <- dist1$GLMref(response = "ill", explanatory_complete = c("gender", "university"), explanatory_proportional = c("intercept","age"),
+#                         distribution = "logistic", categories_order = c("1","2","0"), dataframe = data2 )) # -679.9081
 #
-# dist1 <- new(ReferenceF)
-# dist1$GLMref(response = "ill_y",
-#              explanatory_complete = c("intercept","university"),
-#              explanatory_proportional = NA,
-#              distribution = "logistic",
-#              categories_order = c(1,2,0),
-#              dataframe = data2 )
 #
-# dist1$GLMref(response = "ill_y",
-#              explanatory_complete = c("intercept","university"),
-#              explanatory_proportional = NA,
-#              distribution = "probit",
-#              categories_order = c(0,1,2),
-#              dataframe = data2 )
+# # With categorical variables: Not working with just 2 categories
+# data2$gender <- as.factor(data2$gender)
+# data2$university <- as.factor(data2$university)
+# str(data2)
+#
+# (mod7 <- dist1$GLMref(response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -732.0838
+# (mod8 <- dist1$GLMref(response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("0","2","1"), dataframe = data2 )) # -732.0838
+# (mod9 <- dist1$GLMref(response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+#                       distribution = "logistic", categories_order = c("1","2","0"), dataframe = data2 )) # -732.0838
+# (mod10 <- dist1$GLMref(response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("gender"),
+#                        distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -742.7698
+# (mod11 <- dist1$GLMref(response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept", "gender", "university"),
+#                        distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -737.4464
+# (mod12 <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept", "gender", "university"), explanatory_proportional = c("NA"),
+#                        distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 )) # -698.9851
+#
+#
+# (mod12 <- dist1$GLMref(response = "ill", explanatory_complete = c("intercept", "gender", "university"), explanatory_proportional = c("NA"),
+#                        distribution = "logistic", categories_order = c("0","1","2"), dataframe = data2 ))
 #
 # # DATA 2
-# {Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
-#   str(Polviews2)
-#   M2<-sapply(Polviews2[,c("ideology","party", "gender" )],unclass)-1
-#   str(M2); summary(M2)}
+# Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
 #
+# str(Polviews2)
+# M2<-as.data.frame(sapply(Polviews2[,c("ideology","party", "gender" )] ,unclass))
+# M2 <- as.data.frame(M2)
+# sum(complete.cases(M2))
+# M2$ideology <- as.factor(M2$ideology)
+# str(M2); summary(M2)
+#
+# dist1 <- new(ReferenceF)
+# (mod1_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+#                         distribution = "logistic", categories_order = c("1","2", "3", "4", "5"), dataframe = M2 )) # -980.4022
+# (mod2_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+#                         distribution = "logistic", categories_order = c("1","2", "3", "5","4"), dataframe = M2 )) # -980.4022
+# (mod3_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+#                         distribution = "logistic", categories_order = c("2", "3", "4", "5","1"), dataframe = M2 )) # -980.4022
+# (mod4_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("NA"), explanatory_proportional = c("intercept"),
+#                         distribution = "logistic", categories_order = c("1","2", "3", "4", "5"), dataframe = M2 )) # -1043.362
+# (mod5_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept","party"), explanatory_proportional = c("NA"),
+#                         distribution = "logistic", categories_order = c("1", "2", "3", "4", "5"), dataframe = M2 )) # -977.8485
+# (mod6_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept","gender", "party"), explanatory_proportional = c("NA"),
+#                         distribution = "logistic", categories_order = c("1", "2", "3", "4", "5"), dataframe = M2 )) # -774.6079
+# (mod7_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("NA"), explanatory_proportional = c("party"),
+#                         distribution = "logistic", categories_order = c("1", "2", "3", "4", "5"), dataframe = M2 )) # -977.8485
+# (mod8_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("NA"), explanatory_proportional = c("intercept", "party"),
+#                         distribution = "logistic", categories_order = c("1", "2", "3", "4", "5"), dataframe = M2 )) # -996.6733
+#
+# # NO FUNCIONA ALLA
+# (mod9_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept"), explanatory_proportional = c("party"),
+#                         distribution = "logistic", categories_order = c("1", "2", "3", "4", "5"), dataframe = M2 )) # -977.8485
+#
+# (mod10_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept","gender"), explanatory_proportional = c("NA"),
+#                          distribution = "logistic", categories_order = c("2", "3", "4", "5", "1"), dataframe = M2 )) # -977.8485
+#
+# # ALGO RARO TIENE PARTY
+# (mod11_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept","party"), explanatory_proportional = c("NA"),
+#                          distribution = "logistic", categories_order = c("2", "3", "4", "5", "1"), dataframe = M2 )) # -775.7563
+#
+#
+#
+# (mod6_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("NA"), explanatory_proportional = c("intercept"),
+#                         distribution = "logistic", categories_order = c("2", "3", "4", "5", "1"), dataframe = M2 ))
+#
+# # SI FUNCIONA
+# (mod14_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept", "party" ,"gender"), explanatory_proportional = c("NA"),
+#                          distribution = "logistic", categories_order = c("1", "2", "3", "4", "5"), dataframe = M2 )) # -774.6079
+# (mod15_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept", "party"), explanatory_proportional = c("gender"),
+#                          distribution = "logistic", categories_order = c("1", "2", "3", "4", "5"), dataframe = M2 )) # -775.5648
+# (mod16_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept", "party"), explanatory_proportional = c("gender"),
+#                          distribution = "logistic", categories_order =  c("5", "4", "3", "2","1"), dataframe = M2 )) # -775.5648
+#
+# # TIENE OTRO ORDEN
+# (mod16_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept", "party"), explanatory_proportional = c("gender"),
+#                          distribution = "logistic", categories_order =  c("2", "3", "4", "5","1"), dataframe = M2 )) # -775.5648
+# (mod16_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept", "party"), explanatory_proportional = c("gender"),
+#                          distribution = "logistic", categories_order =  c("5", "2", "3", "4","1"), dataframe = M2 )) # -775.5648
+#
+# # ALGO RARO CON PARTY
+# (mod16_2 <- dist1$GLMref(response = "ideology", explanatory_complete = c("intercept", "party"), explanatory_proportional = c("gender"),
+#                          distribution = "logistic", categories_order =  c("5", "2", "3", "4", "1"), dataframe = M2 )) # -775.5648
+#
+# # GENDER WITHOUT INTERCEPT
 #
 # # All posible permutations
 # a1 = dist1$GLMref(response = "ideology",
@@ -230,111 +317,137 @@
 # }
 # Log_lik_Vec
 #
-# # We first estimate three reference model using the reference category 5 (default value).
-# dist1 <- new(ReferenceF)
 #
-# a1 = dist1$GLMref(response = "ideology",
-#                   explanatory_complete = c("intercept","party", "gender"),
-#                   explanatory_proportional = NA,
-#                   distribution = "logistic",
-#                   categories_order = c(0,1,2,3,4),
-#                   dataframe = M2)
+# # MULTINOMIAL PARTY EX 8.3 TUTZ -------------------------------------------
+# # DATA
+# {partypref <- matrix(data=c(114, 10, 53, 224,134,9,42,226,114,8,23,174,339,30,13,
+#                             414,42,5,44,161,88,10,60,171,90,8,31,168, 413,23,14,375), nrow=8, byrow=TRUE)
+# partydat<-data.frame(
+#   party=c(rep("CDU",sum(partypref[,1])),rep("SPD",sum(partypref[,4])),
+#           rep("The Liberals",sum(partypref[,2])),rep("The Greens",sum(partypref[,3]))),
+#   sex=c(rep(0,sum(partypref[1:4,1])),rep(1,sum(partypref[5:8,1])),
+#         rep(0,sum(partypref[1:4,4])),rep(1,sum(partypref[5:8,4])),
+#         rep(0,sum(partypref[1:4,2])),rep(1,sum(partypref[5:8,2])),
+#         rep(0,sum(partypref[1:4,3])),rep(1,sum(partypref[5:8,3]))),
+#   age=c(rep(c(1:4,1:4), partypref[,1]),rep(c(1:4,1:4), partypref[,4]),
+#         rep(c(1:4,1:4), partypref[,2]),rep(c(1:4,1:4), partypref[,3])))
+# partydat$age <- as.factor(partydat$age)}
+# head(partydat)
+# str(partydat)
+# summary(partydat)
 #
-# a2 = dist1$GLMref(response = "ideology",
-#                   explanatory_complete = NA,
-#                   explanatory_proportional = c("intercept","party", "gender"),
-#                   distribution = "logistic",
-#                   categories_order = c(0,1,2,3,4),
-#                   dataframe = M2)
+# (m_party_1 <- dist1$GLMref(response = "party", explanatory_complete = c("intercept", "sex", "age"), explanatory_proportional = NA,
+#                            distribution = "logistic", categories_order =  c("SPD", "The Greens", "The Liberals", "CDU"), dataframe = partydat)) # -3521.484
 #
-# a3 = dist1$GLMref(response = "ideology",
-#                   explanatory_complete = NA,
-#                   explanatory_proportional = c("intercept","party", "gender"),
-#                   distribution = "cauchit",
-#                   categories_order = c(0,1,2,3,4),
-#                   dataframe = M2)
-# a1$`Log-likelihood`; a2$`Log-likelihood`; a3$`Log-likelihood`
+# # MULTINOMIAL TRAVEL EX 8.3 TUTZ ------------------------------------------
+# # vignette("multinomial-travel")
 #
-# # Then we change the reference category and estimate again the three reference models:
+# library(mlogit)
+# data(ModeChoice, package="Ecdat")
+# head(ModeChoice)
+# travel.long <- mlogit.data(ModeChoice, choice="mode", shape="long", alt.levels=c("air","train","bus","car"))
 #
-# a1_2 = dist1$GLMref(response = "ideology",
-#                     explanatory_complete = c("intercept","party", "gender"),
-#                     explanatory_proportional = NA,
-#                     distribution = "logistic",
-#                     categories_order = c(0,1,2,4,3),
-#                     dataframe = M2)
+# head(travel.long)
+# travel.kat.id <- mlogit(mode ~ invt + gc|hinc, data=travel.long)
 #
-# a2_2 = dist1$GLMref(response = "ideology",
-#                     explanatory_complete = NA,
-#                     explanatory_proportional = c("intercept","party", "gender"),
-#                     distribution = "logistic",
-#                     categories_order = c(0,1,2,4,3),
-#                     dataframe = M2)
+# # Now with VGAM
+# travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
+# colnames(travelmode) <- c("air","train","bus","car")
+# travelhinc <- matrix(ModeChoice$hinc, byrow = T, ncol = 4)
+# travelhinc <- travelhinc[,1]
+# travelinvt <- matrix(ModeChoice$invt, byrow = T, ncol = 4)
+# colnames(travelinvt) <- c("invtair","invttrain","invtbus","invtcar")
+# travelgc <- matrix(ModeChoice$gc, byrow = T, ncol = 4)
+# colnames(travelgc) <- c("gcair","gctrain","gcbus","gccar")
+# travelinvt <- sweep(travelinvt[,-1], 1, travelinvt[,1])
+# travelgc <- sweep(travelgc[,-1], 1, travelgc[,1])
+# Invt <- travelinvt[,1]
+# Gc <- travelgc[,1]
+# traveldat <- cbind(travelhinc, travelinvt, Invt, travelgc, Gc)
+# traveldat <- as.data.frame(traveldat)
 #
-# a3_2 = dist1$GLMref(response = "ideology",
-#                     explanatory_complete = NA,
-#                     explanatory_proportional = c("intercept","party", "gender"),
-#                     distribution = "cauchit",
-#                     categories_order = c(0,1,2,4,3),
-#                     dataframe = M2)
+# head(traveldat)
+# fit <- vglm(travelmode ~ Invt + Gc + travelhinc, multinomial(parallel = FALSE ~ travelhinc, refLevel = 1),
+#             xij = list(Invt ~ invttrain + invtbus + invtcar,Gc ~ gctrain + gcbus + gccar),
+#             form2 = ~ Invt + invttrain + invtbus + invtcar + Gc + gctrain + gcbus + gccar + travelhinc,
+#             data = traveldat, trace = TRUE)
 #
-# a1_2$`Log-likelihood`; a2_2$`Log-likelihood`; a3_2$`Log-likelihood`
+# # DATOS PARA MI EC MODELO -------------------------------------------------
 #
-# # Adjacent models for ordinal response
+# head(travel.long)
+# choice <- sub('.*\\.', '', rownames(travel.long))
+# indv <- sub("\\..*","", rownames(travel.long))
 #
-# # Agresti (2010); Peyhardi et al. (2015) highlighted the equivalence between (adjacent, logistic, complete)
-# # and (reference, logistic, complete) models.
+# travel.long87 <- cbind(indv, choice, travel.long)
+# travel.long88 <- as.data.frame(travel.long87)
 #
-# dist2 <- new(AdjacentR)
-# adj_1 = dist2$GLMadj(response = "ideology",
-#                      explanatory_complete = c("intercept","party", "gender"),
-#                      explanatory_proportional = NA,
-#                      distribution = "logistic",
-#                      categories_order = c(0,1,2,4,3),
-#                      dataframe = M2)
+# head(travel.long88,8)
+# tail(travel.long88)
 #
-# CumulativeR
-# dist2 <- new(CumulativeR)
-# dist2$GLMcum(as.matrix(X_1), Y_vector, link = "logistic", design = "complete" )
-# dist2$GLMcum(as.matrix(X_1), Y_vector, link = "logistic", design = "proportional" )
-# dist2$GLMcum(as.matrix(X_1), Y_vector, link = "probit", design = "complete" )
-# dist2$GLMcum(as.matrix(X_1), Y_vector, link = "probit", design = "proportional" )
+# dist3 <- new(ReferenceF)
+# A98 = dist3$GLMref_ec(response = "choice", actual_response = "mode",
+#                       individuals = "indv",
+#                       explanatory_complete = c("intercept","hinc"),
+#                       depend_y = c("invt", "gc"),
+#                       distribution = "logistic", categories_order =  c("train", "bus", "car", "air"), dataframe = travel.long88)
+# dim(A98$Y_init)
+# dim(A98$X_EXT)
+# A98$Coefficients
 #
-#
-# SequentialR
-# dist3 <- new(SequentialR)
-# dist3$GLMseq(as.matrix(X_1), Y_vector, link = "logistic", design = "complete" )
-# dist3$GLMseq(as.matrix(X_1), Y_vector, link = "logistic", design = "proportional" )
-# dist3$GLMseq(as.matrix(X_1), Y_vector, link = "probit", design = "complete" )
-# dist3$GLMseq(as.matrix(X_1), Y_vector, link = "probit", design = "proportional" )
-#
-# AdjacentR
-# dist4 <- new(AdjacentR)
-# dist4$GLMadj(as.matrix(X_1), Y_vector, link = "logistic", design = "complete" )
-# dist4$GLMadj(as.matrix(X_1), Y_vector, link = "logistic", design = "proportional" )
-# dist4$GLMadj(as.matrix(X_1), Y_vector, link = "probit", design = "complete" )
-# dist4$GLMadj(as.matrix(X_1), Y_vector, link = "probit", design = "proportional" )
+# A98 = dist3$GLMref_ec(response = "choice", actual_response = "mode",
+#                       individuals = "indv",
+#                       explanatory_complete = c("intercept","hinc"),
+#                       depend_y = c("invt", "gc"),
+#                       distribution = "normal", categories_order =  c("bus", "car", "air", "train"), dataframe = travel.long88)
+# dim(A98$Y_init)
+# dim(A98$X_EXT)
+# A98$Coefficients
 #
 #
-# # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "cauchit", design = "proportional" )
-# # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
-# # dist4$GLMadj(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-# # dist1$GLMref(as.matrix(M2), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
-# Polviews2 <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Polviews2.dat", header=TRUE)
 #
-# table(Polviews2$ideology , Polviews2$party)
+# # ANOTHER EXAMPLE FOR ECONOMETRIC MODEL -----------------------------------
 #
-# Y_ej2 <- as.matrix(as.numeric(as.character(Polviews2$ideology)))
-# M2<-sapply(Polviews2[,c( "party", "gender" )],unclass)
-# Polviews2[Polviews2$party == "repub" && Polviews2$ideology == 1,]
 #
-# colSums(is.na(M2))
-# table(M2)
-# dist1 <- new(ReferenceF)
-# dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-# dist1$GLMref(as.matrix(M2[,1]-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
-# dist1$GLMref(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "proportional" )
+# data("Heating",package="Ecdat")
 #
-# dist1 <- new(AdjacentR)
-# dist1$GLMadj(as.matrix(M2-1), as.matrix(Y_ej2-1), link = "logistic", design = "complete" )
+# # Heating is a "horizontal" data.frame with three choice-specific
+# # variables (ic: investment cost, oc: operating cost) and some
+# # individual-specific variables (income, region, rooms)
+#
+# H <- mlogit.data(Heating, shape="wide", choice="depvar", varying=c(3:12))
+# head(H)
+#
+# m <- mlogit(depvar~ic+oc|0, H)
+#
+#
+# head(H)
+# choice <- sub('.*\\.', '', rownames(H))
+# indv <- sub("\\..*","", rownames(H))
+#
+# dat4 <- cbind(indv, choice, H)
+# dat4 <- as.data.frame(dat4)
+#
+# head(dat4,8)
+# str(dat4)
+# dist3 <- new(ReferenceF)
+#
+# mi2 <- mlogit(depvar~oc+ic|income, H, reflevel="hp")
+# A98 = dist3$GLMref_ec(response = "choice", actual_response = "depvar",
+#                       individuals = "indv",
+#                       explanatory_complete = c("intercept","income"),
+#                       depend_y = c("oc","ic"),
+#                       distribution = "logistic", categories_order =  c("ec", "er", "gc", "gr", "hp"), dataframe = dat4)
+# A98$Coefficients
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #
