@@ -16,6 +16,9 @@ public:
   virtual Eigen::VectorXd inverse_cauchit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_cauchit(const Eigen::VectorXd& eta) const ;
 
+  virtual Eigen::VectorXd inverse_student(const Eigen::VectorXd& eta) const;
+  virtual Eigen::MatrixXd inverse_derivative_student(const Eigen::VectorXd& eta) const ;
+
   List GLMref(std::string response,
               StringVector explanatory_complete,
               StringVector explanatory_proportional,
@@ -29,7 +32,8 @@ public:
                  StringVector depend_y,
                  std::string distribution,
                  SEXP categories_order,
-                 DataFrame dataframe);
+                 DataFrame dataframe,
+                 std::string design);
 
 };
 

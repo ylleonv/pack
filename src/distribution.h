@@ -10,9 +10,8 @@ public:
   double _epsilon_0 = 1e-10;
   double _epsilon_1 = 1e-6;
 
-  // Eigen::VectorXd sort_vector(Eigen::VectorXd x1) ;
-  // Eigen::MatrixXd sorted_rows(Eigen::MatrixXd A, int col_arrenge) ;
-  // DataFrame sort_by_user(DataFrame A, SEXP order2);
+  std::string concatenate(std::string x, std::string level);
+
   List select_data(DataFrame x1, std::string response,
                               StringVector explanatory_complete,
                               StringVector explanatory_proportional,
@@ -79,6 +78,10 @@ class Student :  virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
+
+  virtual double cdf_student(const double& value) const;
+  virtual double pdf_student(const double& value) const;
+
   Student();
 };
 

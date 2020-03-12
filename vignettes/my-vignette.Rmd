@@ -1,0 +1,261 @@
+---
+title: "PCGLM"
+author: "Lorena Leon"
+# output: rmarkdown::html_vignette
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    # number_sections : true
+    theme: simplex
+    highlight: tango
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+  
+```{r include=FALSE}
+knitr::opts_chunk$set(
+message=FALSE, warning=FALSE, paged.print=TRUE, collapse = TRUE, comment = "#>"
+)
+```
+
+
+```{r setup}
+library(pack); library(catdata)  # For addiction data
+library(mlogit)
+```
+
+--------
+
+## Binomial case
+
+--------
+
+## Multinomial case - Non ordered response
+
+### Reference standard case
+
+```{r }
+
+data(addiction)
+summary(addiction)
+head(addiction)
+# vignette("multinomial-addiction1")
+addiction$ill<-as.factor(addiction$ill)
+data1 <- addiction[,c("ill","gender","university", "age")]
+data2 <- na.omit(data1)
+
+summary(data2)
+
+dist1 <- new(ReferenceF)
+(mod1 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+)) # -724.8664
+
+(mod2 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "2", "1"), dataframe = data2
+)) 
+(mod3 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("intercept"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("1", "2", "0"), dataframe = data2
+)) 
+(mod4 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+)) 
+(mod5 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept"),
+  distribution = "logistic", categories_order = c("0", "2", "1"), dataframe = data2
+))
+(mod6 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept"),
+  distribution = "logistic", categories_order = c("1", "2", "0"), dataframe = data2
+)) 
+
+(mod7 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+)) 
+(mod8 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "2", "1"), dataframe = data2
+)) 
+(mod8_2 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("2", "0", "1"), dataframe = data2
+)) 
+(mod9 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("1", "2", "0"), dataframe = data2
+)) 
+
+dist_10 <- new(ReferenceF)
+
+(mod10 <- dist_10$GLMref(
+  response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("gender"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+)) 
+(mod11 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept", "gender", "university"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+)) 
+(mod12 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("intercept", "gender", "university"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+)) 
+# NO LO DEJA EL OTRO
+(mod13 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("intercept", "gender", "university"), explanatory_proportional = c("age"),
+  distribution = "logistic", categories_order = c("1", "2", "0"), dataframe = data2
+)) 
+# FUNCIONA
+(mod13a <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("intercept", "age", "gender", "university"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("1", "2", "0"), dataframe = data2
+)) 
+(mod13a_1 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("intercept", "age", "gender", "university"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "2", "1"), dataframe = data2
+)) 
+(mod13b <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("gender", "university"), explanatory_proportional = c("intercept", "age"),
+  distribution = "logistic", categories_order = c("1", "2", "0"), dataframe = data2
+)) 
+
+```
+
+Explanatory variables as factors:
+
+```{r}
+data2$gender <- as.factor(data2$gender)
+data2$university <- as.factor(data2$university)
+(mod7 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+))
+(mod8 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "2", "1"), dataframe = data2
+))
+(mod9 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("gender"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("1", "2", "0"), dataframe = data2
+))
+(mod11 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("NA"), explanatory_proportional = c("intercept", "gender", "university"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+))
+(mod12 <- dist1$GLMref(
+  response = "ill", explanatory_complete = c("intercept", "gender", "university"), explanatory_proportional = c("NA"),
+  distribution = "logistic", categories_order = c("0", "1", "2"), dataframe = data2
+))
+```
+
+### Category-specific
+#### Travel Mode
+##### Example 8.4 Tutz: 
+The choice of travel mode of n = 840 passengers in Australia was investigated by Greene (2003). The
+data are available from the R package Ecdat. The alternatives of travel mode were air, train, bus, and
+car, which have frequencies 0.276, 0.300, 0.142, and 0.280. Air serves as the reference category. As
+category-specific variables we consider travel time in vehicle (timevc) and cost, and as the global variable
+we consider household income (income). The estimates show that income seems to be
+influential for the preference of train and bus over airplane. Moreover, time in vehicle seems to matter for
+the preference of the travel mode. Cost turns out to be non-influential if income is in the predictor.
+
+Load data from mlogit library:
+```{r}
+# library(mlogit)
+data(ModeChoice, package = "Ecdat")
+head(ModeChoice)
+travel.long <- mlogit.data(ModeChoice, choice = "mode", shape = "long", alt.levels = c("air", "train", "bus", "car"))
+head(travel.long)
+```
+
+With PCGLM
+```{r}
+head(travel.long)
+choice <- sub(".*\\.", "", rownames(travel.long))
+indv <- sub("\\..*", "", rownames(travel.long))
+travel.long88 <- as.data.frame(cbind(indv, choice, travel.long))
+head(travel.long88, 5)
+
+dist7 <- new(ReferenceF)
+(exp_8_3 <- dist7$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc"),
+  depend_y = c("gc", "invt"),
+  distribution = "logistic", categories_order = c("train", "bus", "car", "air"), dataframe = travel.long88,
+  design = "tutz"
+))
+```
+
+##### Robustness of Student link function in multinomial choice models
+Results from page 8: The log-likelihood obtained with the MNL is −185.91 as obtained by Louviere et al. (2000) page 157.
+With PCGLM:
+```{r}
+dist3 <- new(ReferenceF)
+(table3 <- dist3$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
+  design = "louviere"
+))
+(table4 <- dist3$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept"),
+  depend_y = c("ttme"),
+  distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
+  design = "louviere"
+))
+(train_1.35 <- dist3$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("air", "bus", "car", "train"), dataframe = travel.long88,
+  design = "louviere"
+))
+```
+
+#### Heating
+Heating is a "horizontal" data.frame with three choice-specific
+variables (ic: investment cost, oc: operating cost) and some
+individual-specific variables (income, region, rooms)
+
+With PCGLM:
+```{r}
+data("Heating", package = "Ecdat")
+H <- mlogit.data(Heating, shape = "wide", choice = "depvar", varying = c(3:12))
+choice <- sub(".*\\.", "", rownames(H))
+indv <- sub("\\..*", "", rownames(H))
+
+dat4 <- as.data.frame(cbind(indv, choice, H))
+head(dat4, 8)
+dist3 <- new(ReferenceF)
+(A98 <- dist3$GLMref_ec(
+  response = "choice", actual_response = "depvar",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "income"),
+  depend_y = c("oc", "ic"),
+  distribution = "logistic", categories_order = c("ec", "er", "gc", "gr", "hp"), dataframe = dat4,
+  design = "tutz"
+))
+```
+
+
+--------
+
+
+--------
+
+## Multinomial case - Ordered response
+

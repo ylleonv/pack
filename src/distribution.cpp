@@ -13,7 +13,7 @@ using namespace std;
 using namespace Rcpp ;
 
 distribution::distribution(void) {
-  Rcout << "Distribution is being created" << endl;
+  // Rcout << "Distribution is being created" << endl;
 }
 
 LogicalVector is_character(DataFrame A) {
@@ -102,6 +102,12 @@ DataFrame sort_by_user(DataFrame A, SEXP order2)
   }stop("The response categories do not match the proposed order of entry");
 }
 
+std::string distribution::concatenate(std::string x, std::string level)
+{
+  return (x + " " +level);
+}
+
+
 List distribution::select_data(DataFrame x1, std::string response,
                                StringVector explanatory_complete,
                                StringVector explanatory_proportional,
@@ -109,10 +115,10 @@ List distribution::select_data(DataFrame x1, std::string response,
 
   int P_c = explanatory_complete.size();
   if(explanatory_complete[0] == "NA"){P_c = 0; }
-  Rcout << P_c << std::endl;
+  // Rcout << P_c << std::endl;
   int P_p = explanatory_proportional.size();
   if(explanatory_proportional[0] == "NA"){P_p = 0; }
-  Rcout << P_p << std::endl;
+  // Rcout << P_p << std::endl;
   const int N = x1.nrows() ; // Number of observations
 
   // ADD INTERCEPT
@@ -164,7 +170,7 @@ List distribution::select_data(DataFrame x1, std::string response,
     }
   }
   int col_com = X_com_cat_int.cols() - 1;
-  Rcout << col_com << std::endl;
+  // Rcout << col_com << std::endl;
 
   NumericMatrix result_m( x2.nrows() , 1 ) ;
   for (int column_char1 = 0 ; column_char1 < x2.cols(); column_char1++){
@@ -192,10 +198,6 @@ List distribution::select_data(DataFrame x1, std::string response,
   Eigen::MatrixXd Com_ext = P1.block(0 , K-1 , P1.rows() , col_com );
   Eigen::MatrixXd Pro_ext = P1.rightCols(P1.cols() - Com_ext.cols() - Y_ext.cols()) ;
 
-  // return List::create(_["Y_ext"] = Y_ext,
-  //                     _["Com_ext"] = Com_ext,
-  //                     _["Pro_ext"] = Pro_ext);
-
   Eigen::MatrixXd X_EXT(2, 2);
   Eigen::MatrixXd X_M_Complete_Ext;
   if(P_c > 0){
@@ -213,14 +215,15 @@ List distribution::select_data(DataFrame x1, std::string response,
   X_EXT << X_M_Complete_Ext, X_M_Poportional_Ext;
 
   return List::create(_["Y_ext"] = Y_ext,
-                      _["X_EXT"] = X_EXT);
+                      _["X_EXT"] = X_EXT,
+                      _["levs1"] = levs1);
 }
 
 List distribution::select_data_nested(DataFrame x1, std::string response, std::string actual_response,
-                        std::string individuals,
-                        StringVector explanatory_complete,
-                        StringVector depend_y,
-                        SEXP order) {
+                                      std::string individuals,
+                                      StringVector explanatory_complete,
+                                      StringVector depend_y,
+                                      SEXP order) {
 
   const int N = x1.nrows() ;
 
@@ -345,18 +348,50 @@ List distribution::select_data_nested(DataFrame x1, std::string response, std::s
 
   Eigen::MatrixXd X_M_Complete_Ext = Eigen::kroneckerProduct(P, Eigen::MatrixXd::Identity(Q,Q)).eval();
 
+
+
+
+  // Eigen::MatrixXd X1 = X_M_Complete_Ext.block(0,0,X_M_Complete_Ext.rows(),Q+1) ;
+  //
+  // Eigen::MatrixXd X2 = X_M_Complete_Ext.block(0,(2*Q),X_M_Complete_Ext.rows(),(1)) ;
+
+
+
+  Eigen::MatrixXd X1 = X_M_Complete_Ext.block(0,0,X_M_Complete_Ext.rows(),Q) ;
+  Eigen::MatrixXd X2(X_M_Complete_Ext.rows(),1);
+  // Eigen::MatrixXd X_mod = X1;
+  //
+  //
+  if(explanatory_complete.size() >= 2){
+
+    for (int element_p1 = 0 ; element_p1 < explanatory_complete.size() - 1; element_p1++ ){
+
+      X2 = X_M_Complete_Ext.block(0,((element_p1+1)*Q),X_M_Complete_Ext.rows(),1) ;
+
+
+      X1.conservativeResize(X1.rows(), X1.cols() + 1);
+
+      X1.col(X1.cols()-1) = X2;
+
+      // X_mod << X_mod, X2;
+    }
+
+  }else{}
+
   Eigen::MatrixXd X_M_dep_y(X_M_Complete_Ext.rows(),X_M_Complete_Ext.cols()+ depend_y.length());
 
   X_M_dep_y << X_M_Complete_Ext, ext_dep_y.rightCols(depend_y.length());
 
-  return List::create( _["x2"] = x2,
-                       _["to_change44"] = to_change44,
-                       _["ind_response"] = ind_response,
+  Eigen::MatrixXd X_M_dep_y_alt(X1.rows(),X1.cols()+ depend_y.length());
+
+  X_M_dep_y_alt << X1, ext_dep_y.rightCols(depend_y.length());
+
+  return List::create( _["X1"] = X1,
                        _["X_M_dep_y"] = X_M_dep_y,
-                       _["x_to_ext"] = x_to_ext,
-                       _["ext_dep_y"] = ext_dep_y,
+                       _["X_M_dep_y_alt"] = X_M_dep_y_alt,
                        _["X_M_Complete_Ext"] = X_M_Complete_Ext,
-                       _["Y_ext"] = Y_ext
+                       _["Y_ext"] = Y_ext,
+                       _["levs1"] = levs1
   );
 }
 
@@ -376,11 +411,11 @@ Eigen::VectorXd Logistic::in_open_corner(const Eigen::VectorXd& p) const
 }
 
 Logistic::Logistic(void) {
-  Rcout << "Logistic is being created" << endl;
+  // Rcout << "Logistic is being created" << endl;
 }
 
 Normal::Normal(void) {
-  Rcout << "normal is being created" << endl;
+  // Rcout << "normal is being created" << endl;
 }
 
 Eigen::VectorXd Logistic::InverseLinkCumulativeFunction(Eigen::VectorXd vector){
@@ -436,7 +471,7 @@ Eigen::VectorXd Normal::InverseLinkDensityFunction(Eigen::VectorXd vector ){
 }
 
 Cauchit::Cauchit(void) {
-  Rcout << "Cauchit is being created" << endl;
+  // Rcout << "Cauchit is being created" << endl;
 }
 
 double Cauchit::cdf_cauchit(const double& value) const
@@ -472,7 +507,19 @@ Eigen::VectorXd Cauchit::InverseLinkDensityFunction(Eigen::VectorXd vector ){
 }
 
 Student::Student(void) {
-  Rcout << "Student is being created" << endl;
+  // Rcout << "Student is being created" << endl;
+}
+double Student::cdf_student(const double& value) const
+{
+  double _degrees = 1.35;
+  boost::math::students_t_distribution<> student(_degrees);
+  return cdf(student, value);
+}
+double Student::pdf_student(const double& value) const
+{
+  double _degrees = 1.35;
+  boost::math::students_t_distribution<> student(_degrees);
+  return pdf(student, value);
 }
 Eigen::VectorXd Student::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _degrees = 2.0;
@@ -490,7 +537,7 @@ Eigen::VectorXd Student::InverseLinkDensityFunction(Eigen::VectorXd vector ){
 }
 
 Gumbel::Gumbel(void) {
-  Rcout << "Gumbel is being created" << endl;
+  // Rcout << "Gumbel is being created" << endl;
 }
 Eigen::VectorXd Gumbel::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
@@ -510,7 +557,7 @@ Eigen::VectorXd Gumbel::InverseLinkDensityFunction(Eigen::VectorXd vector ){
 }
 
 Gompertz::Gompertz(void) {
-  Rcout << "Gompertz is being created" << endl;
+  // Rcout << "Gompertz is being created" << endl;
 }
 Eigen::VectorXd Gompertz::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _location = 0.0;

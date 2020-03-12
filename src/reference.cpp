@@ -6,7 +6,7 @@ using namespace Rcpp ;
 // [[Rcpp::depends(RcppEigen)]]
 
 ReferenceF::ReferenceF(void) {
-  Rcout << "Ref" << endl;
+  // Rcout << "Ref" << endl;
 }
 
 Eigen::VectorXd ReferenceF::inverse_logistic(const Eigen::VectorXd& eta) const
@@ -79,6 +79,31 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_cauchit(const Eigen::VectorXd& et
 }
 
 
+Eigen::VectorXd ReferenceF::inverse_student(const Eigen::VectorXd& eta) const
+{
+  Eigen::VectorXd pi( eta.size() );
+  double norm1 = 1.;
+  for(size_t j=0; j<eta.size(); ++j)
+  {
+    pi[j] = Student::cdf_student( eta(j) ) / ( 1-Student::cdf_student( eta(j) ) );
+    norm1 += pi[j];
+  }
+  return (pi/norm1);
+}
+
+Eigen::MatrixXd ReferenceF::inverse_derivative_student(const Eigen::VectorXd& eta2) const
+{
+  Eigen::VectorXd pi1 = ReferenceF::inverse_student(eta2);
+  Eigen::MatrixXd D1 = Eigen::MatrixXd::Zero(pi1.rows(),pi1.rows());
+  for(int j=0; j<eta2.rows(); ++j)
+  { D1(j,j) = pdf_student( eta2(j) ) /
+    (Student::cdf_student(eta2(j)) * (1-Student::cdf_student(eta2(j))));
+  }
+  return D1 * ( Eigen::MatrixXd(pi1.asDiagonal()) - pi1 * pi1.transpose().eval() );
+}
+
+
+
 List ReferenceF::GLMref(std::string response,
                         StringVector explanatory_complete,
                         StringVector explanatory_proportional,
@@ -89,7 +114,7 @@ List ReferenceF::GLMref(std::string response,
   int P_c = 0;
   if(explanatory_complete[0] != "NA"){P_c = explanatory_complete.size(); }
   int P_p = 0;
-  if(explanatory_proportional[0] == "NA"){P_p = explanatory_proportional.size(); }
+  if(explanatory_proportional[0] != "NA"){P_p = explanatory_proportional.size(); }
   int P =  P_c +  P_p ; // Number of explanatory variables without intercept
   const int N = dataframe.nrows() ; // Number of observations
 
@@ -98,6 +123,8 @@ List ReferenceF::GLMref(std::string response,
 
   Eigen::MatrixXd Y_init = Full_M["Y_ext"];
   Eigen::MatrixXd X_EXT = Full_M["X_EXT"];
+  CharacterVector levs1 = Full_M["levs1"];
+
   int Q = Y_init.cols();
   int K = Q + 1;
   // // // Beta initialization with zeros
@@ -163,19 +190,32 @@ List ReferenceF::GLMref(std::string response,
     BETA = BETA + (F_i.inverse() * Score_i);
     // check_tutz = ((BETA - beta_old).norm())/(beta_old.norm()+check_tutz);
     iteration = iteration + 1;
-    // Rcout << "Beta" << endl;
-    // Rcout << BETA << endl;
+
   }
-  Rcout << "Number of iterations" << endl;
-  Rcout << iteration-1 << endl;
-  Rcout << "Log Likelihood" << endl;
-  Rcout << LogLik << endl;
-  // Rcout << "Beta" << endl;
-  // Rcout << BETA << endl;
+
+  std::vector<std::string> text=as<std::vector<std::string>>(explanatory_complete);
+  std::vector<std::string> level_text=as<std::vector<std::string>>(levs1);
+  StringVector names(Q*P_c + P_p);
+  if(P_c > 0){
+    for(int var = 0 ; var < explanatory_complete.size() ; var++){
+      for(int cat = 0 ; cat < Q ; cat++){
+        names[(Q*var) + cat] = distribution::concatenate(text[var], level_text[cat]);
+      }
+    }
+  }
+  if(P_p > 0){
+    for(int var_p = 0 ; var_p < explanatory_proportional.size() ; var_p++){
+      names[(Q*P_c) + var_p] = explanatory_proportional[var_p];
+    }
+  }
+
+  // TO NAMED THE RESULT BETAS
+  NumericMatrix BETA_2 = wrap(BETA);
+  rownames(BETA_2) = names;
+
   return List::create(Named("Nb. iterations") = iteration-1 , Named("Coefficients") = BETA,
-                      Named("Log-likelihood") = LogLik);
-
-
+                      Named("Coefficients2") = BETA_2,
+                      Named("Log-likelihood") = LogLik, Named("Names_beta") = names);
 }
 
 List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
@@ -184,17 +224,25 @@ List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
                            StringVector depend_y,
                            std::string distribution,
                            SEXP categories_order,
-                           DataFrame dataframe){
+                           DataFrame dataframe,
+                           std::string design){
   int P_c = 0;
   if(explanatory_complete[0] != "NA"){P_c = explanatory_complete.size(); }
   int P_p = 0;
+  if(depend_y[0] != "NA"){P_p = depend_y.size(); }
+
   const int N = dataframe.nrows() ; // Number of observations
 
   List Full_M = distribution::select_data_nested(dataframe, response, actual_response,
                                                  individuals, explanatory_complete, depend_y , categories_order);
 
   Eigen::MatrixXd Y_init = Full_M["Y_ext"];
-  Eigen::MatrixXd X_EXT = Full_M["X_M_dep_y"];
+  Eigen::MatrixXd X_EXT;
+  if(design == "tutz"){
+    X_EXT = Full_M["X_M_dep_y"];
+  }else if(design == "louviere"){
+    X_EXT = Full_M["X_M_dep_y_alt"];
+  }
 
   int Q = Y_init.cols();
   int K = Q + 1;
@@ -243,6 +291,9 @@ List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
       }else if(distribution == "cauchit"){
         pi = ReferenceF::inverse_cauchit(eta);
         D = ReferenceF::inverse_derivative_cauchit(eta);
+      }else if(distribution == "student"){
+        pi = ReferenceF::inverse_student(eta);
+        D = ReferenceF::inverse_derivative_student(eta);
       }
 
       Cov_i = Eigen::MatrixXd(pi.asDiagonal()) - (pi*pi.transpose());
@@ -261,19 +312,31 @@ List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
     BETA = BETA + (F_i.inverse() * Score_i);
     // check_tutz = ((BETA - beta_old).norm())/(beta_old.norm()+check_tutz);
     iteration = iteration + 1;
-
   }
-  Rcout << "Number of iterations" << endl;
-  Rcout << iteration-1 << endl;
-  Rcout << "Log Likelihood" << endl;
-  Rcout << LogLik << endl;
-  // Rcout << "Beta" << endl;
-  // Rcout << BETA << endl;
-  return List::create(Named("Nb. iterations") = iteration-1 , Named("Coefficients") = BETA,
+  CharacterVector levs1 = Full_M["levs1"];
+
+  std::vector<std::string> text=as<std::vector<std::string>>(explanatory_complete);
+  std::vector<std::string> level_text=as<std::vector<std::string>>(categories_order);
+  StringVector names(Q*P_c + P_p);
+  if(P_c > 0){
+    for(int var = 0 ; var < explanatory_complete.size() ; var++){
+      for(int cat = 0 ; cat < Q ; cat++){
+        names[(Q*var) + cat] = distribution::concatenate(text[var], level_text[cat]);
+      }
+    }
+  }
+  if(P_p > 0){
+    for(int var_p = 0 ; var_p < depend_y.size() ; var_p++){
+      names[(Q*P_c) + var_p] = depend_y[var_p];
+    }
+  }
+
+  // TO NAMED THE RESULT BETAS
+  NumericMatrix BETA_2 = wrap(BETA);
+  rownames(BETA_2) = names;
+
+  return List::create(Named("Nb. iterations") = iteration-1 , Named("Coefficients") = BETA_2,
                       Named("Log-likelihood") = LogLik);
-  // return List::create(Named("Coefficients") = BETA,
-  //                     Named("Y_init") = Y_init,
-  //                     Named("X_EXT") = X_EXT);
 
 }
 

@@ -24,3 +24,7 @@ Imports:
     RcppEigen
 Depends: 
     Rcpp
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
