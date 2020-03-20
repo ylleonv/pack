@@ -88,6 +88,7 @@ DataFrame sort_by_user(DataFrame A, SEXP order2)
   IntegerVector y_1 = (A[0]);
   StringVector y_n(A.rows());
   IntegerVector order = (fast_factor(order2));
+
   CharacterVector levs1 = order.attr("levels");
   CharacterVector levs2 = y_1.attr("levels");
   if (is_true(all(levs1 == levs2))) {
@@ -413,26 +414,6 @@ Eigen::VectorXd Logistic::in_open_corner(const Eigen::VectorXd& p) const
 Logistic::Logistic(void) {
   // Rcout << "Logistic is being created" << endl;
 }
-
-Normal::Normal(void) {
-  // Rcout << "normal is being created" << endl;
-}
-
-Eigen::VectorXd Logistic::InverseLinkCumulativeFunction(Eigen::VectorXd vector){
-  boost::math::logistic dist(0., 1.);
-  for (int i = 0; i<=vector.rows()-1; i++)
-    vector(i) = boost::math::cdf(dist, vector(i));
-  return vector;
-}
-
-Eigen::VectorXd Logistic::InverseLinkDensityFunction(Eigen::VectorXd vector){
-  boost::math::logistic dist(0., 1.);
-  for (int i = 0; i<=vector.size()-1; i++)
-    vector(i) = boost::math::pdf(dist, vector(i));
-  return vector;
-}
-
-// For constant values
 double Logistic::cdf_logit(const double& value) const
 {
   boost::math::logistic dist(0., 1.);
@@ -443,19 +424,39 @@ double Logistic::pdf_logit(const double& value) const
   boost::math::logistic dist(0., 1.);
   return boost::math::pdf(dist, value);
 }
+Eigen::VectorXd Logistic::InverseLinkCumulativeFunction(Eigen::VectorXd vector){
+  boost::math::logistic dist(0., 1.);
+  for (int i = 0; i<=vector.rows()-1; i++)
+    vector(i) = boost::math::cdf(dist, vector(i));
+  return vector;
+}
+Eigen::VectorXd Logistic::InverseLinkDensityFunction(Eigen::VectorXd vector){
+  boost::math::logistic dist(0., 1.);
+  for (int i = 0; i<=vector.size()-1; i++)
+    vector(i) = boost::math::pdf(dist, vector(i));
+  return vector;
+}
+Eigen::VectorXd Logistic::InverseLinkQuantileFunction(Eigen::VectorXd vector ){
+  boost::math::logistic dist(0., 1.);
+  for (int i = 0; i<=vector.size()-1; i++)
+    vector(i) = quantile(dist, vector(i));
+  return vector;
+}
 
+
+Normal::Normal(void) {
+  // Rcout << "normal is being created" << endl;
+}
 double Normal::cdf_normal(const double& value) const
 {
   boost::math::normal norm;
   return boost::math::cdf(norm, value);
 }
-
 double Normal::pdf_normal(const double& value) const
 {
   boost::math::normal norm;
   return boost::math::pdf(norm, value);
 }
-
 
 Eigen::VectorXd Normal::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   boost::math::normal norm;
@@ -467,6 +468,12 @@ Eigen::VectorXd Normal::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   boost::math::normal norm;
   for (int i = 0; i<=vector.rows()-1; i++)
     vector(i) = pdf(norm, vector(i));
+  return vector;
+}
+Eigen::VectorXd Normal::InverseLinkQuantileFunction(Eigen::VectorXd vector ){
+  boost::math::normal norm;
+  for (int i = 0; i<=vector.rows()-1; i++)
+    vector(i) = quantile(norm, vector(i));
   return vector;
 }
 
@@ -505,20 +512,28 @@ Eigen::VectorXd Cauchit::InverseLinkDensityFunction(Eigen::VectorXd vector ){
     vector(i) = pdf(extreme_value, vector(i));
   return vector;
 }
+Eigen::VectorXd Cauchit::InverseLinkQuantileFunction(Eigen::VectorXd vector ){
+  double _location = 0.0;
+  double _scale =1.0;
+  boost::math::cauchy_distribution<> extreme_value(_location, _scale);
+  for (int i = 0; i<=vector.rows()-1; i++)
+    vector(i) = quantile(extreme_value, vector(i));
+  return vector;
+}
 
 Student::Student(void) {
   // Rcout << "Student is being created" << endl;
 }
-double Student::cdf_student(const double& value) const
+double Student::cdf_student(const double& value, double df_student) const
 {
-  double _degrees = 1.35;
-  boost::math::students_t_distribution<> student(_degrees);
+  // double _degrees = 1.35;
+  boost::math::students_t_distribution<> student(df_student);
   return cdf(student, value);
 }
-double Student::pdf_student(const double& value) const
+double Student::pdf_student(const double& value, double df_student) const
 {
-  double _degrees = 1.35;
-  boost::math::students_t_distribution<> student(_degrees);
+  // double _degrees = 1.35;
+  boost::math::students_t_distribution<> student(df_student);
   return pdf(student, value);
 }
 Eigen::VectorXd Student::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
@@ -538,6 +553,20 @@ Eigen::VectorXd Student::InverseLinkDensityFunction(Eigen::VectorXd vector ){
 
 Gumbel::Gumbel(void) {
   // Rcout << "Gumbel is being created" << endl;
+}
+double Gumbel::cdf_gumbel(const double& value) const
+{
+  double _location = 0.0;
+  double _scale =1.0;
+  boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
+  return cdf(extreme_value, value);
+}
+double Gumbel::pdf_gumbel(const double& value) const
+{
+  double _location = 0.0;
+  double _scale =1.0;
+  boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
+  return pdf(extreme_value, value);
 }
 Eigen::VectorXd Gumbel::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
@@ -559,6 +588,18 @@ Eigen::VectorXd Gumbel::InverseLinkDensityFunction(Eigen::VectorXd vector ){
 Gompertz::Gompertz(void) {
   // Rcout << "Gompertz is being created" << endl;
 }
+
+double Gompertz::pdf_gompertz(const double& value) const
+{ double _mu = 0.0;
+  double _sigma = 1.0;
+
+  return (exp((value - _mu)/ _sigma) *  exp( - exp ((value - _mu)/ _sigma) ) ) / _sigma ; }
+
+double Gompertz::cdf_gompertz(const double& value) const
+{ double _mu = 0.0;
+  double _sigma = 1.0;
+  return  1 - exp( - exp((value - _mu) / _sigma) ); }
+
 Eigen::VectorXd Gompertz::InverseLinkCumulativeFunction(Eigen::VectorXd vector ){
   double _location = 0.0;
   double _scale =1.0;
@@ -576,20 +617,14 @@ Eigen::VectorXd Gompertz::InverseLinkDensityFunction(Eigen::VectorXd vector ){
   return vector;
 }
 
-double Gompertz::cdf_gompertz(const double& value) const
-{
-  double _location = 0.0;
-  double _scale =1.0;
-  boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
-  return cdf(extreme_value, value);
+Eigen::VectorXd Gompertz::InverseLinkQuantileFunction(Eigen::VectorXd vector ){
+  double _mu = 0.0;
+  double _sigma = 1.0;
+  for (int i = 0; i<=vector.rows()-1; i++)
+    vector(i) = _mu + _sigma * log( -log(1-vector(i)) );
+  return vector;
 }
-double Gompertz::pdf_gompertz(const double& value) const
-{
-  double _location = 0.0;
-  double _scale =1.0;
-  boost::math::extreme_value_distribution<> extreme_value(_location, _scale);
-  return pdf(extreme_value, value);
-}
+
 
 
 RCPP_MODULE(exportmod){
@@ -599,15 +634,15 @@ RCPP_MODULE(exportmod){
   ;
 }
 
-RCPP_MODULE(exportmoddev){
-  using namespace Rcpp ;
-  class_<distribution>("distribution")
-    .constructor()
-  ;
-  class_<Logistic>("Logistic")
-    .derives<distribution>("distribution")
-    .constructor()
-    .method( "InverseLinkCumulativeFunction", &Logistic::InverseLinkCumulativeFunction )
-  ;
-}
+// RCPP_MODULE(exportmoddev){
+//   using namespace Rcpp ;
+//   class_<distribution>("distribution")
+//     .constructor()
+//   ;
+//   class_<Logistic>("Logistic")
+//     .derives<distribution>("distribution")
+//     .constructor()
+//     .method( "InverseLinkCumulativeFunction", &Logistic::InverseLinkCumulativeFunction )
+//   ;
+// }
 

@@ -1,24 +1,22 @@
 ---
 title: "PCGLM"
 author: "Lorena Leon"
-# output: rmarkdown::html_vignette
 output:
   html_document:
-    toc: true
-    toc_float: true
-    # number_sections : true
-    theme: simplex
     highlight: tango
-vignette: >
-  %\VignetteIndexEntry{my-vignette}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    theme: simplex
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{my-vignette} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
   
   
 ```{r include=FALSE}
 knitr::opts_chunk$set(
-message=FALSE, warning=FALSE, paged.print=TRUE, collapse = TRUE, comment = "#>"
+message=FALSE, warning=FALSE, paged.print=TRUE, collapse = TRUE, cache = TRUE, comment = "#>"
 )
 ```
 
@@ -26,11 +24,8 @@ message=FALSE, warning=FALSE, paged.print=TRUE, collapse = TRUE, comment = "#>"
 ```{r setup}
 library(pack); library(catdata)  # For addiction data
 library(mlogit)
+devtools::load_all(".")
 ```
-
---------
-
-## Binomial case
 
 --------
 
@@ -197,17 +192,19 @@ dist7 <- new(ReferenceF)
 
 ##### Robustness of Student link function in multinomial choice models
 Results from page 8: The log-likelihood obtained with the MNL is −185.91 as obtained by Louviere et al. (2000) page 157.
+
 With PCGLM:
+
 ```{r}
 dist3 <- new(ReferenceF)
-(table3 <- dist3$GLMref_ec(
-  response = "choice", actual_response = "mode",
-  individuals = "indv",
-  explanatory_complete = c("intercept", "hinc", "psize"),
-  depend_y = c("gc", "ttme"),
-  distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
-  design = "louviere"
-))
+# (table3 <- dist3$GLMref_ec(
+#   response = "choice", actual_response = "mode",
+#   individuals = "indv",
+#   explanatory_complete = c("intercept", "hinc", "psize"),
+#   depend_y = c("gc", "ttme"),
+#   distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
+#   design = "louviere"
+# ))
 (table4 <- dist3$GLMref_ec(
   response = "choice", actual_response = "mode",
   individuals = "indv",
@@ -216,14 +213,14 @@ dist3 <- new(ReferenceF)
   distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
   design = "louviere"
 ))
-(train_1.35 <- dist3$GLMref_ec(
-  response = "choice", actual_response = "mode",
-  individuals = "indv",
-  explanatory_complete = c("intercept", "hinc", "psize"),
-  depend_y = c("gc", "ttme"),
-  distribution = "student", categories_order = c("air", "bus", "car", "train"), dataframe = travel.long88,
-  design = "louviere"
-))
+# (train_1.35 <- dist3$GLMref_ec(
+#   response = "choice", actual_response = "mode",
+#   individuals = "indv",
+#   explanatory_complete = c("intercept", "hinc", "psize"),
+#   depend_y = c("gc", "ttme"),
+#   distribution = "student", categories_order = c("air", "bus", "car", "train"), dataframe = travel.long88,
+#   design = "louviere"
+# ))
 ```
 
 #### Heating
@@ -258,4 +255,244 @@ dist3 <- new(ReferenceF)
 --------
 
 ## Multinomial case - Ordered response
+
+
+
+--------
+
+
+## Paper script JSS
+
+Model Choice data just whith the selected travel option
+
+```{r}
+{
+  library(mlogit)
+  data(ModeChoice, package = "Ecdat")
+  head(ModeChoice)
+  travel.long <- mlogit.data(ModeChoice, choice = "mode", shape = "long", alt.levels = c("air", "train", "bus", "car"))
+  head(travel.long)
+  choice <- sub(".*\\.", "", rownames(travel.long))
+  indv <- sub("\\..*", "", rownames(travel.long))
+  travel.long88 <- as.data.frame(cbind(indv, choice, travel.long))
+}
+travel_dat1 <- travel.long88[travel.long88$mode == T,]
+head(travel_dat1)
+```
+
+### Invariance under permutations
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+dist1 <- new(ReferenceF)
+(l_1 <- dist1$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("air", "train", "bus", "car"),
+  dataframe = travel_dat1
+))
+```
+
+REFERENCE, LOGISTIC, PROPORTIONAL
+
+```{r}
+(l_2 <- dist1$GLMref(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "logistic",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+REFERENCE, CAUCHIT, COMPLETE
+ 
+```{r}
+(l_3 <- dist1$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("air", "train", "bus", "car"),
+  dataframe = travel_dat1
+))
+```
+
+Then we change the reference category (bus as reference) and estimate again the three reference models:
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+(l_1prime <- dist1$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("air", "train", "car", "bus"),
+  dataframe = travel_dat1
+))
+```
+
+REFERENCE, LOGISTIC, PROPORTIONAL
+
+```{r}
+(l_2prime <- dist1$GLMref(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "logistic",
+  categories_order = c("air", "train","car", "bus"),
+  dataframe = travel_dat1
+))
+```
+
+REFERENCE, CAUCHIT, COMPLETE
+ 
+```{r}
+(l_3prime <- dist1$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("air", "train","car", "bus"),
+  dataframe = travel_dat1
+))
+```
+
+The log-likelihoods l_1 and l_1prime are equal (since the canonical model is invariant under all permutations) whereas the log-likelihoods l_2 and l_2prime are different (respectively l_3 and l_3prime).
+
+### 4. Adjacent models for ordinal response
+
+Equivalence between (adjacent, logistic, complete) and (reference, logistic, complete) models.
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+(estimation <- dist1$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, LOGISTIC, COMPLETE
+ 
+```{r}
+dist2 <- new(AdjacentR)
+(estimation_prime <- dist2$GLMadj(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+Remark that the log-likelihoods l and l_prime are equal but the parameters estimations are different
+### Invariance under permutations
+
+ADJACENT, CAUCHY, COMPLETE
+
+```{r}
+(estimation_1 <- dist2$GLMadj(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, GOMPERTZ, PROPORTIONAL
+ 
+```{r}
+(estimation_2 <- dist2$GLMadj(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "gompertz",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, CAUCHY, COMPLETE (Reverse order)
+ 
+```{r}
+(estimation_1r <- dist2$GLMadj(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("train", "car", "bus", "air"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, GOMPERTZ, PROPORTIONAL (Reverse order)
+ 
+```{r}
+(estimation_2r <- dist2$GLMadj(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "gompertz",
+  categories_order = c("train", "car", "bus", "air"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, GUMBEL, PROPORTIONAL (Reverse order)
+ 
+```{r}
+(estimation_3r <- dist2$GLMadj(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "gumbel",
+  categories_order = c("train", "car", "bus", "air"),
+  dataframe = travel_dat1
+))
+```
+
+Remark that the log-likelihoods l_1 and l_1r are equal since the Cauchy distribution is symmetric whereas the log-likelihoods l_2 and l_2r are different since the Gompertz distribution is not symmetric. Moreover if the Gumbel distribution is used we the reverse order then the log-likelihoods l_2 and l_3r are equal since the Gumbel distribution is the symmetric of the Gompertz distribution. Otherwise, the parameter estimations are reversed.
+
+### 5. Cumulative models for ordinal response
+
+The equivalence between the (cumulative, Gompertz, proportional) and (sequential, Gompertz, proportional) models has been demonstrated by Läärä and Matthews (1985).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

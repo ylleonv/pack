@@ -7,9 +7,9 @@
 ## usethis namespace: end
 
 loadModule("exportmod", TRUE)
-loadModule("exportmoddev", TRUE)
+# loadModule("exportmoddev", TRUE)
 loadModule("fishder", TRUE)
 loadModule("referencemodule", TRUE)
-# loadModule("cumulativemodule", TRUE)
-# loadModule("sequentialmodule", TRUE)
-# loadModule("adjacentmodule", TRUE)
+loadModule("cumulativemodule", TRUE)
+loadModule("sequentialmodule", TRUE)
+loadModule("adjacentmodule", TRUE)

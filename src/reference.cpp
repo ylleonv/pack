@@ -79,25 +79,25 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_cauchit(const Eigen::VectorXd& et
 }
 
 
-Eigen::VectorXd ReferenceF::inverse_student(const Eigen::VectorXd& eta) const
+Eigen::VectorXd ReferenceF::inverse_student(const Eigen::VectorXd& eta, double freedom_degrees) const
 {
   Eigen::VectorXd pi( eta.size() );
   double norm1 = 1.;
   for(size_t j=0; j<eta.size(); ++j)
   {
-    pi[j] = Student::cdf_student( eta(j) ) / ( 1-Student::cdf_student( eta(j) ) );
+    pi[j] = Student::cdf_student( eta(j) , freedom_degrees) / ( 1-Student::cdf_student( eta(j) , freedom_degrees ) );
     norm1 += pi[j];
   }
   return (pi/norm1);
 }
 
-Eigen::MatrixXd ReferenceF::inverse_derivative_student(const Eigen::VectorXd& eta2) const
+Eigen::MatrixXd ReferenceF::inverse_derivative_student(const Eigen::VectorXd& eta2, double freedom_degrees) const
 {
-  Eigen::VectorXd pi1 = ReferenceF::inverse_student(eta2);
+  Eigen::VectorXd pi1 = ReferenceF::inverse_student(eta2, freedom_degrees);
   Eigen::MatrixXd D1 = Eigen::MatrixXd::Zero(pi1.rows(),pi1.rows());
   for(int j=0; j<eta2.rows(); ++j)
-  { D1(j,j) = pdf_student( eta2(j) ) /
-    (Student::cdf_student(eta2(j)) * (1-Student::cdf_student(eta2(j))));
+  { D1(j,j) = pdf_student( eta2(j) , freedom_degrees) /
+    (Student::cdf_student(eta2(j),freedom_degrees) * (1-Student::cdf_student(eta2(j),freedom_degrees)));
   }
   return D1 * ( Eigen::MatrixXd(pi1.asDiagonal()) - pi1 * pi1.transpose().eval() );
 }
@@ -116,6 +116,7 @@ List ReferenceF::GLMref(std::string response,
   int P_p = 0;
   if(explanatory_proportional[0] != "NA"){P_p = explanatory_proportional.size(); }
   int P =  P_c +  P_p ; // Number of explanatory variables without intercept
+
   const int N = dataframe.nrows() ; // Number of observations
 
   List Full_M = distribution::select_data(dataframe, response, explanatory_complete,
@@ -123,7 +124,7 @@ List ReferenceF::GLMref(std::string response,
 
   Eigen::MatrixXd Y_init = Full_M["Y_ext"];
   Eigen::MatrixXd X_EXT = Full_M["X_EXT"];
-  CharacterVector levs1 = Full_M["levs1"];
+  // CharacterVector levs1 = Full_M["levs1"];
 
   int Q = Y_init.cols();
   int K = Q + 1;
@@ -194,7 +195,7 @@ List ReferenceF::GLMref(std::string response,
   }
 
   std::vector<std::string> text=as<std::vector<std::string>>(explanatory_complete);
-  std::vector<std::string> level_text=as<std::vector<std::string>>(levs1);
+  std::vector<std::string> level_text=as<std::vector<std::string>>(categories_order);
   StringVector names(Q*P_c + P_p);
   if(P_c > 0){
     for(int var = 0 ; var < explanatory_complete.size() ; var++){
@@ -213,9 +214,9 @@ List ReferenceF::GLMref(std::string response,
   NumericMatrix BETA_2 = wrap(BETA);
   rownames(BETA_2) = names;
 
-  return List::create(Named("Nb. iterations") = iteration-1 , Named("Coefficients") = BETA,
-                      Named("Coefficients2") = BETA_2,
-                      Named("Log-likelihood") = LogLik, Named("Names_beta") = names);
+  return List::create(Named("Nb. iterations") = iteration-1 ,
+                      Named("Coefficients") = BETA_2,
+                      Named("Log-likelihood") = LogLik);
 }
 
 List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
@@ -225,7 +226,8 @@ List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
                            std::string distribution,
                            SEXP categories_order,
                            DataFrame dataframe,
-                           std::string design){
+                           std::string design,
+                           double freedom_degrees){
   int P_c = 0;
   if(explanatory_complete[0] != "NA"){P_c = explanatory_complete.size(); }
   int P_p = 0;
@@ -292,8 +294,8 @@ List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
         pi = ReferenceF::inverse_cauchit(eta);
         D = ReferenceF::inverse_derivative_cauchit(eta);
       }else if(distribution == "student"){
-        pi = ReferenceF::inverse_student(eta);
-        D = ReferenceF::inverse_derivative_student(eta);
+        pi = ReferenceF::inverse_student(eta, freedom_degrees);
+        D = ReferenceF::inverse_derivative_student(eta, freedom_degrees);
       }
 
       Cov_i = Eigen::MatrixXd(pi.asDiagonal()) - (pi*pi.transpose());
@@ -331,9 +333,11 @@ List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
     }
   }
 
+  Rcout << names << std::endl;
+
   // TO NAMED THE RESULT BETAS
   NumericMatrix BETA_2 = wrap(BETA);
-  rownames(BETA_2) = names;
+  // rownames(BETA_2) = names;
 
   return List::create(Named("Nb. iterations") = iteration-1 , Named("Coefficients") = BETA_2,
                       Named("Log-likelihood") = LogLik);

@@ -1,0 +1,294 @@
+---
+title: "PCGLM - JSS"
+output:
+  html_document:
+    highlight: tango
+    theme: simplex
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{my-vignette} %\VignetteEngine{knitr::rmarkdown}   %\VignetteEncoding{UTF-8}
+---
+  
+  
+```{r include=FALSE}
+knitr::opts_chunk$set(
+message=FALSE, warning=FALSE, paged.print=TRUE, collapse = TRUE, cache = TRUE, comment = "#>"
+)
+```
+
+
+```{r setup}
+library(pack)
+library(mlogit)
+devtools::load_all(".")
+dist_ref <- new(ReferenceF)
+dist_adj <- new(AdjacentR)
+dist_cum <- new(CumulativeR)
+dist_seq <- new(SequentialR)
+```
+
+Model Choice data just with the selected travel option
+
+```{r}
+{
+  library(mlogit)
+  data(ModeChoice, package = "Ecdat")
+  head(ModeChoice)
+  travel.long <- mlogit.data(ModeChoice, choice = "mode", shape = "long", alt.levels = c("air", "train", "bus", "car"))
+  head(travel.long)
+  choice <- sub(".*\\.", "", rownames(travel.long))
+  indv <- sub("\\..*", "", rownames(travel.long))
+  travel.long88 <- as.data.frame(cbind(indv, choice, travel.long))
+}
+travel_dat1 <- travel.long88[travel.long88$mode == T,]
+head(travel_dat1)
+```
+
+### 3. Reference models for nominal response
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+(l_1 <- dist_ref$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("air", "train", "bus", "car"),
+  dataframe = travel_dat1
+))
+```
+
+REFERENCE, LOGISTIC, PROPORTIONAL
+
+```{r}
+(l_2 <- dist_ref$GLMref(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "logistic",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+REFERENCE, CAUCHIT, COMPLETE
+ 
+```{r}
+(l_3 <- dist_ref$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("air", "train", "bus", "car"),
+  dataframe = travel_dat1
+))
+```
+
+Then we change the reference category (bus as reference) and estimate again the three reference models:
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+(l_1prime <- dist_ref$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("air", "train", "car", "bus"),
+  dataframe = travel_dat1
+))
+```
+
+REFERENCE, LOGISTIC, PROPORTIONAL
+
+```{r}
+(l_2prime <- dist_ref$GLMref(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "logistic",
+  categories_order = c("air", "train","car", "bus"),
+  dataframe = travel_dat1
+))
+```
+
+REFERENCE, CAUCHIT, COMPLETE
+ 
+```{r}
+(l_3prime <- dist_ref$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("air", "train","car", "bus"),
+  dataframe = travel_dat1
+))
+```
+
+The log-likelihoods l_1 and l_1prime are equal (since the canonical model is invariant under all permutations) whereas the log-likelihoods l_2 and l_2prime are different (respectively l_3 and l_3prime).
+
+### 4. Adjacent models for ordinal response
+
+Equivalence between (adjacent, logistic, complete) and (reference, logistic, complete) models.
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+(estimation <- dist_ref$GLMref(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, LOGISTIC, COMPLETE
+ 
+```{r}
+dist2 <- new(AdjacentR)
+(estimation_prime <- dist_adj$GLMadj(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+Remark that the log-likelihoods l and l_prime are equal but the parameters estimations are different
+
+#### Invariance under permutations
+
+ADJACENT, CAUCHY, COMPLETE
+
+```{r}
+(estimation_1 <- dist_adj$GLMadj(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, GOMPERTZ, PROPORTIONAL
+ 
+```{r}
+(estimation_2 <- dist_adj$GLMadj(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "gompertz",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, CAUCHY, COMPLETE (Reverse order)
+ 
+```{r}
+(estimation_1r <- dist_adj$GLMadj(
+  response = "choice",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("train", "car", "bus", "air"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, GOMPERTZ, PROPORTIONAL (Reverse order)
+ 
+```{r}
+(estimation_2r <- dist_adj$GLMadj(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "gompertz",
+  categories_order = c("train", "car", "bus", "air"),
+  dataframe = travel_dat1
+))
+```
+
+ADJACENT, GUMBEL, PROPORTIONAL (Reverse order)
+ 
+```{r}
+(estimation_3r <- dist_adj$GLMadj(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "gumbel",
+  categories_order = c("train", "car", "bus", "air"),
+  dataframe = travel_dat1
+))
+```
+
+Remark that the log-likelihoods l_1 and l_1r are equal since the Cauchy distribution is symmetric whereas the log-likelihoods l_2 and l_2r are different since the Gompertz distribution is not symmetric. Moreover if the Gumbel distribution is used we the reverse order then the log-likelihoods l_2 and l_3r are equal since the Gumbel distribution is the symmetric of the Gompertz distribution. Otherwise, the parameter estimations are reversed.
+
+### 5. Cumulative models for ordinal response
+
+The equivalence between the (cumulative, Gompertz, proportional) and (sequential, Gompertz, proportional) models has been demonstrated by Läärä and Matthews (1985).
+
+SEQUENTIAL, GOMPERTZ, PROPORTIONAL
+ 
+```{r}
+(estimation_prime <- dist_seq$GLMseq(
+  response = "choice",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "hinc", "psize"),
+  distribution = "gompertz",
+  categories_order = c("air", "bus", "car", "train"),
+  dataframe = travel_dat1
+))
+```
+
+CUMULATIVE, GOMPERTZ, PROPORTIONAL (Error)
+ 
+```{r}
+# (estimation <- dist_cum$GLMcum(
+#   response = "choice",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "hinc", "psize"),
+#   distribution = "gompertz",
+#   categories_order = c("air", "bus", "car", "train"),
+#   dataframe = travel_dat1,   
+#   beta_t = c("FALSE"),   beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18) 
+# ))
+# dat_lok_1 <- data.frame("LogLikIter" = estimation$LogLikIter, "iteration" = 1:length(estimation$LogLikIter))
+# library(ggplot2)
+# ggplot(dat_lok_1[-1,], aes(x = iteration, y = LogLikIter)) +
+#   geom_point()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -29,9 +29,10 @@ public:
 
 class Logistic : virtual public distribution{
 public:
-  Eigen::VectorXd Quantile(Eigen::VectorXd vectordis1);
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
+
   virtual Eigen::VectorXd in_open_corner(const Eigen::VectorXd& p) const;
 
   virtual double cdf_logit(const double& value) const;
@@ -48,6 +49,7 @@ class Normal : virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   virtual double cdf_normal(const double& value) const;
   virtual double pdf_normal(const double& value) const;
@@ -63,6 +65,7 @@ class Cauchit : virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   virtual double cdf_cauchit(const double& value) const;
   virtual double pdf_cauchit(const double& value) const;
@@ -79,8 +82,8 @@ public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
 
-  virtual double cdf_student(const double& value) const;
-  virtual double pdf_student(const double& value) const;
+  virtual double cdf_student(const double& value, double df_student) const;
+  virtual double pdf_student(const double& value, double df_student) const;
 
   Student();
 };
@@ -89,6 +92,10 @@ class Gumbel :  virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
+
+  virtual double cdf_gumbel(const double& value) const;
+  virtual double pdf_gumbel(const double& value) const;
+
   Gumbel();
 };
 
@@ -96,6 +103,7 @@ class Gompertz : virtual public distribution{
 public:
   Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
   Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   virtual double cdf_gompertz(const double& value) const;
   virtual double pdf_gompertz(const double& value) const;

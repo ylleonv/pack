@@ -1,0 +1,193 @@
+---
+title: "Multinomial choice model"
+output:
+  html_document:
+    highlight: tango
+    number_sections: yes
+    theme: simplex
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+
+Tutz example
+
+It is often useful to distinguish between two types of covariates, namely, global and category-specific variables. For example, when an individual chooses among alternatives 1, . . . , k, one may model the effect of characteristics of the individual like age and gender, which are global variables, but also account for measured attributes of the alternatives 1, . . . , k, which are category-specific variables. When the choice refers to transportation mode, the potential attributes are price and duration, which vary across the alternatives and therefore are category-specific.
+
+Example 8.4: Travel Mode (Tutz)
+The choice of travel mode of n = 840 passengers in Australia was investigated by Greene (2003). The data are available from the R package Ecdat. The alternatives of travel mode were air, train, bus, and car, which have frequencies 0.276, 0.300, 0.142, and 0.280. Air serves as the Reference category. As category-specific variables we consider travel time in vehicle (invt) and cost (gc), and as the global variable we consider household income (hinc). The estimates given in Table 8.4 show that income seems to be
+influential for the pReference of train and bus over airplane. Moreover, time in vehicle seems to matter for the pReference of the travel mode. Cost turns out to be non-influential if income is in the predictor.
+
+```{r message=FALSE, warning=FALSE}
+{
+  library(mlogit)
+  data(ModeChoice, package = "Ecdat")
+  head(ModeChoice)
+  travel.long <- mlogit.data(ModeChoice, choice = "mode", shape = "long", alt.levels = c("air", "train", "bus", "car"))
+  head(travel.long)
+  choice <- sub(".*\\.", "", rownames(travel.long))
+  indv <- sub("\\..*", "", rownames(travel.long))
+  travel.long88 <- as.data.frame(cbind(indv, choice, travel.long))
+}
+head(travel.long88, 5)
+str(travel.long88)
+devtools::load_all(".")
+ratio_ref <- new(ReferenceF)
+```
+
+
+### Reference, logistic, complete (intercept, HINC), cat-specific (GC, INVT)
+```{r}
+(exp_8_3 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc"),
+  depend_y = c("gc", "invt"),
+  distribution = "logistic", categories_order = c("train", "bus", "car", "air"), dataframe = travel.long88,
+  design = "tutz", freedom_degrees = 30
+))
+```
+
+Robustness of Student link function in multinomial choice models
+
+### Reference, logistic, complete (intercept), proportional (HINC, PSIZE), cat-specific (GC, ttme)
+
+The log-likelihood obtained with the MNL is −185.91 as obtained by Louviere et al. (2000) page 157.
+
+```{r}
+(table3 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 2.0
+))
+```
+
+
+The log-likelihoods obtained with the (Reference, F ν ∗ , Z) j 0 models were −185.65, −183.79, −142, −183.49 respectively with the four Reference alternatives j 0 =air, j 0 =bus, j 0 =car, j 0 =train and correspondind degree of freedom ν ∗ = 3, ν ∗ = 30, ν ∗ = 0.2, ν ∗ = 1.35.
+
+###  Reference cat: bus, v* = 30, ll = −183.79
+```{r}
+(mod <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("air", "train", "car", "bus"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 30
+))
+```
+
+###  Reference cat: train, v* = 1.35, ll = −183.49
+```{r}
+(train_1.35 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("air", "bus", "car", "train"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 1.35
+))
+```
+
+
+###  Reference cat: car, v* = 0.2, ll = −142
+```{r}
+## DOES NOT WORK
+(train_1.35 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 0.2
+))
+# Reference cat: car, v* = 1.0, ll = −142
+(train_1.35 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 1
+))
+```
+
+
+###  Reference cat: air, v* = 3, ll = −185.65
+```{r}
+# DOES NOT WORK
+(table4 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("train", "car", "bus", "air"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 3.0
+))
+
+(table4 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("train", "bus", "car", "air"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 3
+))
+
+(table4 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("bus", "train", "car", "air"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 3.0
+))
+
+(table4 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("bus", "car", "train", "air"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 3.0
+))
+
+(table4 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("car", "train", "bus", "air"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 3.0
+))
+
+(table4 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept", "hinc", "psize"),
+  depend_y = c("gc", "ttme"),
+  distribution = "student", categories_order = c("car", "bus", "train", "air"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 3.0
+))
+```
+
+### (reference, logistic, Z) ref - car model using the normalized space Fq0.95
+
+
+```{r}
+(table4 <- ratio_ref$GLMref_ec(
+  response = "choice", actual_response = "mode",
+  individuals = "indv",
+  explanatory_complete = c("intercept"),
+  depend_y = c("ttme"),
+  distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
+  design = "louviere", freedom_degrees = 0.0
+))
+```
+
+

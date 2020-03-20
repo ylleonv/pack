@@ -1,0 +1,119 @@
+---
+title: "Cumulative - R PCGLM"
+output:
+  html_document:
+    highlight: tango
+    number_sections: yes
+    theme: simplex
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+
+```{r}
+dat <- read.csv2("~/Desktop/Test package/dat_cum.csv")
+# summary(dat)
+# str(dat)
+head(dat)
+devtools::load_all(".")
+dist_cum <- new(CumulativeR)
+```
+
+
+### CUMULATIVE, LOGISTIC, COMPLETE (INTERCEPT)
+```{r}
+(estimation_prime <- dist_cum$GLMcum(
+  response = "apply",
+  explanatory_complete = c("intercept"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("unlikely", "somewhat likely", "very likely"),
+  dataframe = dat,   
+  beta_t = c("F"),
+  beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85)
+))
+```
+
+### CUMULATIVE, GOMPERTZ, COMPLETE (INTERCEPT, PARED)
+
+```{r}
+(estimation_prime <- dist_cum$GLMcum(
+  response = "apply",
+  explanatory_complete = c("intercept", "pared"),
+  explanatory_proportional = c("NA"),
+  distribution = "gompertz",
+  categories_order = c("unlikely", "somewhat likely", "very likely"),
+  dataframe = dat,
+  beta_t = c("F"),   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85) ))
+```
+
+### CUMULATIVE, GOMPERTZ, COMPLETE (INTERCEPT, PARED), PROPORTIONAL (PUBLIC)
+DOES NOT WORK
+
+
+```{r}
+(estimation_prime <- dist_cum$GLMcum(
+  response = "apply",
+  explanatory_complete = c("intercept", "pared"),
+  explanatory_proportional = c("public"),
+  distribution = "gompertz",
+  categories_order = c("unlikely", "somewhat likely", "very likely"),
+  dataframe = dat,   
+  beta_t = c("TRUE"),   beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18) ))
+```
+
+### CUMULATIVE, NORMAL, COMPLETE (INTERCEPT, PARED), PROPORTIONAL (PUBLIC)
+
+```{r}
+(estimation_prime <- dist_cum$GLMcum(
+  response = "apply",
+  explanatory_complete = c("intercept", "pared"),
+  explanatory_proportional = c("public"),
+  distribution = "normal",
+  categories_order = c("unlikely", "somewhat likely", "very likely"),
+  dataframe = dat,   
+  beta_t = c("F"),   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85) ))
+```
+
+### CUMULATIVE, NORMAL, COMPLETE (PARED, GPA), PROPORTIONAL (INTERCEPT, PUBLIC)
+
+```{r}
+(estimation_prime <- dist_cum$GLMcum(
+  response = "apply",
+  explanatory_complete = c("pared", "gpa"),
+  explanatory_proportional = c("intercept","public"),
+  distribution = "normal",
+  categories_order = c("unlikely", "somewhat likely", "very likely"),
+  dataframe = dat,
+  beta_t = c("F"),   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85) ))
+```
+
+### CUMULATIVE, NORMAL, COMPLETE (INTERCEPT, PARED), PROPORTIONAL (PUBLIC, GPA)
+DOES NOT WORK
+```{r error=TRUE}
+(estimation_prime <- dist_cum$GLMcum(
+  response = "apply",
+  explanatory_complete = c("intercept", "pared"),
+  explanatory_proportional = c("public", "gpa"),
+  distribution = "normal",
+  categories_order = c("unlikely", "somewhat likely", "very likely"),
+  dataframe = dat,   beta_t = c("F"),   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85) ))
+```
+
+### CUMULATIVE, CAUCHIT, COMPLETE (INTERCEPT, PARED), PROPORTIONAL (PUBLIC)
+
+DOES NOT WORK 
+
+```{r}
+(estimation_prime <- dist_cum$GLMcum(
+  response = "apply",
+  explanatory_complete = c("intercept", "pared"),
+  explanatory_proportional = c("public"),
+  distribution = "cauchit",
+  categories_order = c("unlikely", "somewhat likely", "very likely"),
+  dataframe = dat,   beta_t = c("F"),   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85) ))
+```
+
+
