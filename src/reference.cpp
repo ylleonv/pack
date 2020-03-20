@@ -6,7 +6,6 @@ using namespace Rcpp ;
 // [[Rcpp::depends(RcppEigen)]]
 
 ReferenceF::ReferenceF(void) {
-  // Rcout << "Ref" << endl;
 }
 
 Eigen::VectorXd ReferenceF::inverse_logistic(const Eigen::VectorXd& eta) const
@@ -101,8 +100,6 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_student(const Eigen::VectorXd& et
   }
   return D1 * ( Eigen::MatrixXd(pi1.asDiagonal()) - pi1 * pi1.transpose().eval() );
 }
-
-
 
 List ReferenceF::GLMref(std::string response,
                         StringVector explanatory_complete,
