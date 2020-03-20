@@ -51,8 +51,10 @@
 # # We need to tell R that we want to use a C++11 compiler
 # Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
 # pkgbuild::compile_dll()
+# pkgbuild("~/Desktop/pack_200320")
 # compileAttributes()
 # load_all()
+# document()
 #
 # # Binomial case -----------------------------------------------------------
 #
@@ -2507,3 +2509,6 @@
 # # library(rmarkdown); library(devtools)
 # #
 # # usethis::use_vignette("my-vignette")
+#
+#
+# # pkgdir("~/Desktop/pack_200320")

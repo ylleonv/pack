@@ -2,6 +2,9 @@
 #' @import Rcpp
 #' @export FisherScoring
 #' @export ReferenceF
+#' @export CumulativeR
+#' @export AdjacentR
+#' @export SequentialR
 #' @useDynLib pack, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
