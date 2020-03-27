@@ -6,7 +6,7 @@ using namespace Rcpp ;
 // [[Rcpp::depends(RcppEigen)]]
 
 SequentialR::SequentialR(void) {
-  Rcout << "SequentialR is being created" << endl;
+  distribution dist;
 }
 
 Eigen::VectorXd SequentialR::inverse_logistic(const Eigen::VectorXd& eta) const
@@ -113,12 +113,14 @@ Eigen::MatrixXd SequentialR::inverse_derivative_gompertz(const Eigen::VectorXd& 
   return M;
 }
 
-List SequentialR::GLMseq(std::string response,
-                                    StringVector explanatory_complete,
-                                    StringVector explanatory_proportional,
-                                    std::string distribution,
-                                    SEXP categories_order,
-                                    DataFrame dataframe){
+distribution dist_seq;
+
+List GLMseq(std::string response,
+            StringVector explanatory_complete,
+            StringVector explanatory_proportional,
+            std::string distribution,
+            SEXP categories_order,
+            DataFrame dataframe){
 
   int P_c = 0;
   if(explanatory_complete[0] != "NA"){P_c = explanatory_complete.size(); }
@@ -128,7 +130,7 @@ List SequentialR::GLMseq(std::string response,
 
   const int N = dataframe.nrows() ; // Number of observations
 
-  List Full_M = distribution::select_data(dataframe, response, explanatory_complete,
+  List Full_M = dist_seq.select_data(dataframe, response, explanatory_complete,
                                           explanatory_proportional, categories_order);
 
   Eigen::MatrixXd Y_init = Full_M["Y_ext"];
@@ -155,7 +157,12 @@ List SequentialR::GLMseq(std::string response,
   Eigen::MatrixXd F_i_2 ;
   Eigen::VectorXd LogLikIter;
   LogLikIter = Eigen::MatrixXd::Zero(1,1) ;
+  Eigen::MatrixXd var_beta;
+  Eigen::VectorXd Std_Error;
   double LogLik;
+  Eigen::MatrixXd pi_ma(N, K);
+  Eigen::MatrixXd F_i_final = Eigen::MatrixXd::Zero(BETA.rows(), BETA.rows());
+
   // for (int iteration=1; iteration < 18; iteration++){
   // while (check_tutz > 0.0001){
   double epsilon = 0.0001 ;
@@ -172,19 +179,21 @@ List SequentialR::GLMseq(std::string response,
       Y_M_i = Y_init.row(i);
       eta = X_M_i * BETA;
 
+      SequentialR seq;
+
       // Vector pi depends on selected distribution
       if(distribution == "logistic"){
-        pi = SequentialR::inverse_logistic(eta);
-        D = SequentialR::inverse_derivative_logistic(eta);
+        pi = seq.inverse_logistic(eta);
+        D = seq.inverse_derivative_logistic(eta);
       }else if(distribution == "normal"){
-        pi = SequentialR::inverse_normal(eta);
-        D = SequentialR::inverse_derivative_normal(eta);
+        pi = seq.inverse_normal(eta);
+        D = seq.inverse_derivative_normal(eta);
       }else if(distribution == "cauchit"){
-        pi = SequentialR::inverse_cauchit(eta);
-        D = SequentialR::inverse_derivative_cauchit(eta);
+        pi = seq.inverse_cauchit(eta);
+        D = seq.inverse_derivative_cauchit(eta);
       }else if(distribution == "gompertz"){
-        pi = SequentialR::inverse_gompertz(eta);
-        D = SequentialR::inverse_derivative_gompertz(eta);
+        pi = seq.inverse_gompertz(eta);
+        D = seq.inverse_derivative_gompertz(eta);
       }
 
       Cov_i = Eigen::MatrixXd(pi.asDiagonal()) - (pi*pi.transpose());
@@ -194,16 +203,28 @@ List SequentialR::GLMseq(std::string response,
       F_i_2 = X_M_i.transpose() * (W_in) * (D.transpose() * X_M_i);
       F_i = F_i + F_i_2;
       LogLik = LogLik + (Y_M_i.transpose().eval()*Eigen::VectorXd(pi.array().log())) + ( (1 - Y_M_i.sum()) * std::log(1 - pi.sum()) );
+
+      pi_ma.row(i) = pi.transpose();
+
     }
+
+    Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(pi_ma.rows());
+    pi_ma.col(Q) = Ones1 - pi_ma.rowwise().sum() ;
 
     LogLikIter.conservativeResize(iteration+2, 1);
     LogLikIter(iteration+1) = LogLik;
     Stop_criteria = (abs(LogLikIter(iteration+1) - LogLikIter(iteration))) / (epsilon + (abs(LogLikIter(iteration+1)))) ;
     Eigen::VectorXd beta_old = BETA;
     BETA = BETA + (F_i.inverse() * Score_i);
+    // check_tutz = ((BETA - beta_old).norm())/(beta_old.norm()+check_tutz);
     iteration = iteration + 1;
+    F_i_final = F_i;
 
   }
+
+  var_beta = F_i_final.inverse();
+  Std_Error = var_beta.diagonal();
+  Std_Error = Std_Error.array().sqrt() ;
 
   std::vector<std::string> text=as<std::vector<std::string>>(explanatory_complete);
   std::vector<std::string> level_text=as<std::vector<std::string>>(categories_order);
@@ -211,7 +232,7 @@ List SequentialR::GLMseq(std::string response,
   if(P_c > 0){
     for(int var = 0 ; var < explanatory_complete.size() ; var++){
       for(int cat = 0 ; cat < Q ; cat++){
-        names[(Q*var) + cat] = distribution::concatenate(text[var], level_text[cat]);
+        names[(Q*var) + cat] = dist_seq.concatenate(text[var], level_text[cat]);
       }
     }
   }
@@ -222,18 +243,79 @@ List SequentialR::GLMseq(std::string response,
   }
 
   // TO NAMED THE RESULT BETAS
-  NumericMatrix BETA_2 = wrap(BETA);
-  rownames(BETA_2) = names;
+  NumericMatrix coef = wrap(BETA);
+  rownames(coef) = names;
 
-  return List::create(Named("Nb. iterations") = iteration-1 ,
-                      Named("Coefficients") = BETA_2,
-                      Named("Log-likelihood") = LogLik);
+  // AIC
+  double AIC = (-2*LogLik) + (2 *coef.length());
+
+  // AIC
+  double BIC = (-2*LogLik) + (coef.length() * log(N) );
+
+  int df = (N*Q) - coef.length();
+
+  Eigen::MatrixXd predicted = X_EXT * BETA;
+
+  Eigen::VectorXd Ones2 = Eigen::VectorXd::Ones(Y_init.rows());
+  Eigen::VectorXd vex1 = (Y_init.rowwise().sum()) ;
+  Y_init.conservativeResize( Y_init.rows(), K);
+  Y_init.col(Q) = (vex1 - Ones2).array().abs() ;
+
+  Eigen::MatrixXd residuals = Y_init - pi_ma;
+
+  Eigen::VectorXd pi_ma_vec(Eigen::Map<Eigen::VectorXd>(pi_ma.data(), pi_ma.cols()*pi_ma.rows()));
+  Eigen::VectorXd Y_init_vec(Eigen::Map<Eigen::VectorXd>(Y_init.data(), Y_init.cols()*Y_init.rows()));
+
+  Eigen::VectorXd div_arr = Y_init_vec.array() / pi_ma_vec.array();
+
+  Eigen::VectorXd dev_r(Y_init.rows());
+
+  int el_1 = 0;
+
+  for (int element = 0 ; element < div_arr.size() ;  element++){
+    if (div_arr[element] != 0){
+      dev_r[el_1] = div_arr[element];
+      el_1 = el_1 +1 ;
+    }
+  }
+
+  Eigen::ArrayXd dev_log = dev_r.array().log();
+
+  double deviance = dev_log.sum();
+  deviance = -2*deviance;
+
+  return List::create(
+    // Named("Nb. iterations") = iteration-1 ,
+    Named("coefficients") = coef,
+    Named("AIC") = AIC,
+    Named("BIC") = BIC,
+    // Named("var_beta") = var_beta,
+    Named("stderr") = Std_Error,
+    Rcpp::Named("df") = df,
+    Rcpp::Named("predicted") = predicted,
+    Rcpp::Named("fitted") = pi_ma,
+    Rcpp::Named("pi_ma_vec") = pi_ma_vec,
+    Rcpp::Named("Y_init_vec") = Y_init_vec,
+    Rcpp::Named("dev_log") = dev_log,
+    Rcpp::Named("deviance") = deviance,
+    Rcpp::Named("residuals") = residuals,
+    Named("Log-likelihood") = LogLik
+  );
+
 }
 
 RCPP_MODULE(sequentialmodule){
+  Rcpp::function("GLMseq", &GLMseq,
+                 List::create(_["response"] = "a",
+                              _["explanatory_complete"] = CharacterVector::create( "A", NA_STRING),
+                              _["explanatory_proportional"] = CharacterVector::create( "A", NA_STRING),
+                              _["distribution"] = "a",
+                              _["categories_order"] = R_NaN,
+                              _["dataframe"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf),
+                              _["freedom_degrees"] = 1.0));
   Rcpp::class_<SequentialR>("SequentialR")
   .constructor()
-  .method( "GLMseq", &SequentialR::GLMseq )
+  // .method( "GLMseq", &SequentialR::GLMseq )
   ;
 }
 

@@ -142,7 +142,7 @@ List distribution::select_data(DataFrame x1, std::string response,
   LogicalVector n_com_cat1 = is_character(x21);
   n_com_cat = sum(n_com_cat1)-1;
 
-  // CONTINUA PARA AÑADUR PROPORTIONAL
+  // CONTINUA PARA ANADIR PROPORTIONAL
   for (int element_p = 0 ; element_p < explanatory_proportional.size() ; element_p++ ){
     if(explanatory_proportional[0] != "NA"){
       String element_2 = explanatory_proportional[element_p];

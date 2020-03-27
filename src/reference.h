@@ -19,12 +19,12 @@ public:
   virtual Eigen::VectorXd inverse_student(const Eigen::VectorXd& eta, double freedom_degrees) const;
   virtual Eigen::MatrixXd inverse_derivative_student(const Eigen::VectorXd& eta, double freedom_degrees) const ;
 
-  List GLMref(std::string response,
-              StringVector explanatory_complete,
-              StringVector explanatory_proportional,
-              std::string distribution,
-              SEXP categories_order,
-              DataFrame dataframe);
+  // List GLMref(std::string response,
+  //             StringVector explanatory_complete,
+  //             StringVector explanatory_proportional,
+  //             std::string distribution,
+  //             SEXP categories_order,
+  //             DataFrame dataframe);
 
   List GLMref_ec(std::string response, std::string actual_response,
                  std::string individuals,

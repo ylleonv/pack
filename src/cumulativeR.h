@@ -19,14 +19,14 @@ public:
   virtual Eigen::MatrixXd inverse_derivative_gompertz(const Eigen::VectorXd& eta) const ;
 
 
-  List GLMcum(std::string response,
-              StringVector explanatory_complete,
-              StringVector explanatory_proportional,
-              std::string distribution,
-              SEXP categories_order,
-              DataFrame dataframe,
-              StringVector beta_t,
-              Eigen::VectorXd beta_init);
+  // List GLMcum(std::string response,
+  //             StringVector explanatory_complete,
+  //             StringVector explanatory_proportional,
+  //             std::string distribution,
+  //             SEXP categories_order,
+  //             DataFrame dataframe,
+  //             StringVector beta_t,
+  //             Eigen::VectorXd beta_init);
 
 
 };

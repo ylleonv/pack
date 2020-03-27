@@ -23,7 +23,7 @@ public:
                                         StringVector depend_y,
                                         SEXP order);
 
-  distribution(int x)  { cout << "distribution::distribution(int ) called" << endl;   }
+  // distribution(int x);
   distribution();
 };
 
@@ -38,9 +38,9 @@ public:
   virtual double cdf_logit(const double& value) const;
   virtual double pdf_logit(const double& value) const;
 
-  Logistic(int x):distribution(x)   {
-    cout<<"Logistic::Logistic(int ) called"<< endl;
-  }
+  // Logistic(int x):distribution()   {
+  //   cout<<"Logistic::Logistic(int ) called"<< endl;
+  // }
 
   Logistic();
 };
@@ -54,9 +54,9 @@ public:
   virtual double cdf_normal(const double& value) const;
   virtual double pdf_normal(const double& value) const;
 
-  Normal(int x):distribution(x)   {
-    cout<<"normal::normal(int ) called"<< endl;
-  }
+  // Normal(int x):distribution()   {
+  //   cout<<"normal::normal(int ) called"<< endl;
+  // }
 
   Normal();
 };
@@ -70,9 +70,9 @@ public:
   virtual double cdf_cauchit(const double& value) const;
   virtual double pdf_cauchit(const double& value) const;
 
-  Cauchit(int x):distribution(x)   {
-    cout<<"Cauchit::Cauchit(int ) called"<< endl;
-  }
+  // Cauchit(int x):distribution()   {
+  //   cout<<"Cauchit::Cauchit(int ) called"<< endl;
+  // }
 
   Cauchit();
 };

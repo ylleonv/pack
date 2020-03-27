@@ -51,10 +51,16 @@
 # # We need to tell R that we want to use a C++11 compiler
 # Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
 # pkgbuild::compile_dll()
-# pkgbuild("~/Desktop/pack_200320")
+# pkgbuild::build()
+#
+# Rcpp::compileAttributes("~/Desktop/pack_240320")
+#
+# pkgbuild("~/Desktop/pack_240320")
 # compileAttributes()
 # load_all()
 # document()
+#
+# tools::package_native_routine_registration_skeleton(".", character_only = FALSE)
 #
 # # Binomial case -----------------------------------------------------------
 #
@@ -159,22 +165,61 @@
 #   addiction$ill <- as.factor(addiction$ill)
 #   data1 <- addiction[, c("ill", "gender", "university", "age")]
 #   data2 <- na.omit(data1)
+#   # library(plyr)
+#   # data2$ill <- revalue(data2$ill, c("0"="d", "1"="o", "2"="z"))
 # }
 # summary(data2)
 # colnames(data2)
 # str(data2) # RESPONSE FACTOR. COV AS INT
-# library(plyr)
-# # data2$ill <- revalue(data2$ill, c("0"="d", "1"="o", "2"="z"))
 #
 # dist1 <- new(ReferenceF)
 # (mod1 <- dist1$GLMref(
 #   response = "ill",
 #   explanatory_complete = c("intercept"),
-#   explanatory_proportional = c("age"),
+#   explanatory_proportional = c("NA"),
 #   distribution = "logistic",
 #   categories_order = c("0", "1", "2"),
-#   dataframe = dat
+#   dataframe = data2
 # ))
+#
+# mod1$deviance
+# mod1$predicted
+# head(mod1$fitted)
+# head(mod1$residuals)
+# head(mod1$dev_r)
+# -2 * sum(mod1$dev_log)
+#
+#
+#
+# summary.fastLm <- function(object, ...) {
+#   coef <- object$coefficients
+#   se <- object$stderr
+#   tval <- coef / se
+#
+#   object$coefficients <- cbind(
+#     Estimate = coef,
+#     "Std. Error" = se,
+#     "t value" = tval,
+#     "Pr(>|t|)" = 2 * pt(-abs(tval), df = object$df)
+#   )
+#
+#   # cf src/stats/R/lm.R and case with no weights and an intercept
+#   f <- object$fitted.values
+#   r <- object$residuals
+#   # mss <- sum((f - mean(f))^2)
+#   mss <- if (object$intercept) sum((f - mean(f))^2) else sum(f^2)
+#   rss <- sum(r^2)
+#
+#   object$r.squared <- mss / (mss + rss)
+#   df.int <- if (object$intercept) 1L else 0L
+#   n <- length(f)
+#   rdf <- object$df
+#   object$adj.r.squared <- 1 - (1 - object$r.squared) * ((n - df.int) / rdf)
+#   class(object) <- "summary.fastLm"
+#   object
+# }
+#
+# summary.fastLm(mod1)
 #
 # (mod13b <- dist1$GLMref(
 #   response = "ill", explanatory_complete = c("gender", "university"), explanatory_proportional = c("intercept", "age"),
@@ -2191,24 +2236,521 @@
 #   dataframe = travel_dat1
 # ))
 #
+# # Severity of Disturbed Dreams (Anderson) ---------------------------------
+# {
+#   dreams_d <- read.csv("~/Desktop/Test package/data/Severity of Disturbed Dreams.csv")
+#   head(dreams_d)
+#
+#   # Wide to long
+#   library(tidyr)
+#   dreams_d1 <- gather(dreams_d, Level, Total, Not.severe:Very.severe)
+#
+#   # Grouped to ungrouped
+#   library(vcdExtra)
+#   dreams_d1 <- expand.dft(dreams_d1, freq = "Total")
+#   head(dreams_d1)
+#   summary(dreams_d1)
+#
+#   summary.fastLm <- function(object, ...) {
+#     coef <- object$coefficients
+#     se <- object$stderr
+#     tval <- coef / se
+#
+#     object$coefficients <- cbind(
+#       "Estimate" = coef,
+#       "Std. Error" = se,
+#       "z value" = tval,
+#       "Pr(>|z|)" = 2 * pnorm(-abs(tval))
+#     )
+#     colnames(object$coefficients) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
+#
+#     # cf src/stats/R/lm.R and case with no weights and an intercept
+#     # f <- object$fitted.values
+#     # r <- object$residuals
+#     # mss <- sum((f - mean(f))^2)
+#     # mss <- if (object$intercept) sum((f - mean(f))^2) else sum(f^2)
+#     # rss <- sum(r^2)
+#     #
+#     # object$r.squared <- mss/(mss + rss)
+#     # df.int <- if (object$intercept) 1L else 0L
+#     # n <- length(f)
+#     # rdf <- object$df
+#     # object$adj.r.squared <- 1 - (1 - object$r.squared) * ((n - df.int)/rdf)
+#     class(object) <- "summary.fastLm"
+#     object
+#   }
+# }
+# # REFERENCE, LOGISTIC, COMPLETE
+#
+# l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   1.0
+# )
+#
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "student",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   30
+# ))
+#
+# summary.fastLm(l_1)$coefficients
+# l_1$deviance
+# l_1$`Log-likelihood`
+#
+# # REFERENCE, LOGISTIC, PROPORTIONAL
+#
+# l_2 <- ratio_ref$GLMref(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_2)$coefficients
+# l_2$deviance
+# l_2$`Log-likelihood`
+#
+# # REFERENCE, CAUCHIT, COMPLETE
+#
+# l_3 <- ratio_ref$GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "cauchit",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_3)$coefficients
+# l_3$deviance
+# l_3$`Log-likelihood`
+#
+# # Then we change the reference category (Severe.2) and estimate again the three reference models:
+#
+# l_1prime <- ratio_ref$GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_1prime)$coefficients
+# l_1prime$deviance
+# l_1prime$`Log-likelihood`
+#
+# # REFERENCE, LOGISTIC, PROPORTIONAL
+# l_2prime <- ratio_ref$GLMref(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_2prime)$coefficients
+# l_2prime$deviance
+# l_2prime$`Log-likelihood`
+#
+# # REFERENCE, CAUCHIT, COMPLETE
+# l_3prime <- ratio_ref$GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "cauchit",
+#   categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_3prime)$coefficients
+# l_3prime$deviance
+# l_3prime$`Log-likelihood`
+#
+# # ADJACENT, LOGISTIC, COMPLETE
+# lprime <- ratio_adj$GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(lprime)$coefficients
+# lprime$deviance
+# lprime$`Log-likelihood`
+#
+# # ADJACENT, CAUCHY, COMPLETE
+# estimation_1 <- ratio_adj$GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "cauchit",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_1)$coefficients
+# estimation_1$deviance
+# estimation_1$`Log-likelihood`
+#
+# # ADJACENT, GOMPERTZ, PROPORTIONAL
+# estimation_2 <- ratio_adj$GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_2)$coefficients
+# estimation_2$deviance
+# estimation_2$`Log-likelihood`
+#
+# # ADJACENT, CAUCHY, COMPLETE (Reverse order)
+# estimation_1r <- ratio_adj$GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "cauchit",
+#   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_1r)$coefficients
+# estimation_1r$deviance
+# estimation_1r$`Log-likelihood`
+#
+# # ADJACENT, GOMPERTZ, PROPORTIONAL (Reverse order)
+# estimation_2r <- ratio_adj$GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_2r)$coefficients
+# estimation_2r$deviance
+# estimation_2r$`Log-likelihood`
+#
+# # ADJACENT, GUMBEL, PROPORTIONAL (Reverse order)
+# estimation_3r <- ratio_adj$GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "gumbel",
+#   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_3r)$coefficients
+# estimation_3r$deviance
+# estimation_3r$`Log-likelihood`
+#
+# # SEQUENTIAL, GOMPERTZ, PROPORTIONAL
+# (estimation_prime <- ratio_seq$GLMseq(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# ))
+#
+# (estimation_prime <- ratio_seq$GLMseq(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# ))
+#
+# summary.fastLm(estimation_prime)$coefficients
+# estimation_prime$deviance
+# estimation_prime$`Log-likelihood`
+#
+# # CUMULATIVE, GOMPERTZ, PROPORTIONAL
+#
+# (estimation <- ratio_cum$GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "normal",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+# (estimation <- ratio_cum$GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+# # Invariance under permutations
+#
+# (l <- ratio_cum$GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+# (l <- ratio_cum$GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "cauchit",
+#   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+# (l <- ratio_cum$GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "logistic",
+#   categories_order = c("Very.severe", "Severe.1", "Severe.2", "Not.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+#
+# all_permutations <- permutations(
+#   v = c("Very.severe", "Severe.1", "Severe.2", "Not.severe"),
+#   repeats.allowed = F, n = 4, r = 4
+# )
+# head(all_permutations[1, ])
+#
+# # PLOT CUMULATIVE
+# Log_lik_Vec <- NA
+# for (element in 1:nrow(all_permutations)) {
+#   l <- ratio_cum$GLMcum(
+#     response = "Level",
+#     explanatory_complete = c("intercept"),
+#     explanatory_proportional = c("Age"),
+#     distribution = "logistic",
+#     categories_order = all_permutations[element, ],
+#     dataframe = dreams_d1,
+#     beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+#   )
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+# }
+# Log_lik_Vec
+#
+# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+# library(forcats)
+# to_plot$Permutation <- as.factor(to_plot$Permutation)
+# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+# to_plot <- left_join(to_plot, groups)
+#
+# cum_log_pro <- to_plot %>%
+#   arrange(-LogLik) %>%
+#   mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
+#   ggplot(aes(x = Permutation, y = LogLik)) +
+#   geom_point() +
+#   geom_line(aes(group = gn)) +
+#   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#   ggtitle("Cumulative, Logistic, Proportional")
+#
+# # PLOT ADJACENT
+# Log_lik_Vec <- NA
+# for (element in 1:nrow(all_permutations)) {
+#   l <- ratio_adj$GLMadj(
+#     response = "Level",
+#     explanatory_complete = c("intercept", "Age"),
+#     explanatory_proportional = c("NA"),
+#     distribution = "logistic",
+#     categories_order = all_permutations[element, ],
+#     dataframe = dreams_d1
+#   )
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+# }
+# Log_lik_Vec
+#
+# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+# library(forcats)
+# to_plot$Permutation <- as.factor(to_plot$Permutation)
+# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+# to_plot <- left_join(to_plot, groups)
+#
+# adj_log_com <- to_plot %>%
+#   arrange(-LogLik) %>%
+#   mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
+#   ggplot(aes(x = Permutation, y = LogLik)) +
+#   geom_point() +
+#   geom_line(aes(group = gn)) +
+#   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#   ggtitle("Adjacent, Logistic, Complete")
+#
+# Log_lik_Vec <- NA
+# for (element in 1:nrow(all_permutations)) {
+#   l <- ratio_adj$GLMadj(
+#     response = "Level",
+#     explanatory_complete = c("intercept", "Age"),
+#     explanatory_proportional = c("NA"),
+#     distribution = "normal",
+#     categories_order = all_permutations[element, ],
+#     dataframe = dreams_d1
+#   )
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+# }
+# Log_lik_Vec
+#
+# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+# library(forcats)
+# to_plot$Permutation <- as.factor(to_plot$Permutation)
+# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+# to_plot <- left_join(to_plot, groups)
+#
+# (adj_normal_com <- to_plot %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle("Adjacent, Normal, Complete"))
+#
+#
+# # REFERENCE PLOT
+#
+# l <- ratio_ref$GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "student",
+#   categories_order = all_permutations[element, ],
+#   dataframe = dreams_d1,
+#   bias = T
+# )
+#
+# Log_lik_Vec <- NA
+# for (element in 1:nrow(all_permutations)) {
+#   l <- ratio_ref$GLMref(
+#     response = "Level",
+#     explanatory_complete = c("intercept", "Age"),
+#     explanatory_proportional = c("NA"),
+#     distribution = "student",
+#     categories_order = all_permutations[element, ],
+#     dataframe = dreams_d1,
+#     freedom_degrees = 1
+#   )
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+# }
+# Log_lik_Vec
+#
+# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+# library(forcats)
+# to_plot$Permutation <- as.factor(to_plot$Permutation)
+# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+# to_plot <- left_join(to_plot, groups)
+#
+# saveRDS(to_plot, file = "LL_RefS1Com.rds")
+# to_plot2 <- readRDS(file = "LL_RefS1Com.rds")
+#
+# (ref_student_com <- to_plot2 %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle("Reference, Student(1), Complete"))
+#
+# l <- ratio_ref$GLMref(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept","Age"),
+#   distribution = "student",
+#   categories_order = all_permutations[element, ],
+#   dataframe = dreams_d1,
+#   freedom_degrees = 2
+# )
+#
+# Log_lik_Vec <- NA
+# for (element in 1:nrow(all_permutations)) {
+#   l <- ratio_ref$GLMref(
+#     response = "Level",
+#     explanatory_complete = c("NA"),
+#     explanatory_proportional = c("intercept","Age"),
+#     distribution = "student",
+#     categories_order = all_permutations[element, ],
+#     dataframe = dreams_d1,
+#     freedom_degrees = 2
+#   )
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+# }
+# Log_lik_Vec
+#
+# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+# library(forcats)
+# to_plot$Permutation <- as.factor(to_plot$Permutation)
+# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+# to_plot <- left_join(to_plot, groups)
+# saveRDS(to_plot, file = "LL_RefS1Pro.rds")
+# to_plot3 <- readRDS(file = "LL_RefS1Pro.rds")
+#
+# (ref_student_com <- to_plot3 %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle("Reference, Student(1), Proportional"))
+#
+#
 # # KNEE DATASET ------------------------------------------------------------
 # # DEMOSTRAR EQUIVALENCIA CON OTRO DATASET
 #
 # # CUMULATIVE SI PARECE ESTAR BIEN DEFINIDO,
 # # PERO QUIZAS LA FORMA EN QUE SE INICIALIZA NO ESTA BIEN
-# library(catdata)
-# data(knee)
-# knee$R4 <- as.factor(knee$R4)
-# dist1 <- new(CumulativeR)
-# (estimation <- dist1$GLMcum(
+#
+# {
+#   library(catdata)
+#   data(knee)
+#   knee$R4 <- as.factor(knee$R4)
+# }
+#
+# estimation <- ratio_cum$GLMcum(
 #   response = "R4",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Th", "Sex", "Age"),
-#   distribution = "logit",
+#   distribution = "logistic",
 #   categories_order = c("1", "2", "3", "4", "5"),
-#   dataframe = knee
-# ))
-#
+#   dataframe = knee,
+#   beta_t = c("FALSE"), beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
+# )
 #
 #
 # # NO ES ESTIMABLE CON EL OTRO MODELO
@@ -2498,6 +3040,76 @@
 #
 #
 #
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# # CUMULATIVE RATIO --------------------------------------------------------
+# {
+#   library(catdata)
+#   data(knee)
+#   knee$R4 <- as.factor(knee$R4)
+# }
+#
+# # FUNCIONA
+# (estimation <- ratio_cum$GLMcum(
+#   response = "R4",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Th", "Sex", "Age"),
+#   distribution = "logistic",
+#   categories_order = c("1", "2", "3", "4", "5"),
+#   dataframe = knee,
+#   beta_t = c("FALSE"), beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
+# ))
+#
+# # FUNCIONA
+# (estimation <- ratio_cum$GLMcum(
+#   response = "R4",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Th", "Sex", "Age"),
+#   distribution = "normal",
+#   categories_order = c("1", "2", "3", "4", "5"),
+#   dataframe = knee,
+#   beta_t = c("FALSE"), beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
+# ))
+#
+# # FUNCIONA
+# (estimation <- ratio_cum$GLMcum(
+#   response = "R4",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Th", "Sex", "Age"),
+#   distribution = "cauchit",
+#   categories_order = c("1", "2", "3", "4", "5"),
+#   dataframe = knee,
+#   beta_t = c("FALSE"), beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
+# ))
+#
+# # FUNCIONA
+# (estimation <- ratio_cum$GLMcum(
+#   response = "R4",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Th", "Sex", "Age"),
+#   distribution = "gompertz",
+#   categories_order = c("1", "2", "3", "4", "5"),
+#   dataframe = knee,
+#   beta_t = c("FALSE"), beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
+# ))
+#
+# (estimation <- ratio_cum$GLMcum(
+#   response = "R4",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept"),
+#   distribution = "gompertz",
+#   categories_order = c("1", "2", "3", "4", "5"),
+#   dataframe = knee,
+#   beta_t = c("FALSE"), beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
+# ))
 #
 #
 #

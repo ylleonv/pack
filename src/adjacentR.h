@@ -4,8 +4,8 @@
 
 class AdjacentR : virtual public Logistic, Normal, Cauchit, Student, Gumbel, Gompertz{
 public:
-  AdjacentR();
 
+  AdjacentR();
 
   virtual Eigen::VectorXd inverse_logistic(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_logistic(const Eigen::VectorXd& eta) const ;
@@ -22,12 +22,12 @@ public:
   virtual Eigen::VectorXd inverse_gumbel(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_gumbel(const Eigen::VectorXd& eta) const ;
 
-  List GLMadj(std::string response,
-              StringVector explanatory_complete,
-              StringVector explanatory_proportional,
-              std::string distribution,
-              SEXP categories_order,
-              DataFrame dataframe);
+  // List GLMadj(std::string response,
+  //             StringVector explanatory_complete,
+  //             StringVector explanatory_proportional,
+  //             std::string distribution,
+  //             SEXP categories_order,
+  //             DataFrame dataframe);
 };
 
 #endif
