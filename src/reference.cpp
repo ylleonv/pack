@@ -103,7 +103,7 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_student(const Eigen::VectorXd& et
 
 distribution dist1;
 
-// List ReferenceF::GLMref(std::string response,
+// [[Rcpp::export]]
 List GLMref(std::string response = "a",
             StringVector explanatory_complete = CharacterVector::create( "A", NA_STRING),
             StringVector explanatory_proportional = CharacterVector::create( "A", NA_STRING),
@@ -419,7 +419,7 @@ List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
 
 }
 
-// [[Rcpp::export]]
+
 RCPP_MODULE(referencemodule){
   Rcpp::function("GLMref", &GLMref,
                  List::create(_["response"] = "a",

@@ -87,6 +87,7 @@ Eigen::MatrixXd CumulativeR::inverse_derivative_gompertz(const Eigen::VectorXd& 
 
 distribution dist_cum;
 
+// [[Rcpp::export]]
 List GLMcum(std::string response,
             StringVector explanatory_complete,
             StringVector explanatory_proportional,

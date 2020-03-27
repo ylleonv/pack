@@ -115,6 +115,7 @@ Eigen::MatrixXd SequentialR::inverse_derivative_gompertz(const Eigen::VectorXd& 
 
 distribution dist_seq;
 
+// [[Rcpp::export]]
 List GLMseq(std::string response,
             StringVector explanatory_complete,
             StringVector explanatory_proportional,
