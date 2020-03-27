@@ -2,7 +2,6 @@
 
 export(CumulativeR)
 export(FisherScoring)
-export(ReferenceF)
 export(SequentialR)
 import(Rcpp)
 importFrom(Rcpp,sourceCpp)

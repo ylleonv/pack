@@ -9,7 +9,7 @@ GLMcum <- function(response, explanatory_complete, explanatory_proportional, dis
     .Call(`_pack_GLMcum`, response, explanatory_complete, explanatory_proportional, distribution, categories_order, dataframe, beta_t, beta_init)
 }
 
-GLMref <- function(response = "a", explanatory_complete = as.character( c( "A", NA_STRING)), explanatory_proportional = as.character( c( "A", NA_STRING)), distribution = "a", categories_order = as.character( c( "A", NA_STRING)), dataframe, freedom_degrees = 2.0) {
+GLMref <- function(response, explanatory_complete, explanatory_proportional, distribution, categories_order, dataframe, freedom_degrees) {
     .Call(`_pack_GLMref`, response, explanatory_complete, explanatory_proportional, distribution, categories_order, dataframe, freedom_degrees)
 }
 
