@@ -6,6 +6,22 @@
 
 using namespace Rcpp;
 
+// GLMadj
+List GLMadj(std::string response, StringVector explanatory_complete, StringVector explanatory_proportional, std::string distribution, SEXP categories_order, DataFrame dataframe);
+RcppExport SEXP _pack_GLMadj(SEXP responseSEXP, SEXP explanatory_completeSEXP, SEXP explanatory_proportionalSEXP, SEXP distributionSEXP, SEXP categories_orderSEXP, SEXP dataframeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type response(responseSEXP);
+    Rcpp::traits::input_parameter< StringVector >::type explanatory_complete(explanatory_completeSEXP);
+    Rcpp::traits::input_parameter< StringVector >::type explanatory_proportional(explanatory_proportionalSEXP);
+    Rcpp::traits::input_parameter< std::string >::type distribution(distributionSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type categories_order(categories_orderSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type dataframe(dataframeSEXP);
+    rcpp_result_gen = Rcpp::wrap(GLMadj(response, explanatory_complete, explanatory_proportional, distribution, categories_order, dataframe));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_adjacentmodule();
 RcppExport SEXP _rcpp_module_boot_fishder();
@@ -15,6 +31,7 @@ RcppExport SEXP _rcpp_module_boot_referencemodule();
 RcppExport SEXP _rcpp_module_boot_sequentialmodule();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_pack_GLMadj", (DL_FUNC) &_pack_GLMadj, 6},
     {"_rcpp_module_boot_adjacentmodule", (DL_FUNC) &_rcpp_module_boot_adjacentmodule, 0},
     {"_rcpp_module_boot_fishder", (DL_FUNC) &_rcpp_module_boot_fishder, 0},
     {"_rcpp_module_boot_cumulativemodule", (DL_FUNC) &_rcpp_module_boot_cumulativemodule, 0},
