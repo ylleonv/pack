@@ -1,0 +1,361 @@
+---
+title: "PCGLM - JSS"
+subtitle: "Severity of Disturbed Dreams"
+output:
+  html_document:
+    highlight: tango
+    theme: simplex
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{my-vignette} %\VignetteEngine{knitr::rmarkdown}   %\VignetteEncoding{UTF-8}
+---
+  
+  
+```{r include=FALSE}
+knitr::opts_chunk$set(
+message=FALSE, warning=FALSE, paged.print=TRUE, collapse = TRUE, cache = TRUE, comment = "#>"
+)
+```
+
+
+```{r include=FALSE}
+devtools::load_all(".")
+summary.pcglm <- function(object, ...) {
+  coef <- object$coefficients
+  se   <- object$stderr
+  tval <- coef/se
+  
+  object$coefficients <- cbind("Estimate"     = coef,
+                               "Std. Error" = se,
+                               "z value"    = tval,
+                               "Pr(>|z|)"   = 2*pnorm(-abs(tval)))
+  colnames(object$coefficients) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
+  printCoefmat(object$coefficients, P.values=TRUE, has.Pvalue=TRUE, ...)
+  # cf src/stats/R/lm.R and case with no weights and an intercept
+  # f <- object$fitted.values
+  # r <- object$residuals
+  #mss <- sum((f - mean(f))^2)
+  # mss <- if (object$intercept) sum((f - mean(f))^2) else sum(f^2)
+  # rss <- sum(r^2)
+  # 
+  # object$r.squared <- mss/(mss + rss)
+  # df.int <- if (object$intercept) 1L else 0L
+  # n <- length(f)
+  # rdf <- object$df
+  # object$adj.r.squared <- 1 - (1 - object$r.squared) * ((n - df.int)/rdf)
+  class(object) <- "summary.pcglm"
+  object
+}
+```
+
+Severity of Disturbed Dreams
+
+```{r}
+dreams_d <- read.csv("~/Desktop/Test package/data/Severity of Disturbed Dreams.csv")
+head(dreams_d)
+
+# Wide to long
+library(tidyr)
+dreams_d1 <- gather(dreams_d, Level, Total, Not.severe:Very.severe)
+
+# Grouped to ungrouped
+library(vcdExtra)
+dreams_d1 <- expand.dft(dreams_d1, freq="Total")
+head(dreams_d1)
+summary(dreams_d1)
+```
+
+### 3. Reference models for nominal response
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+l_1 <- GLMref(
+  response = "Level",
+  explanatory_complete = c("intercept", "Age"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l_1)$coefficients[1]
+l_1$deviance
+l_1$`Log-likelihood`
+```
+
+REFERENCE, LOGISTIC, PROPORTIONAL
+
+```{r}
+l_2 <- GLMref(
+  response = "Level",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "Age"),
+  distribution = "logistic",
+  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l_2)$coefficients[1]
+l_2$deviance
+l_2$`Log-likelihood`
+```
+
+REFERENCE, CAUCHIT, COMPLETE
+ 
+```{r}
+l_3 <- GLMref(
+  response = "Level",
+  explanatory_complete = c("intercept", "Age"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l_3)$coefficients[1]
+l_3$deviance
+l_3$`Log-likelihood`
+```
+
+Then we change the reference category (Severe.2) and estimate again the three reference models:
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+l_1prime <- GLMref(
+  response = "Level",
+  explanatory_complete = c("intercept", "Age"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l_1prime)$coefficients[1]
+l_1prime$deviance
+l_1prime$`Log-likelihood`
+```
+
+REFERENCE, LOGISTIC, PROPORTIONAL
+
+```{r}
+l_2prime <- GLMref(
+  response = "Level",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "Age"),
+  distribution = "logistic",
+  categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l_2prime)$coefficients[1]
+l_2prime$deviance
+l_2prime$`Log-likelihood`
+```
+
+REFERENCE, CAUCHIT, COMPLETE
+ 
+```{r}
+l_3prime <- GLMref(
+  response = "Level",
+  explanatory_complete = c("intercept", "Age"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l_3prime)$coefficients[1]
+l_3prime$deviance
+l_3prime$`Log-likelihood`
+```
+
+The log-likelihoods l_1 and l_1prime are equal (since the canonical model is invariant under all permutations) whereas the log-likelihoods l_2 and l_2prime are different (respectively l_3 and l_3prime).
+
+### 4. Adjacent models for ordinal response
+
+Equivalence between (adjacent, logistic, complete) and (reference, logistic, complete) models.
+
+REFERENCE, LOGISTIC, COMPLETE
+
+```{r}
+l <- GLMref(
+  response = "Level",
+  explanatory_complete = c("intercept", "Age"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l)$coefficients[1]
+l$deviance
+l$`Log-likelihood`
+```
+
+ADJACENT, LOGISTIC, COMPLETE
+ 
+```{r}
+lprime <- GLMadj(
+  response = "Level",
+  explanatory_complete = c("intercept", "Age"),
+  explanatory_proportional = c("NA"),
+  distribution = "logistic",
+  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(lprime)$coefficients[1]
+lprime$deviance
+lprime$`Log-likelihood`
+```
+Remark that the log-likelihoods l and l_prime are equal but the parameters estimations are different
+
+#### Invariance under permutations
+
+Property 11: stable under the reverse permutation
+
+ADJACENT, CAUCHY, COMPLETE
+
+```{r}
+estimation_1 <- GLMadj(
+  response = "Level",
+  explanatory_complete = c("intercept", "Age"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(estimation_1)$coefficients[1]
+estimation_1$deviance
+estimation_1$`Log-likelihood`
+```
+
+ADJACENT, GOMPERTZ, PROPORTIONAL
+ 
+```{r}
+estimation_2 <- GLMadj(
+  response = "Level",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "Age"),
+  distribution = "gompertz",
+  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(estimation_2)$coefficients[1]
+estimation_2$deviance
+estimation_2$`Log-likelihood`
+```
+
+ADJACENT, CAUCHY, COMPLETE (Reverse order)
+ 
+```{r}
+estimation_1r <- GLMadj(
+  response = "Level",
+  explanatory_complete = c("intercept", "Age"),
+  explanatory_proportional = c("NA"),
+  distribution = "cauchit",
+  categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(estimation_1r)$coefficients[1]
+estimation_1r$deviance
+estimation_1r$`Log-likelihood`
+```
+
+ADJACENT, GOMPERTZ, PROPORTIONAL (Reverse order)
+ 
+```{r}
+estimation_2r <- GLMadj(
+  response = "Level",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "Age"),
+  distribution = "gompertz",
+  categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(estimation_2r)$coefficients[1]
+estimation_2r$deviance
+estimation_2r$`Log-likelihood`
+```
+
+ADJACENT, GUMBEL, PROPORTIONAL (Reverse order)
+ 
+```{r}
+estimation_3r <- GLMadj(
+  response = "Level",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "Age"),
+  distribution = "gumbel",
+  categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(estimation_3r)$coefficients[1]
+estimation_3r$deviance
+estimation_3r$`Log-likelihood`
+```
+
+Remark that the log-likelihoods l_1 and l_1r are equal since the Cauchy distribution is symmetric whereas the log-likelihoods l_2 and l_2r are different since the Gompertz distribution is not symmetric. Moreover if the Gumbel distribution is used we the reverse order then the log-likelihoods l_2 and l_3r are equal since the Gumbel distribution is the symmetric of the Gompertz distribution. Otherwise, the parameter estimations are reversed.
+
+### 5. Cumulative models for ordinal response
+
+The equivalence between the (cumulative, Gompertz, proportional) and (sequential, Gompertz, proportional) models has been demonstrated by Läärä and Matthews (1985).
+
+CUMULATIVE, GOMPERTZ, PROPORTIONAL
+ 
+```{r}
+l_prime <- GLMcum(
+  response = "Level",
+  explanatory_complete = c("intercept"),
+  explanatory_proportional = c("Age"),
+  distribution = "gompertz",
+  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1,
+  beta_t = c("FALSE"),   beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
+)
+summary.pcglm(l_prime)$coefficients[1]
+l_prime$deviance
+l_prime$`Log-likelihood`
+```
+
+SEQUENTIAL, GOMPERTZ, PROPORTIONAL
+ 
+```{r}
+l <- GLMseq(
+  response = "Level",
+  explanatory_complete = c("intercept"),
+  explanatory_proportional = c("Age"),
+  distribution = "gompertz",
+  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l)$coefficients[1]
+l$deviance
+l$`Log-likelihood`
+```
+
+
+The log-likelihoods l and l_prime are equal.
+
+![Ordered log-likelihood of models for all permutations - Adjacent, Complete ](/home/leonvelasco/Desktop/Propierties_Ordinal/Adjacent.png)
+
+![Ordered log-likelihood of models for all permutations - Adjacent, Proportional ](/home/leonvelasco/Desktop/Propierties_Ordinal/Adjacent_pro.png)
+
+
+![Ordered log-likelihood of models for all permutations - Cumulative, Complete ](/home/leonvelasco/Desktop/Propierties_Ordinal/Cum_com.png)
+
+![Ordered log-likelihood of models for all permutations - Cumulative, Proportional ](/home/leonvelasco/Desktop/Propierties_Ordinal/Cum_pro.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

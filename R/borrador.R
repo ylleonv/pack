@@ -1,8 +1,3 @@
-# ratio_ref <- new(ReferenceF)
-# ratio_adj <- new(AdjacentR)
-# ratio_cum <- new(CumulativeR)
-# ratio_seq <- new(SequentialR)
-#
 # # Libraries ---------------------------------------------------------------
 # library(devtools)
 # library(tidyverse)
@@ -53,7 +48,7 @@
 # pkgbuild::compile_dll()
 # pkgbuild::build()
 #
-# Rcpp::compileAttributes("~/Desktop/pack_240320")
+# Rcpp::compileAttributes("~/Desktop/pack_270320")
 #
 # pkgbuild("~/Desktop/pack_240320")
 # compileAttributes()
@@ -239,7 +234,7 @@
 # head(data2)
 #
 # ratio_cum <- new(CumulativeR)
-# (mod1 <- ratio_cum$GLMcum(
+# (mod1 <- GLMcum(
 #   response = "ill",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "age"),
@@ -605,7 +600,7 @@
 #
 # # Robustness of Student link function in multinomial choice models
 # # The log-likelihood obtained with the MNL is −185.91 as obtained by Louviere et al. (2000) page 157.
-# (table3 <- ratio_ref$GLMref_ec(
+# (table3 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -622,7 +617,7 @@
 #
 # # j_0=air, v* = 3, ll = −185.65
 # # DOES NOT WORK
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -631,7 +626,7 @@
 #   design = "louviere", freedom_degrees = 3.0
 # ))
 #
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -640,7 +635,7 @@
 #   design = "louviere", freedom_degrees = 3
 # ))
 #
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -649,7 +644,7 @@
 #   design = "louviere", freedom_degrees = 3.0
 # ))
 #
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -658,7 +653,7 @@
 #   design = "louviere", freedom_degrees = 3.0
 # ))
 #
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -667,7 +662,7 @@
 #   design = "louviere", freedom_degrees = 3.0
 # ))
 #
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -677,7 +672,7 @@
 # ))
 #
 # # j_0=bus, v* = 30, ll = −183.79
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -688,7 +683,7 @@
 #
 # # j_0=car, v* = 0.2, ll = −142
 # ## DOES NOT WORK
-# (train_1.35 <- ratio_ref$GLMref_ec(
+# (train_1.35 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -697,7 +692,7 @@
 #   design = "louviere", freedom_degrees = 0.2
 # ))
 # # j_0=car, v* = 1.0, ll = −142
-# (train_1.35 <- ratio_ref$GLMref_ec(
+# (train_1.35 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -707,7 +702,7 @@
 # ))
 #
 # # j_0=train, v* = 1.35, ll = −183.49
-# (train_1.35 <- ratio_ref$GLMref_ec(
+# (train_1.35 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -783,7 +778,7 @@
 #
 #
 # # e : REFERENCE, LOGISTIC, COMPLETE
-# (l_1 <- ratio_ref$GLMref(
+# (l_1 <- GLMref(
 #   response = "choice",
 #   explanatory_complete = c("intercept", "psize"),
 #   explanatory_proportional = c("hinc"),
@@ -792,7 +787,7 @@
 #   dataframe = travel_dat1
 # ))
 #
-# (l_1 <- ratio_cum$GLMcum(
+# (l_1 <- GLMcum(
 #   response = "choice",
 #   explanatory_complete = c("intercept", "psize"),
 #   explanatory_proportional = c("hinc"),
@@ -801,7 +796,7 @@
 #   dataframe = travel_dat1
 # ))
 #
-# (l_1 <- ratio_cum$GLMcum(
+# (l_1 <- GLMcum(
 #   response = "choice",
 #   explanatory_complete = c("intercept", "psize"),
 #   explanatory_proportional = c("hinc"),
@@ -810,7 +805,7 @@
 #   dataframe = travel_dat1
 # ))
 #
-# (l_1 <- ratio_cum$GLMcum(
+# (l_1 <- GLMcum(
 #   response = "choice",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "hinc"),
@@ -976,7 +971,7 @@
 # # models has been demonstrated by Läärä and Matthews (1985).
 #
 # # Cumulative, Gompertz, Proportional
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "choice",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "hinc", "psize"),
@@ -1066,7 +1061,7 @@
 # head(dat)
 #
 # # FUNCIONA BIEN
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("NA"),
@@ -1078,7 +1073,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("NA"),
@@ -1090,7 +1085,7 @@
 #
 # # MOD3
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public"),
@@ -1102,7 +1097,7 @@
 #
 # # MOD4
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public"),
@@ -1114,7 +1109,7 @@
 #
 # # MOD5
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("pared", "gpa"),
 #   explanatory_proportional = c("intercept", "public"),
@@ -1127,7 +1122,7 @@
 #
 # # MOD6
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public", "gpa"),
@@ -1138,7 +1133,7 @@
 #
 # # MOD7
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public"),
@@ -1150,7 +1145,7 @@
 #
 # # MOD 7
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public"),
@@ -1162,7 +1157,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("NA"),
@@ -1186,7 +1181,7 @@
 # }
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("NA"),
@@ -1198,7 +1193,7 @@
 # ))
 #
 # # NO
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept", "temp"),
 #   explanatory_proportional = c("NA"),
@@ -1210,7 +1205,7 @@
 # ))
 #
 # # NO
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept", "temp", "contact"),
 #   explanatory_proportional = c("NA"),
@@ -1221,7 +1216,7 @@
 #   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85)
 # ))
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp"),
@@ -1233,7 +1228,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp"),
@@ -1245,7 +1240,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp"),
@@ -1258,7 +1253,7 @@
 #
 #
 # # e : ADJACENT, LOGISTIC, COMPLETE
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp", "contact"),
@@ -1269,7 +1264,7 @@
 #   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85)
 # ))
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp", "contact"),
@@ -1278,7 +1273,7 @@
 #   dataframe = wine
 # ))
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp", "contact"),
@@ -1288,7 +1283,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp", "contact"),
@@ -1516,7 +1511,7 @@
 # head(data2)
 #
 # ratio_cum <- new(CumulativeR)
-# (mod1 <- ratio_cum$GLMcum(
+# (mod1 <- GLMcum(
 #   response = "ill",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "age"),
@@ -1882,7 +1877,7 @@
 #
 # # Robustness of Student link function in multinomial choice models
 # # The log-likelihood obtained with the MNL is −185.91 as obtained by Louviere et al. (2000) page 157.
-# (table3 <- ratio_ref$GLMref_ec(
+# (table3 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -1899,7 +1894,7 @@
 #
 # # j_0=air, v* = 3, ll = −185.65
 # # DOES NOT WORK
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -1909,7 +1904,7 @@
 # ))
 #
 # # j_0=bus, v* = 30, ll =  −183.79
-# (table4 <- ratio_ref$GLMref_ec(
+# (table4 <- GLMref_ec(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -2016,7 +2011,7 @@
 #
 #
 # # e : REFERENCE, LOGISTIC, COMPLETE
-# (l_1 <- ratio_ref$GLMref(
+# (l_1 <- GLMref(
 #   response = "choice",
 #   explanatory_complete = c("intercept", "psize"),
 #   explanatory_proportional = c("hinc"),
@@ -2025,7 +2020,7 @@
 #   dataframe = travel_dat1
 # ))
 #
-# (l_1 <- ratio_cum$GLMcum(
+# (l_1 <- GLMcum(
 #   response = "choice",
 #   explanatory_complete = c("intercept", "psize"),
 #   explanatory_proportional = c("hinc"),
@@ -2034,7 +2029,7 @@
 #   dataframe = travel_dat1
 # ))
 #
-# (l_1 <- ratio_cum$GLMcum(
+# (l_1 <- GLMcum(
 #   response = "choice",
 #   explanatory_complete = c("intercept", "psize"),
 #   explanatory_proportional = c("hinc"),
@@ -2043,7 +2038,7 @@
 #   dataframe = travel_dat1
 # ))
 #
-# (l_1 <- ratio_cum$GLMcum(
+# (l_1 <- GLMcum(
 #   response = "choice",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "hinc"),
@@ -2209,7 +2204,7 @@
 # # models has been demonstrated by Läärä and Matthews (1985).
 #
 # # Cumulative, Gompertz, Proportional
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "choice",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "hinc", "psize"),
@@ -2282,15 +2277,45 @@
 # }
 # # REFERENCE, LOGISTIC, COMPLETE
 #
-# l_1 <- GLMref(
+# summary.pcglm <- function(object, ...) {
+#   coef <- object$coefficients
+#   se   <- object$stderr
+#   tval <- coef/se
+#
+#   object$coefficients <- cbind("Estimate"     = coef,
+#                                "Std. Error" = se,
+#                                "z value"    = tval,
+#                                "Pr(>|z|)"   = 2*pnorm(-abs(tval)))
+#   colnames(object$coefficients) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
+#   printCoefmat(object$coefficients, P.values=TRUE, has.Pvalue=TRUE, ...)
+#   # cf src/stats/R/lm.R and case with no weights and an intercept
+#   # f <- object$fitted.values
+#   # r <- object$residuals
+#   #mss <- sum((f - mean(f))^2)
+#   # mss <- if (object$intercept) sum((f - mean(f))^2) else sum(f^2)
+#   # rss <- sum(r^2)
+#   #
+#   # object$r.squared <- mss/(mss + rss)
+#   # df.int <- if (object$intercept) 1L else 0L
+#   # n <- length(f)
+#   # rdf <- object$df
+#   # object$adj.r.squared <- 1 - (1 - object$r.squared) * ((n - df.int)/rdf)
+#   class(object) <- "summary.pcglm"
+#   object
+# }
+#
+#
+# (l_1 <- GLMref(
 #   response = "Level",
 #   explanatory_complete = c("intercept", "Age"),
 #   explanatory_proportional = c("NA"),
 #   distribution = "logistic",
 #   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#   dataframe = dreams_d1,
-#   1.0
-# )
+#   dataframe = dreams_d1
+# ))
+#
+# summary.pcglm(l_1)$coefficients[1]
+#
 #
 # (l_1 <- GLMref(
 #   response = "Level",
@@ -2308,7 +2333,7 @@
 #
 # # REFERENCE, LOGISTIC, PROPORTIONAL
 #
-# l_2 <- ratio_ref$GLMref(
+# l_2 <- GLMref(
 #   response = "Level",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "Age"),
@@ -2322,7 +2347,7 @@
 #
 # # REFERENCE, CAUCHIT, COMPLETE
 #
-# l_3 <- ratio_ref$GLMref(
+# l_3 <- GLMref(
 #   response = "Level",
 #   explanatory_complete = c("intercept", "Age"),
 #   explanatory_proportional = c("NA"),
@@ -2336,7 +2361,7 @@
 #
 # # Then we change the reference category (Severe.2) and estimate again the three reference models:
 #
-# l_1prime <- ratio_ref$GLMref(
+# l_1prime <- GLMref(
 #   response = "Level",
 #   explanatory_complete = c("intercept", "Age"),
 #   explanatory_proportional = c("NA"),
@@ -2349,7 +2374,7 @@
 # l_1prime$`Log-likelihood`
 #
 # # REFERENCE, LOGISTIC, PROPORTIONAL
-# l_2prime <- ratio_ref$GLMref(
+# l_2prime <- GLMref(
 #   response = "Level",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "Age"),
@@ -2362,7 +2387,7 @@
 # l_2prime$`Log-likelihood`
 #
 # # REFERENCE, CAUCHIT, COMPLETE
-# l_3prime <- ratio_ref$GLMref(
+# l_3prime <- GLMref(
 #   response = "Level",
 #   explanatory_complete = c("intercept", "Age"),
 #   explanatory_proportional = c("NA"),
@@ -2375,7 +2400,7 @@
 # l_3prime$`Log-likelihood`
 #
 # # ADJACENT, LOGISTIC, COMPLETE
-# lprime <- ratio_adj$GLMadj(
+# lprime <- GLMadj(
 #   response = "Level",
 #   explanatory_complete = c("intercept", "Age"),
 #   explanatory_proportional = c("NA"),
@@ -2388,7 +2413,7 @@
 # lprime$`Log-likelihood`
 #
 # # ADJACENT, CAUCHY, COMPLETE
-# estimation_1 <- ratio_adj$GLMadj(
+# estimation_1 <- GLMadj(
 #   response = "Level",
 #   explanatory_complete = c("intercept", "Age"),
 #   explanatory_proportional = c("NA"),
@@ -2401,7 +2426,7 @@
 # estimation_1$`Log-likelihood`
 #
 # # ADJACENT, GOMPERTZ, PROPORTIONAL
-# estimation_2 <- ratio_adj$GLMadj(
+# estimation_2 <- GLMadj(
 #   response = "Level",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "Age"),
@@ -2414,7 +2439,7 @@
 # estimation_2$`Log-likelihood`
 #
 # # ADJACENT, CAUCHY, COMPLETE (Reverse order)
-# estimation_1r <- ratio_adj$GLMadj(
+# estimation_1r <- GLMadj(
 #   response = "Level",
 #   explanatory_complete = c("intercept", "Age"),
 #   explanatory_proportional = c("NA"),
@@ -2427,7 +2452,7 @@
 # estimation_1r$`Log-likelihood`
 #
 # # ADJACENT, GOMPERTZ, PROPORTIONAL (Reverse order)
-# estimation_2r <- ratio_adj$GLMadj(
+# estimation_2r <- GLMadj(
 #   response = "Level",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "Age"),
@@ -2440,7 +2465,7 @@
 # estimation_2r$`Log-likelihood`
 #
 # # ADJACENT, GUMBEL, PROPORTIONAL (Reverse order)
-# estimation_3r <- ratio_adj$GLMadj(
+# estimation_3r <- GLMadj(
 #   response = "Level",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "Age"),
@@ -2462,7 +2487,7 @@
 #   dataframe = dreams_d1
 # ))
 #
-# (estimation_prime <- ratio_seq$GLMseq(
+# (estimation_prime <- GLMseq(
 #   response = "Level",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Age"),
@@ -2477,7 +2502,7 @@
 #
 # # CUMULATIVE, GOMPERTZ, PROPORTIONAL
 #
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "Level",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept", "Age"),
@@ -2487,7 +2512,7 @@
 #   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
 # ))
 #
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "Level",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Age"),
@@ -2499,7 +2524,7 @@
 #
 # # Invariance under permutations
 #
-# (l <- ratio_cum$GLMcum(
+# (l <- GLMcum(
 #   response = "Level",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Age"),
@@ -2509,7 +2534,7 @@
 #   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
 # ))
 #
-# (l <- ratio_cum$GLMcum(
+# (l <- GLMcum(
 #   response = "Level",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Age"),
@@ -2519,7 +2544,7 @@
 #   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
 # ))
 #
-# (l <- ratio_cum$GLMcum(
+# (l <- GLMcum(
 #   response = "Level",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Age"),
@@ -2530,115 +2555,211 @@
 # ))
 #
 #
+#
+# # PLOT ADJACENT
 # all_permutations <- permutations(
 #   v = c("Very.severe", "Severe.1", "Severe.2", "Not.severe"),
 #   repeats.allowed = F, n = 4, r = 4
 # )
-# head(all_permutations[1, ])
-#
-# # PLOT CUMULATIVE
-# Log_lik_Vec <- NA
-# for (element in 1:nrow(all_permutations)) {
-#   l <- ratio_cum$GLMcum(
-#     response = "Level",
-#     explanatory_complete = c("intercept"),
-#     explanatory_proportional = c("Age"),
-#     distribution = "logistic",
-#     categories_order = all_permutations[element, ],
-#     dataframe = dreams_d1,
-#     beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
-#   )
-#   Log_lik_Vec[element] <- l$`Log-likelihood`
-# }
-# Log_lik_Vec
-#
-# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
-# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
-# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
-# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
 # library(forcats)
-# to_plot$Permutation <- as.factor(to_plot$Permutation)
-# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
-# to_plot <- left_join(to_plot, groups)
 #
-# cum_log_pro <- to_plot %>%
-#   arrange(-LogLik) %>%
-#   mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
-#   ggplot(aes(x = Permutation, y = LogLik)) +
-#   geom_point() +
-#   geom_line(aes(group = gn)) +
-#   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-#   ggtitle("Cumulative, Logistic, Proportional")
+# plot <- list()
 #
-# # PLOT ADJACENT
-# Log_lik_Vec <- NA
-# for (element in 1:nrow(all_permutations)) {
-#   l <- ratio_adj$GLMadj(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "logistic",
-#     categories_order = all_permutations[element, ],
-#     dataframe = dreams_d1
-#   )
-#   Log_lik_Vec[element] <- l$`Log-likelihood`
-# }
-# Log_lik_Vec
-#
-# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
-# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
-# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
-# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
-# library(forcats)
-# to_plot$Permutation <- as.factor(to_plot$Permutation)
-# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
-# to_plot <- left_join(to_plot, groups)
-#
-# adj_log_com <- to_plot %>%
-#   arrange(-LogLik) %>%
-#   mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
-#   ggplot(aes(x = Permutation, y = LogLik)) +
-#   geom_point() +
-#   geom_line(aes(group = gn)) +
-#   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-#   ggtitle("Adjacent, Logistic, Complete")
-#
-# Log_lik_Vec <- NA
-# for (element in 1:nrow(all_permutations)) {
-#   l <- ratio_adj$GLMadj(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "normal",
-#     categories_order = all_permutations[element, ],
-#     dataframe = dreams_d1
-#   )
-#   Log_lik_Vec[element] <- l$`Log-likelihood`
-# }
-# Log_lik_Vec
-#
-# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
-# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
-# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
-# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
-# library(forcats)
-# to_plot$Permutation <- as.factor(to_plot$Permutation)
-# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
-# to_plot <- left_join(to_plot, groups)
-#
-# (adj_normal_com <- to_plot %>%
+# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
+#   Log_lik_Vec <- NA
+#   for (element in 1:nrow(all_permutations)) {
+#     l <- GLMadj(
+#       response = "Level",
+#       explanatory_complete = c("intercept", "Age"),
+#       explanatory_proportional = c("NA"),
+#       distribution = dist,
+#       categories_order = all_permutations[element, ],
+#       dataframe = dreams_d1
+#     )
+#     Log_lik_Vec[element] <- l$`Log-likelihood`
+#   }
+#   Log_lik_Vec
+#   all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+#   names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+#   to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+#   to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+#   to_plot$Permutation <- as.factor(to_plot$Permutation)
+#   to_plot$Distribution <- dist
+#   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+#   to_plot <- left_join(to_plot, groups)
+#   to_plot <- to_plot[to_plot$LogLik >= -1000,]
+#   title <- str_c("Adjacent, ", dist, ", complete")
+#   plot[[dist]] <- to_plot %>%
 #     arrange(-LogLik) %>%
-#     mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
+#     mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
 #     ggplot(aes(x = Permutation, y = LogLik)) +
 #     geom_point() +
 #     geom_line(aes(group = gn)) +
 #     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-#     ggtitle("Adjacent, Normal, Complete"))
+#     ggtitle(title)+
+#     xlab("")+
+#     ylab("")
+# }
+#
+# library(gridExtra)
+# library(grid)
+#
+# plot_adj <- grid.arrange(plot[["logistic"]], plot[["normal"]],
+#                          plot[["cauchit"]], plot[["gompertz"]],
+#                          ncol=2, nrow=2)
+#
+# # PLOT ADJACENT Proportional
+#
+# plot <- list()
+#
+# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
+#   Log_lik_Vec <- NA
+#   for (element in 1:nrow(all_permutations)) {
+#     l <- GLMadj(
+#       response = "Level",
+#       explanatory_complete = c("NA"),
+#       explanatory_proportional = c("intercept", "Age"),
+#       distribution = dist,
+#       categories_order = all_permutations[element, ],
+#       dataframe = dreams_d1
+#     )
+#     Log_lik_Vec[element] <- l$`Log-likelihood`
+#   }
+#   Log_lik_Vec
+#   all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+#   names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+#   to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+#   to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+#   to_plot$Permutation <- as.factor(to_plot$Permutation)
+#   to_plot$Distribution <- dist
+#   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+#   to_plot <- left_join(to_plot, groups)
+#   to_plot <- to_plot[to_plot$LogLik >= -1000,]
+#   title <- str_c("Adjacent, ", dist, ", proportional")
+#   plot[[dist]] <- to_plot %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle(title)+
+#     xlab("")+
+#     ylab("")
+# }
+#
+#
+# plot_adj_pro <- grid.arrange(plot[["logistic"]], plot[["normal"]],
+#                              plot[["cauchit"]], plot[["gompertz"]],
+#                              ncol=2, nrow=2)
+#
+#
+# # PLOT CUMULATIVE
+#
+# plot3 <- list()
+# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
+#   Log_lik_Vec <- NA
+#   for (element in 1:nrow(all_permutations)) {
+#     skip_to_next <- FALSE
+#     tryCatch({
+#       l <- GLMcum(
+#         response = "Level",
+#         explanatory_complete = c("intercept", "Age"),
+#         explanatory_proportional = c("NA"),
+#         distribution = dist,
+#         categories_order = all_permutations[element, ],
+#         dataframe = dreams_d1)
+#     },error = function(e) {
+#       Log_lik_Vec[element] <- NA
+#       skip_to_next <<- TRUE})
+#     if(skip_to_next) { next
+#     }else{
+#       Log_lik_Vec[element] <- l$`Log-likelihood`}
+#   }
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+#   all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+#   names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+#   to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+#   to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+#   to_plot$Permutation <- as.factor(to_plot$Permutation)
+#   to_plot$Distribution <- dist
+#   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+#   to_plot <- left_join(to_plot, groups)
+#   # to_plot <- to_plot[to_plot$LogLik >= -1000,]
+#   title <- str_c("Cumulative, ", dist, ", complete")
+#   plot3[[dist]] <- to_plot %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle(title)+
+#     xlab("")+
+#     ylab("")
+# }
+#
+# plot3
+#
+# plot_cum_com <- grid.arrange(plot3[["logistic"]], plot3[["normal"]],
+#                              plot3[["cauchit"]], plot3[["gompertz"]],
+#                              ncol=2, nrow=2)
+#
+# # PLOT Cumulative Proportional
+#
+# plot2 <- list()
+# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
+#   Log_lik_Vec <- NA
+#   for (element in 1:nrow(all_permutations)) {
+#     skip_to_next <- FALSE
+#     tryCatch({
+#       l <- GLMcum(
+#         response = "Level",
+#         explanatory_complete = c("intercept"),
+#         explanatory_proportional = c( "Age"),
+#         distribution = dist,
+#         categories_order = all_permutations[element, ],
+#         dataframe = dreams_d1)
+#     },error = function(e) {
+#       Log_lik_Vec[element] <- NA
+#       skip_to_next <<- TRUE})
+#     if(skip_to_next) { next
+#     }else{
+#       Log_lik_Vec[element] <- l$`Log-likelihood`}
+#   }
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+#   all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+#   names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+#   to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+#   to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+#   to_plot$Permutation <- as.factor(to_plot$Permutation)
+#   to_plot$Distribution <- dist
+#   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+#   to_plot <- left_join(to_plot, groups)
+#   # to_plot <- to_plot[to_plot$LogLik >= -1000,]
+#   title <- str_c("Cumulative, ", dist, ", proportional")
+#   plot2[[dist]] <- to_plot %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle(title)+
+#     xlab("")+
+#     ylab("")
+# }
+#
+# plot2
+#
+# plot_cum_com <- grid.arrange(plot2[["logistic"]], plot2[["normal"]],
+#                              plot2[["cauchit"]], plot2[["gompertz"]],
+#                              ncol=2, nrow=2)
 #
 #
 # # REFERENCE PLOT
 #
-# l <- ratio_ref$GLMref(
+# l <- GLMref(
 #   response = "Level",
 #   explanatory_complete = c("intercept", "Age"),
 #   explanatory_proportional = c("NA"),
@@ -2650,7 +2771,7 @@
 #
 # Log_lik_Vec <- NA
 # for (element in 1:nrow(all_permutations)) {
-#   l <- ratio_ref$GLMref(
+#   l <- GLMref(
 #     response = "Level",
 #     explanatory_complete = c("intercept", "Age"),
 #     explanatory_proportional = c("NA"),
@@ -2684,7 +2805,7 @@
 #     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
 #     ggtitle("Reference, Student(1), Complete"))
 #
-# l <- ratio_ref$GLMref(
+# l <- GLMref(
 #   response = "Level",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept","Age"),
@@ -2696,7 +2817,7 @@
 #
 # Log_lik_Vec <- NA
 # for (element in 1:nrow(all_permutations)) {
-#   l <- ratio_ref$GLMref(
+#   l <- GLMref(
 #     response = "Level",
 #     explanatory_complete = c("NA"),
 #     explanatory_proportional = c("intercept","Age"),
@@ -2742,7 +2863,7 @@
 #   knee$R4 <- as.factor(knee$R4)
 # }
 #
-# estimation <- ratio_cum$GLMcum(
+# estimation <- GLMcum(
 #   response = "R4",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Th", "Sex", "Age"),
@@ -2796,7 +2917,7 @@
 # head(dat)
 #
 # # FUNCIONA BIEN
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("NA"),
@@ -2808,7 +2929,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("NA"),
@@ -2820,7 +2941,7 @@
 #
 # # MOD3
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public"),
@@ -2832,7 +2953,7 @@
 #
 # # MOD4
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public"),
@@ -2844,7 +2965,7 @@
 #
 # # MOD5
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("pared", "gpa"),
 #   explanatory_proportional = c("intercept", "public"),
@@ -2857,7 +2978,7 @@
 #
 # # MOD6
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public", "gpa"),
@@ -2868,7 +2989,7 @@
 #
 # # MOD7
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public"),
@@ -2880,7 +3001,7 @@
 #
 # # MOD 7
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("public"),
@@ -2892,7 +3013,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "apply",
 #   explanatory_complete = c("intercept", "pared"),
 #   explanatory_proportional = c("NA"),
@@ -2916,7 +3037,7 @@
 # }
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("NA"),
@@ -2928,7 +3049,7 @@
 # ))
 #
 # # NO
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept", "temp"),
 #   explanatory_proportional = c("NA"),
@@ -2940,7 +3061,7 @@
 # ))
 #
 # # NO
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept", "temp", "contact"),
 #   explanatory_proportional = c("NA"),
@@ -2951,7 +3072,7 @@
 #   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85)
 # ))
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp"),
@@ -2963,7 +3084,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp"),
@@ -2975,7 +3096,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp"),
@@ -2988,7 +3109,7 @@
 #
 #
 # # e : ADJACENT, LOGISTIC, COMPLETE
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp", "contact"),
@@ -2999,7 +3120,7 @@
 #   beta_init = c(0.72, 2.76, 4.19, 5.06, -1.6, -0.85)
 # ))
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp", "contact"),
@@ -3008,7 +3129,7 @@
 #   dataframe = wine
 # ))
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp", "contact"),
@@ -3018,7 +3139,7 @@
 # ))
 #
 #
-# (estimation_prime <- ratio_cum$GLMcum(
+# (estimation_prime <- GLMcum(
 #   response = "rating",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("temp", "contact"),
@@ -3058,7 +3179,7 @@
 # }
 #
 # # FUNCIONA
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "R4",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Th", "Sex", "Age"),
@@ -3069,7 +3190,7 @@
 # ))
 #
 # # FUNCIONA
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "R4",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Th", "Sex", "Age"),
@@ -3080,7 +3201,7 @@
 # ))
 #
 # # FUNCIONA
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "R4",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Th", "Sex", "Age"),
@@ -3091,7 +3212,7 @@
 # ))
 #
 # # FUNCIONA
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "R4",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("Th", "Sex", "Age"),
@@ -3101,7 +3222,7 @@
 #   beta_t = c("FALSE"), beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
 # ))
 #
-# (estimation <- ratio_cum$GLMcum(
+# (estimation <- GLMcum(
 #   response = "R4",
 #   explanatory_complete = c("NA"),
 #   explanatory_proportional = c("intercept"),
