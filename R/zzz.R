@@ -1,6 +1,7 @@
 ## usethis namespace: start
 #' @import Rcpp
 #' @export FisherScoring
+#' @export GLMadj
 #' @export CumulativeR
 #' @export SequentialR
 #' @useDynLib pack, .registration = TRUE
