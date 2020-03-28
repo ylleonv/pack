@@ -2,7 +2,7 @@
 
 export(CumulativeR)
 export(FisherScoring)
-export(Adj_fun)
+exportPattern("^[[:alpha:]]+")
 export(SequentialR)
 import(Rcpp)
 importFrom(Rcpp,sourceCpp)
