@@ -2,7 +2,7 @@
 
 export(CumulativeR)
 export(FisherScoring)
-export(GLMadj)
+export(Adj_fun)
 export(SequentialR)
 import(Rcpp)
 importFrom(Rcpp,sourceCpp)

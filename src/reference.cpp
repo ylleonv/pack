@@ -419,20 +419,20 @@ List ReferenceF::GLMref_ec(std::string response, std::string actual_response,
 }
 
 
-RCPP_MODULE(referencemodule){
-  Rcpp::function("GLMref", &GLMref,
-                 List::create(_["response"] = "a",
-                              _["explanatory_complete"] = CharacterVector::create( "A", NA_STRING),
-                              _["explanatory_proportional"] = CharacterVector::create( "A", NA_STRING),
-                              _["distribution"] = "a",
-                              _["categories_order"] = R_NaN,
-                              _["dataframe"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf),
-                              _["freedom_degrees"] = 1.0),
-                              "Provides a simple vector norm");
-  Rcpp::class_<ReferenceF>("ReferenceF")
-  .constructor()
-  // .method( "GLMref", &ReferenceF::GLMref)
-     .method( "GLMref_ec", &ReferenceF::GLMref_ec )
-     .method( "inverse_logistic", &ReferenceF::inverse_logistic )
-  ;
-}
+// RCPP_MODULE(referencemodule){
+//   Rcpp::function("GLMref", &GLMref,
+//                  List::create(_["response"] = "a",
+//                               _["explanatory_complete"] = CharacterVector::create( "A", NA_STRING),
+//                               _["explanatory_proportional"] = CharacterVector::create( "A", NA_STRING),
+//                               _["distribution"] = "a",
+//                               _["categories_order"] = R_NaN,
+//                               _["dataframe"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf),
+//                               _["freedom_degrees"] = 1.0),
+//                               "Provides a simple vector norm");
+//   Rcpp::class_<ReferenceF>("ReferenceF")
+//   .constructor()
+//   // .method( "GLMref", &ReferenceF::GLMref)
+//      .method( "GLMref_ec", &ReferenceF::GLMref_ec )
+//      .method( "inverse_logistic", &ReferenceF::inverse_logistic )
+//   ;
+// }

@@ -136,7 +136,7 @@ Eigen::MatrixXd AdjacentR::inverse_derivative_gumbel(const Eigen::VectorXd& eta)
 
 distribution dist_adj;
 
-// [[Rcpp::export]]
+// [[Rcpp::export("Adj_fun")]]
 List GLMadj(std::string response,
                         StringVector explanatory_complete,
                         StringVector explanatory_proportional,
