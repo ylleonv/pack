@@ -2,8 +2,8 @@
 
 export(CumulativeR)
 export(FisherScoring)
-exportPattern("^[[:alpha:]]+")
 export(SequentialR)
+export(adj_fun)
 import(Rcpp)
 importFrom(Rcpp,sourceCpp)
 useDynLib(pack, .registration = TRUE)
