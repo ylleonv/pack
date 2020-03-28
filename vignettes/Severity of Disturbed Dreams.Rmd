@@ -344,6 +344,9 @@ The log-likelihoods l and l_prime are equal.
 
 
 
+![Ordered log-likelihood of models for all permutations - Sequential, Complete ](/home/leonvelasco/Desktop/Propierties_Ordinal/Seq_com.png)
+
+![Ordered log-likelihood of models for all permutations - Sequential, Proportional ](/home/leonvelasco/Desktop/Propierties_Ordinal/Seq_pro.png)
 
 
 
