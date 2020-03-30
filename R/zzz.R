@@ -1,8 +1,9 @@
 ## usethis namespace: start
 #' @import Rcpp
-#' @export adj_fun
-#' @export CumulativeR
-#' @export SequentialR
+#' @export GLMadj
+#' @export GLMcum
+#' @export GLMseq
+#' @export GLMref
 #' @useDynLib pack, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
@@ -11,5 +12,5 @@ loadModule("exportmod", TRUE)
 loadModule("cumulativemodule", TRUE)
 loadModule("sequentialmodule", TRUE)
 loadModule("adjacentmodule", TRUE)
-# loadModule("referencemodule", TRUE)
+loadModule("referencemodule", TRUE)
 # loadModule("fishder", TRUE)

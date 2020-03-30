@@ -2,7 +2,10 @@
 
 export(CumulativeR)
 export(SequentialR)
-export(adj_fun)
+export(GLMadj)
+export(GLMref)
+export(GLMcum)
+export(GLMseq)
 import(Rcpp)
 importFrom(Rcpp,sourceCpp)
 useDynLib(pack, .registration = TRUE)
