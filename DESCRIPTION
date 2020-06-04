@@ -2,12 +2,12 @@ Package: pack
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Lorena",
+           family = "Leon",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "ylleonv@unal.edu.co",
            comment = structure("YOUR-ORCID-ID", .Names = "ORCID"))
-Description: What the package does (one paragraph).
+Description: Generalized Linear Models for categorical responses: In statistical modeling, there is a wide variety of regression models for categorical dependent variables (nominal or ordinal data); yet, there is no software embracing all these models together in a uniform and generalized format. We propose an R package to estimate generalized linear models implemented under the unified specification (r, F, Z) , where r represents the ratio of probabilities (reference, cumulative, adjacent, or sequential), F the cumulative distribution function for the linkage, and Z, the design matrix.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -21,7 +21,8 @@ Imports:
     BH,
     forcats,
     methods,
-    RcppEigen
+    RcppEigen,
+    stats
 Depends: 
     Rcpp
 Suggests: 

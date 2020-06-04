@@ -7,69 +7,97 @@
 using namespace Rcpp;
 
 // GLMadj
-List GLMadj(std::string response, StringVector explanatory_complete, StringVector explanatory_proportional, std::string distribution, SEXP categories_order, DataFrame dataframe);
-RcppExport SEXP _pack_GLMadj(SEXP responseSEXP, SEXP explanatory_completeSEXP, SEXP explanatory_proportionalSEXP, SEXP distributionSEXP, SEXP categories_orderSEXP, SEXP dataframeSEXP) {
+List GLMadj(Formula formula, CharacterVector categories_order, CharacterVector proportional_effects, DataFrame data, std::string distribution, double freedom_degrees);
+RcppExport SEXP _pack_GLMadj(SEXP formulaSEXP, SEXP categories_orderSEXP, SEXP proportional_effectsSEXP, SEXP dataSEXP, SEXP distributionSEXP, SEXP freedom_degreesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type response(responseSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type explanatory_complete(explanatory_completeSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type explanatory_proportional(explanatory_proportionalSEXP);
+    Rcpp::traits::input_parameter< Formula >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type categories_order(categories_orderSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type proportional_effects(proportional_effectsSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
     Rcpp::traits::input_parameter< std::string >::type distribution(distributionSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type categories_order(categories_orderSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type dataframe(dataframeSEXP);
-    rcpp_result_gen = Rcpp::wrap(GLMadj(response, explanatory_complete, explanatory_proportional, distribution, categories_order, dataframe));
+    Rcpp::traits::input_parameter< double >::type freedom_degrees(freedom_degreesSEXP);
+    rcpp_result_gen = Rcpp::wrap(GLMadj(formula, categories_order, proportional_effects, data, distribution, freedom_degrees));
     return rcpp_result_gen;
 END_RCPP
 }
 // GLMcum
-List GLMcum(std::string response, StringVector explanatory_complete, StringVector explanatory_proportional, std::string distribution, SEXP categories_order, DataFrame dataframe, StringVector beta_t, Eigen::VectorXd beta_init);
-RcppExport SEXP _pack_GLMcum(SEXP responseSEXP, SEXP explanatory_completeSEXP, SEXP explanatory_proportionalSEXP, SEXP distributionSEXP, SEXP categories_orderSEXP, SEXP dataframeSEXP, SEXP beta_tSEXP, SEXP beta_initSEXP) {
+List GLMcum(Formula formula, CharacterVector categories_order, CharacterVector proportional_effects, DataFrame data, std::string distribution, double freedom_degrees, Eigen::VectorXd beta_init);
+RcppExport SEXP _pack_GLMcum(SEXP formulaSEXP, SEXP categories_orderSEXP, SEXP proportional_effectsSEXP, SEXP dataSEXP, SEXP distributionSEXP, SEXP freedom_degreesSEXP, SEXP beta_initSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type response(responseSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type explanatory_complete(explanatory_completeSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type explanatory_proportional(explanatory_proportionalSEXP);
+    Rcpp::traits::input_parameter< Formula >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type categories_order(categories_orderSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type proportional_effects(proportional_effectsSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
     Rcpp::traits::input_parameter< std::string >::type distribution(distributionSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type categories_order(categories_orderSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type dataframe(dataframeSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type beta_t(beta_tSEXP);
+    Rcpp::traits::input_parameter< double >::type freedom_degrees(freedom_degreesSEXP);
     Rcpp::traits::input_parameter< Eigen::VectorXd >::type beta_init(beta_initSEXP);
-    rcpp_result_gen = Rcpp::wrap(GLMcum(response, explanatory_complete, explanatory_proportional, distribution, categories_order, dataframe, beta_t, beta_init));
+    rcpp_result_gen = Rcpp::wrap(GLMcum(formula, categories_order, proportional_effects, data, distribution, freedom_degrees, beta_init));
     return rcpp_result_gen;
 END_RCPP
 }
 // GLMref
-List GLMref(std::string response, StringVector explanatory_complete, StringVector explanatory_proportional, std::string distribution, SEXP categories_order, DataFrame dataframe, double freedom_degrees);
-RcppExport SEXP _pack_GLMref(SEXP responseSEXP, SEXP explanatory_completeSEXP, SEXP explanatory_proportionalSEXP, SEXP distributionSEXP, SEXP categories_orderSEXP, SEXP dataframeSEXP, SEXP freedom_degreesSEXP) {
+List GLMref(Formula formula, CharacterVector categories_order, CharacterVector proportional_effects, DataFrame data, std::string distribution, double freedom_degrees);
+RcppExport SEXP _pack_GLMref(SEXP formulaSEXP, SEXP categories_orderSEXP, SEXP proportional_effectsSEXP, SEXP dataSEXP, SEXP distributionSEXP, SEXP freedom_degreesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type response(responseSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type explanatory_complete(explanatory_completeSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type explanatory_proportional(explanatory_proportionalSEXP);
+    Rcpp::traits::input_parameter< Formula >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type categories_order(categories_orderSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type proportional_effects(proportional_effectsSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
     Rcpp::traits::input_parameter< std::string >::type distribution(distributionSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type categories_order(categories_orderSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type dataframe(dataframeSEXP);
     Rcpp::traits::input_parameter< double >::type freedom_degrees(freedom_degreesSEXP);
-    rcpp_result_gen = Rcpp::wrap(GLMref(response, explanatory_complete, explanatory_proportional, distribution, categories_order, dataframe, freedom_degrees));
+    rcpp_result_gen = Rcpp::wrap(GLMref(formula, categories_order, proportional_effects, data, distribution, freedom_degrees));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Predict_Response
+List Predict_Response(List model_object, DataFrame NEWDATA);
+RcppExport SEXP _pack_Predict_Response(SEXP model_objectSEXP, SEXP NEWDATASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type model_object(model_objectSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type NEWDATA(NEWDATASEXP);
+    rcpp_result_gen = Rcpp::wrap(Predict_Response(model_object, NEWDATA));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Discrete_CM
+List Discrete_CM(Formula formula, String case_id, String alternatives, SEXP reference, CharacterVector alternative_specific, DataFrame data, std::string distribution, double freedom_degrees);
+RcppExport SEXP _pack_Discrete_CM(SEXP formulaSEXP, SEXP case_idSEXP, SEXP alternativesSEXP, SEXP referenceSEXP, SEXP alternative_specificSEXP, SEXP dataSEXP, SEXP distributionSEXP, SEXP freedom_degreesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Formula >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< String >::type case_id(case_idSEXP);
+    Rcpp::traits::input_parameter< String >::type alternatives(alternativesSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type reference(referenceSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type alternative_specific(alternative_specificSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< std::string >::type distribution(distributionSEXP);
+    Rcpp::traits::input_parameter< double >::type freedom_degrees(freedom_degreesSEXP);
+    rcpp_result_gen = Rcpp::wrap(Discrete_CM(formula, case_id, alternatives, reference, alternative_specific, data, distribution, freedom_degrees));
     return rcpp_result_gen;
 END_RCPP
 }
 // GLMseq
-List GLMseq(std::string response, StringVector explanatory_complete, StringVector explanatory_proportional, std::string distribution, SEXP categories_order, DataFrame dataframe);
-RcppExport SEXP _pack_GLMseq(SEXP responseSEXP, SEXP explanatory_completeSEXP, SEXP explanatory_proportionalSEXP, SEXP distributionSEXP, SEXP categories_orderSEXP, SEXP dataframeSEXP) {
+List GLMseq(Formula formula, CharacterVector categories_order, CharacterVector proportional_effects, DataFrame data, std::string distribution, double freedom_degrees);
+RcppExport SEXP _pack_GLMseq(SEXP formulaSEXP, SEXP categories_orderSEXP, SEXP proportional_effectsSEXP, SEXP dataSEXP, SEXP distributionSEXP, SEXP freedom_degreesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type response(responseSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type explanatory_complete(explanatory_completeSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type explanatory_proportional(explanatory_proportionalSEXP);
+    Rcpp::traits::input_parameter< Formula >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type categories_order(categories_orderSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type proportional_effects(proportional_effectsSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
     Rcpp::traits::input_parameter< std::string >::type distribution(distributionSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type categories_order(categories_orderSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type dataframe(dataframeSEXP);
-    rcpp_result_gen = Rcpp::wrap(GLMseq(response, explanatory_complete, explanatory_proportional, distribution, categories_order, dataframe));
+    Rcpp::traits::input_parameter< double >::type freedom_degrees(freedom_degreesSEXP);
+    rcpp_result_gen = Rcpp::wrap(GLMseq(formula, categories_order, proportional_effects, data, distribution, freedom_degrees));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -82,8 +110,10 @@ RcppExport SEXP _rcpp_module_boot_sequentialmodule();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_pack_GLMadj", (DL_FUNC) &_pack_GLMadj, 6},
-    {"_pack_GLMcum", (DL_FUNC) &_pack_GLMcum, 8},
-    {"_pack_GLMref", (DL_FUNC) &_pack_GLMref, 7},
+    {"_pack_GLMcum", (DL_FUNC) &_pack_GLMcum, 7},
+    {"_pack_GLMref", (DL_FUNC) &_pack_GLMref, 6},
+    {"_pack_Predict_Response", (DL_FUNC) &_pack_Predict_Response, 2},
+    {"_pack_Discrete_CM", (DL_FUNC) &_pack_Discrete_CM, 8},
     {"_pack_GLMseq", (DL_FUNC) &_pack_GLMseq, 6},
     {"_rcpp_module_boot_adjacentmodule", (DL_FUNC) &_rcpp_module_boot_adjacentmodule, 0},
     {"_rcpp_module_boot_cumulativemodule", (DL_FUNC) &_rcpp_module_boot_cumulativemodule, 0},

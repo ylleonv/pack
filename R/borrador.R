@@ -15,11 +15,11 @@
 # library(dobson)
 # library(gtools) # For permutations
 #
-# library(gridExtra) #For plots
-# library(grid)
-#
 # # Initial configuration ---------------------------------------------------
 #
+# library(tools)
+# compileAttributes(verbose = TRUE)
+# package_native_routine_registration_skeleton("~/Desktop/pack_270320")
 # # load_all()
 # # check()
 # # use_mit_license("Lorena LEON")
@@ -31,7 +31,7 @@
 # # timesTwo(5)
 # # Cuando hago esto por segunda vez, funciona.
 # # usethis::use_rcpp()
-#
+# pack::summary.pcglm()
 # # use_package("forcats")
 # # use_package("RcppArmadillo",type = "LinkingTo")
 # # use_package("RcppEigen",type = "LinkingTo")
@@ -53,12 +53,10 @@
 #
 # Rcpp::compileAttributes("~/Desktop/pack_270320")
 #
-# GLMseq()
-# adj_fun()
-#
+# pkgbuild("~/Desktop/pack_240320")
 # compileAttributes()
-# devtools::load_all()
-# devtools::document()
+# load_all()
+# document()
 #
 # tools::package_native_routine_registration_skeleton(".", character_only = FALSE)
 #
@@ -581,7 +579,7 @@
 # # library(plyr)
 # # travel.long88$choice <- revalue(travel.long88$choice, c("air"="a", "train"="t", "bus"="b", "car"="c"))
 # # dist3 <- new(ReferenceF)
-# # (exp_8_3 <- dist3$GLMref_ec(
+# # (exp_8_3 <- dist3$Discrete_CM(
 # #   response = "choice", actual_response = "mode",
 # #   individuals = "indv",
 # #   explanatory_complete = c("intercept", "hinc"),
@@ -591,7 +589,7 @@
 # # ))
 #
 # dist3 <- new(ReferenceF)
-# (exp_8_3 <- dist3$GLMref_ec(
+# (exp_8_3 <- dist3$Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc"),
@@ -605,7 +603,7 @@
 #
 # # Robustness of Student link function in multinomial choice models
 # # The log-likelihood obtained with the MNL is −185.91 as obtained by Louviere et al. (2000) page 157.
-# (table3 <- GLMref_ec(
+# (table3 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -622,7 +620,7 @@
 #
 # # j_0=air, v* = 3, ll = −185.65
 # # DOES NOT WORK
-# (table4 <- GLMref_ec(
+# (table4 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -631,7 +629,7 @@
 #   design = "louviere", freedom_degrees = 3.0
 # ))
 #
-# (table4 <- GLMref_ec(
+# (table4 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -640,7 +638,7 @@
 #   design = "louviere", freedom_degrees = 3
 # ))
 #
-# (table4 <- GLMref_ec(
+# (table4 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -649,7 +647,7 @@
 #   design = "louviere", freedom_degrees = 3.0
 # ))
 #
-# (table4 <- GLMref_ec(
+# (table4 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -658,7 +656,7 @@
 #   design = "louviere", freedom_degrees = 3.0
 # ))
 #
-# (table4 <- GLMref_ec(
+# (table4 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -667,7 +665,7 @@
 #   design = "louviere", freedom_degrees = 3.0
 # ))
 #
-# (table4 <- GLMref_ec(
+# (table4 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -677,7 +675,7 @@
 # ))
 #
 # # j_0=bus, v* = 30, ll = −183.79
-# (table4 <- GLMref_ec(
+# (table4 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -688,7 +686,7 @@
 #
 # # j_0=car, v* = 0.2, ll = −142
 # ## DOES NOT WORK
-# (train_1.35 <- GLMref_ec(
+# (train_1.35 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -697,7 +695,7 @@
 #   design = "louviere", freedom_degrees = 0.2
 # ))
 # # j_0=car, v* = 1.0, ll = −142
-# (train_1.35 <- GLMref_ec(
+# (train_1.35 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -707,7 +705,7 @@
 # ))
 #
 # # j_0=train, v* = 1.35, ll = −183.49
-# (train_1.35 <- GLMref_ec(
+# (train_1.35 <- Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "hinc", "psize"),
@@ -716,7 +714,7 @@
 #   design = "louviere", freedom_degrees = 1.35
 # ))
 #
-# (table4 <- dist3$GLMref_ec(
+# (table4 <- dist3$Discrete_CM(
 #   response = "choice", actual_response = "mode",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept"),
@@ -751,7 +749,7 @@
 # head(dat4, 8)
 # str(dat4)
 # dist3 <- new(ReferenceF)
-# (A98 <- dist3$GLMref_ec(
+# (A98 <- dist3$Discrete_CM(
 #   response = "choice", actual_response = "depvar",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "income"),
@@ -1480,16 +1478,13 @@
 #   # vignette("multinomial-addiction1")
 #   addiction$ill <- as.factor(addiction$ill)
 #   data1 <- addiction[, c("ill", "gender", "university", "age")]
-#   data2 <- na.omit(data1)
+#   dat <- na.omit(data1)
 # }
-# summary(data2)
-# colnames(data2)
-# str(data2) # RESPONSE FACTOR. COV AS INT
-# library(plyr)
-# # data2$ill <- revalue(data2$ill, c("0"="d", "1"="o", "2"="z"))
+# summary(dat)
+# colnames(dat)
 #
 # dist1 <- new(ReferenceF)
-# (mod1 <- dist1$GLMref(
+# (mod1 <- GLMref(
 #   response = "ill",
 #   explanatory_complete = c("intercept"),
 #   explanatory_proportional = c("age"),
@@ -1497,6 +1492,7 @@
 #   categories_order = c("0", "1", "2"),
 #   dataframe = dat
 # ))
+# summary.pcglm(mod1)
 #
 # (mod13b <- dist1$GLMref(
 #   response = "ill", explanatory_complete = c("gender", "university"), explanatory_proportional = c("intercept", "age"),
@@ -1803,42 +1799,6 @@
 #   distribution = "logistic", categories_order = c("SPD", "The Greens", "The Liberals", "CDU"), dataframe = partydat
 # )) # -3521.484
 #
-# # MULTINOMIAL TRAVEL EX 8.3 TUTZ ------------------------------------------
-# # vignette("multinomial-travel")
-#
-# library(mlogit)
-# data(ModeChoice, package = "Ecdat")
-# head(ModeChoice)
-# travel.long <- mlogit.data(ModeChoice, choice = "mode", shape = "long", alt.levels = c("air", "train", "bus", "car"))
-#
-# head(travel.long)
-# travel.kat.id <- mlogit(mode ~ invt + gc | hinc, data = travel.long)
-# logLik(travel.kat.id)
-#
-# # Now with VGAM
-# travelmode <- matrix(ModeChoice$mode, byrow = T, ncol = 4)
-# colnames(travelmode) <- c("air", "train", "bus", "car")
-# travelhinc <- matrix(ModeChoice$hinc, byrow = T, ncol = 4)
-# travelhinc <- travelhinc[, 1]
-# travelinvt <- matrix(ModeChoice$invt, byrow = T, ncol = 4)
-# colnames(travelinvt) <- c("invtair", "invttrain", "invtbus", "invtcar")
-# travelgc <- matrix(ModeChoice$gc, byrow = T, ncol = 4)
-# colnames(travelgc) <- c("gcair", "gctrain", "gcbus", "gccar")
-# travelinvt <- sweep(travelinvt[, -1], 1, travelinvt[, 1])
-# travelgc <- sweep(travelgc[, -1], 1, travelgc[, 1])
-# Invt <- travelinvt[, 1]
-# Gc <- travelgc[, 1]
-# traveldat <- cbind(travelhinc, travelinvt, Invt, travelgc, Gc)
-# traveldat <- as.data.frame(traveldat)
-#
-# head(traveldat)
-# (fit <- vglm(travelmode ~ Invt + Gc + travelhinc, multinomial(parallel = FALSE ~ travelhinc, refLevel = 1),
-#              xij = list(Invt ~ invttrain + invtbus + invtcar, Gc ~ gctrain + gcbus + gccar),
-#              form2 = ~ Invt + invttrain + invtbus + invtcar + Gc + gctrain + gcbus + gccar + travelhinc,
-#              data = traveldat, trace = TRUE
-# ))
-#
-#
 # # ECONOMETRIC TRAVEL CHOICE -----------------------------------------------
 #
 # # MY DATA
@@ -1855,111 +1815,91 @@
 # head(travel.long88, 5)
 # str(travel.long88)
 # travel.long88$choice
-# # library(plyr)
-# # travel.long88$choice <- revalue(travel.long88$choice, c("air"="a", "train"="t", "bus"="b", "car"="c"))
-# # dist3 <- new(ReferenceF)
-# # (exp_8_3 <- dist3$GLMref_ec(
-# #   response = "choice", actual_response = "mode",
-# #   individuals = "indv",
-# #   explanatory_complete = c("intercept", "hinc"),
-# #   depend_y = c("gc", "invt"),
-# #   distribution = "logistic", categories_order = c("t", "b", "c", "a"), dataframe = travel.long88,
-# #   design = "tutz"
-# # ))
 #
-# dist3 <- new(ReferenceF)
-# (exp_8_3 <- dist3$GLMref_ec(
-#   response = "choice", actual_response = "mode",
-#   individuals = "indv",
-#   explanatory_complete = c("intercept", "hinc"),
-#   depend_y = c("gc", "invt"),
-#   distribution = "logistic", categories_order = c("train", "bus", "car", "air"), dataframe = travel.long88,
-#   design = "tutz"
-# ))
-# exp_8_3$`Log-likelihood`
-# exp_8_3$Coefficients
-#
-#
-# # Robustness of Student link function in multinomial choice models
-# # The log-likelihood obtained with the MNL is −185.91 as obtained by Louviere et al. (2000) page 157.
-# (table3 <- GLMref_ec(
-#   response = "choice", actual_response = "mode",
-#   individuals = "indv",
-#   explanatory_complete = c("intercept", "hinc", "psize"),
-#   depend_y = c("gc", "ttme"),
-#   distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
-#   design = "louviere", freedom_degrees = 2.0
+# (exp_8_3 <- Discrete_CM(
+#   formula = mode ~ 1 + hinc + gc + invt,
+#   case_id = "indv",
+#   alternatives = "choice",
+#   reference = "air",
+#   alternative_specific = c("gc", "invt"),
+#   data = travel.long88,
+#   distribution = "logistic"
 # ))
 #
-# # The log-likelihoods obtained with the (reference, F ν ∗ , Z) j 0
-# # models were −185.65, −183.79, −142, −183.49 respectively with
-# # the four reference alternatives j 0 =air, j 0 =bus, j 0 =car, j 0 =train and
-# # correspondind degree of freedom ν ∗ = 3,
-# # ν ∗ = 30, ν ∗ = 0.2, ν ∗ = 1.35.
-#
-# # j_0=air, v* = 3, ll = −185.65
-# # DOES NOT WORK
-# (table4 <- GLMref_ec(
-#   response = "choice", actual_response = "mode",
-#   individuals = "indv",
-#   explanatory_complete = c("intercept", "hinc", "psize"),
-#   depend_y = c("gc", "ttme"),
-#   distribution = "student", categories_order = c("train", "bus", "car", "air"), dataframe = travel.long88,
-#   design = "louviere", freedom_degrees = 3.0
+# (exp_8_3 <- Discrete_CM(
+#   formula = mode ~ 1 + hinc + gc + invt,
+#   case_id = "indv",
+#   alternatives = "choice",
+#   reference = "air",
+#   alternative_specific = NA,
+#   data = travel.long88,
+#   distribution = "logistic"
 # ))
 #
-# # j_0=bus, v* = 30, ll =  −183.79
-# (table4 <- GLMref_ec(
-#   response = "choice", actual_response = "mode",
-#   individuals = "indv",
-#   explanatory_complete = c("intercept", "hinc", "psize"),
-#   depend_y = c("gc", "ttme"),
-#   distribution = "student", categories_order = c("air", "train", "car", "bus"), dataframe = travel.long88,
-#   design = "louviere", freedom_degrees = 30
+#
+# (car_0 <- Discrete_CM(
+#   formula = mode ~ 1 + hinc[air] + psize[air] + gc + ttme,
+#   case_id = "indv",
+#   alternatives = "choice",
+#   reference = "car",
+#   alternative_specific = c("gc", "ttme"),
+#   data = travel.long88,
+#   distribution = "logistic"
 # ))
 #
-# # j_0=car, v* = 0.2, ll = −142
-# ## DOES NOT WORK
-# (train_1.35 <- dist3$GLMref_ec(
-#   response = "choice", actual_response = "mode",
-#   individuals = "indv",
-#   explanatory_complete = c("intercept", "hinc", "psize"),
-#   depend_y = c("gc", "ttme"),
-#   distribution = "student", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
-#   design = "louviere", freedom_degrees = 0.7
-# ))
-# # j_0=car, v* = 1.0, ll = −142
-# (train_1.35 <- dist3$GLMref_ec(
-#   response = "choice", actual_response = "mode",
-#   individuals = "indv",
-#   explanatory_complete = c("intercept", "hinc", "psize"),
-#   depend_y = c("gc", "ttme"),
-#   distribution = "student", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
-#   design = "louviere", freedom_degrees = 1
+# (bus_30 <- Discrete_CM(
+#   formula = mode ~ 1 + hinc[air] + psize[air] + gc + ttme,
+#   case_id = "indv",
+#   alternatives = "choice",
+#   reference = "bus",
+#   alternative_specific = c("gc", "ttme"),
+#   data = travel.long88,
+#   distribution = "student",
+#   freedom_degrees = 30
 # ))
 #
-# # j_0=train, v* = 1.35, ll = −183.49
-# (train_1.35 <- dist3$GLMref_ec(
-#   response = "choice", actual_response = "mode",
-#   individuals = "indv",
-#   explanatory_complete = c("intercept", "hinc", "psize"),
-#   depend_y = c("gc", "ttme"),
-#   distribution = "student", categories_order = c("air", "bus", "car", "train"), dataframe = travel.long88,
-#   design = "louviere", freedom_degrees = 1.35
+# (train_1.35 <- Discrete_CM(
+#   formula = mode ~ 1 + hinc[air] + psize[air] + gc + ttme,
+#   case_id = "indv",
+#   alternatives = "choice",
+#   reference = "train",
+#   alternative_specific = c("gc", "ttme"),
+#   data = travel.long88,
+#   distribution = "student",
+#   freedom_degrees = 1.35
 # ))
 #
-# (table4 <- dist3$GLMref_ec(
-#   response = "choice", actual_response = "mode",
-#   individuals = "indv",
-#   explanatory_complete = c("intercept"),
-#   depend_y = c("ttme"),
-#   distribution = "logistic", categories_order = c("air", "train", "bus", "car"), dataframe = travel.long88,
-#   design = "louviere", freedom_degrees = 2.0
+# (car_02 <- Discrete_CM(
+#   formula = mode ~ 1 + hinc[air] + psize[air] + gc + ttme,
+#   case_id = "indv",
+#   alternatives = "choice",
+#   reference = "car",
+#   alternative_specific = c("gc", "ttme"),
+#   data = travel.long88,
+#   distribution = "student",
+#   freedom_degrees = 0.2
 # ))
-# table4$`Log-likelihood`
-# table4$Coefficients
 #
+# (air_3 <- Discrete_CM(
+#   formula = mode ~ 1 + hinc + psize + gc + ttme,
+#   case_id = "indv",
+#   alternatives = "choice",
+#   reference = "air",
+#   alternative_specific = c("gc", "ttme"),
+#   data = travel.long88,
+#   distribution = "student",
+#   freedom_degrees = 3
+# ))
 #
+# (table_4 <- Discrete_CM(
+#   formula = mode ~ 1 + ttme,
+#   case_id = "indv",
+#   alternatives = "choice",
+#   reference = "car",
+#   alternative_specific = "ttme",
+#   data = travel.long88,
+#   distribution = "logistic"
+# ))
 #
 #
 # # ANOTHER EXAMPLE FOR ECONOMETRIC MODEL -----------------------------------
@@ -1984,7 +1924,7 @@
 # head(dat4, 8)
 # str(dat4)
 # dist3 <- new(ReferenceF)
-# (A98 <- dist3$GLMref_ec(
+# (A98 <- dist3$Discrete_CM(
 #   response = "choice", actual_response = "depvar",
 #   individuals = "indv",
 #   explanatory_complete = c("intercept", "income"),
@@ -2251,329 +2191,400 @@
 #   head(dreams_d1)
 #   summary(dreams_d1)
 #
-#   summary.fastLm <- function(object, ...) {
-#     coef <- object$coefficients
-#     se <- object$stderr
-#     tval <- coef / se
-#
-#     object$coefficients <- cbind(
-#       "Estimate" = coef,
-#       "Std. Error" = se,
-#       "z value" = tval,
-#       "Pr(>|z|)" = 2 * pnorm(-abs(tval))
-#     )
-#     colnames(object$coefficients) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
-#
-#     # cf src/stats/R/lm.R and case with no weights and an intercept
-#     # f <- object$fitted.values
-#     # r <- object$residuals
-#     # mss <- sum((f - mean(f))^2)
-#     # mss <- if (object$intercept) sum((f - mean(f))^2) else sum(f^2)
-#     # rss <- sum(r^2)
-#     #
-#     # object$r.squared <- mss/(mss + rss)
-#     # df.int <- if (object$intercept) 1L else 0L
-#     # n <- length(f)
-#     # rdf <- object$df
-#     # object$adj.r.squared <- 1 - (1 - object$r.squared) * ((n - df.int)/rdf)
-#     class(object) <- "summary.fastLm"
-#     object
-#   }
-#
-#   dist1 <- new(ReferenceF)
-#   all_permutations <- permutations(v = c(0, 1, 2, 3, 4), repeats.allowed = F, n = 5, r = 5)
-#   Log_lik_Vec <- NA
-#   all_permutations <- permutations(
-#     v = c("Very.severe", "Severe.1", "Severe.2", "Not.severe"),
-#     repeats.allowed = F, n = 4, r = 4
-#   )
-#
 # }
 # # REFERENCE, LOGISTIC, COMPLETE
 #
-# summary.pcglm <- function(object, ...) {
-#   coef <- object$coefficients
-#   se   <- object$stderr
-#   tval <- coef/se
+# l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# l_1$`Log-likelihood`
+# l_2 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = "Very.severe",
+#   dataframe = dreams_d1
+# )
+# l_2$`Log-likelihood`
+# l_3 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+#   dataframe = dreams_d1
+# )
+# l_3$`Log-likelihood`
+# l_4 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = "Severe.2",
+#   dataframe = dreams_d1
+# )
+# l_4$`Log-likelihood`
 #
-#   object$coefficients <- cbind("Estimate"     = coef,
-#                                "Std. Error" = se,
-#                                "z value"    = tval,
-#                                "Pr(>|z|)"   = 2*pnorm(-abs(tval)))
-#   colnames(object$coefficients) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
-#   printCoefmat(object$coefficients, P.values=TRUE, has.Pvalue=TRUE, ...)
-#   # cf src/stats/R/lm.R and case with no weights and an intercept
-#   # f <- object$fitted.values
-#   # r <- object$residuals
-#   #mss <- sum((f - mean(f))^2)
-#   # mss <- if (object$intercept) sum((f - mean(f))^2) else sum(f^2)
-#   # rss <- sum(r^2)
-#   #
-#   # object$r.squared <- mss/(mss + rss)
-#   # df.int <- if (object$intercept) 1L else 0L
-#   # n <- length(f)
-#   # rdf <- object$df
-#   # object$adj.r.squared <- 1 - (1 - object$r.squared) * ((n - df.int)/rdf)
-#   class(object) <- "summary.pcglm"
-#   object
-# }
-# # MODELS
-# {
-#   (l_1 <- GLMref(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "logistic",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1
-#   ))
-#
-#   summary.pcglm(l_1)$coefficients[1]
+# l_5 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = c("Severe.1","Severe.2", "Very.severe", "Not.severe"),
+#   dataframe = dreams_d1
+# )
+# l_5$`Log-likelihood`
+# l_6 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = "Not.severe",
+#   dataframe = dreams_d1
+# )
+# l_6$`Log-likelihood`
 #
 #
-#   (l_1 <- GLMref(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "student",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1,
-#     30
-#   ))
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+#   dataframe = dreams_d1
+# ))
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = "Severe.2",
+#   dataframe = dreams_d1
+# ))
 #
-#   summary.fastLm(l_1)$coefficients
-#   l_1$deviance
-#   l_1$`Log-likelihood`
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = c("Not.severe", "Very.severe", "Severe.1", "Severe.2"),
+#   dataframe = dreams_d1
+# ))
 #
-#   # REFERENCE, LOGISTIC, PROPORTIONAL
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = c("Very.severe","Not.severe", "Severe.1", "Severe.2"),
+#   dataframe = dreams_d1
+# ))
 #
-#   l_2 <- GLMref(
-#     response = "Level",
-#     explanatory_complete = c("NA"),
-#     explanatory_proportional = c("intercept", "Age"),
-#     distribution = "logistic",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(l_2)$coefficients
-#   l_2$deviance
-#   l_2$`Log-likelihood`
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = c("Very.severe", "Severe.2", "Not.severe", "Severe.1"),
+#   dataframe = dreams_d1
+# ))
 #
-#   # REFERENCE, CAUCHIT, COMPLETE
+# l_1$coefficients
+# l_1$levs1
+# l_1$Y_init_vec
+# head(dreams_d1)
 #
-#   l_3 <- GLMref(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "cauchit",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(l_3)$coefficients
-#   l_3$deviance
-#   l_3$`Log-likelihood`
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = "Severe.2",
+#   dataframe = dreams_d1
+# ))
+# l_1$coefficients
+# l_1$levs1
 #
-#   # Then we change the reference category (Severe.2) and estimate again the three reference models:
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "normal",
+#   reference_category = "Very.severe",
+#   dataframe = dreams_d1
+# ))
 #
-#   l_1prime <- GLMref(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "logistic",
-#     categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(l_1prime)$coefficients
-#   l_1prime$deviance
-#   l_1prime$`Log-likelihood`
+# summary.pcglm(l_1)
 #
-#   # REFERENCE, LOGISTIC, PROPORTIONAL
-#   l_2prime <- GLMref(
-#     response = "Level",
-#     explanatory_complete = c("NA"),
-#     explanatory_proportional = c("intercept", "Age"),
-#     distribution = "logistic",
-#     categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(l_2prime)$coefficients
-#   l_2prime$deviance
-#   l_2prime$`Log-likelihood`
 #
-#   # REFERENCE, CAUCHIT, COMPLETE
-#   l_3prime <- GLMref(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "cauchit",
-#     categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(l_3prime)$coefficients
-#   l_3prime$deviance
-#   l_3prime$`Log-likelihood`
+# (l_1 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "student",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   30
+# ))
 #
-#   # ADJACENT, LOGISTIC, COMPLETE
-#   lprime <- GLMadj(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "logistic",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(lprime)$coefficients
-#   lprime$deviance
-#   lprime$`Log-likelihood`
+# summary.fastLm(l_1)$coefficients
+# l_1$deviance
+# l_1$`Log-likelihood`
 #
-#   # ADJACENT, CAUCHY, COMPLETE
-#   estimation_1 <- GLMadj(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "cauchit",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(estimation_1)$coefficients
-#   estimation_1$deviance
-#   estimation_1$`Log-likelihood`
+# # REFERENCE, LOGISTIC, PROPORTIONAL
 #
-#   # ADJACENT, GOMPERTZ, PROPORTIONAL
-#   estimation_2 <- GLMadj(
-#     response = "Level",
-#     explanatory_complete = c("NA"),
-#     explanatory_proportional = c("intercept", "Age"),
-#     distribution = "gompertz",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(estimation_2)$coefficients
-#   estimation_2$deviance
-#   estimation_2$`Log-likelihood`
+# l_2 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_2)$coefficients
+# l_2$deviance
+# l_2$`Log-likelihood`
 #
-#   # ADJACENT, CAUCHY, COMPLETE (Reverse order)
-#   estimation_1r <- GLMadj(
-#     response = "Level",
-#     explanatory_complete = c("intercept", "Age"),
-#     explanatory_proportional = c("NA"),
-#     distribution = "cauchit",
-#     categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(estimation_1r)$coefficients
-#   estimation_1r$deviance
-#   estimation_1r$`Log-likelihood`
+# # REFERENCE, CAUCHIT, COMPLETE
 #
-#   # ADJACENT, GOMPERTZ, PROPORTIONAL (Reverse order)
-#   estimation_2r <- GLMadj(
-#     response = "Level",
-#     explanatory_complete = c("NA"),
-#     explanatory_proportional = c("intercept", "Age"),
-#     distribution = "gompertz",
-#     categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(estimation_2r)$coefficients
-#   estimation_2r$deviance
-#   estimation_2r$`Log-likelihood`
+# l_3 <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "cauchit",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_3)$coefficients
+# l_3$deviance
+# l_3$`Log-likelihood`
 #
-#   # ADJACENT, GUMBEL, PROPORTIONAL (Reverse order)
-#   estimation_3r <- GLMadj(
-#     response = "Level",
-#     explanatory_complete = c("NA"),
-#     explanatory_proportional = c("intercept", "Age"),
-#     distribution = "gumbel",
-#     categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
-#     dataframe = dreams_d1
-#   )
-#   summary.fastLm(estimation_3r)$coefficients
-#   estimation_3r$deviance
-#   estimation_3r$`Log-likelihood`
+# # Then we change the reference category (Severe.2) and estimate again the three reference models:
 #
-#   # SEQUENTIAL, GOMPERTZ, PROPORTIONAL
-#   (estimation_prime <- ratio_seq$GLMseq(
-#     response = "Level",
-#     explanatory_complete = c("NA"),
-#     explanatory_proportional = c("intercept", "Age"),
-#     distribution = "gompertz",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1
-#   ))
+# l_1prime <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_1prime)$coefficients
+# l_1prime$deviance
+# l_1prime$`Log-likelihood`
 #
-#   (estimation_prime <- GLMseq(
-#     response = "Level",
-#     explanatory_complete = c("intercept"),
-#     explanatory_proportional = c("Age"),
-#     distribution = "gompertz",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1
-#   ))
+# # REFERENCE, LOGISTIC, PROPORTIONAL
+# l_2prime <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_2prime)$coefficients
+# l_2prime$deviance
+# l_2prime$`Log-likelihood`
 #
-#   summary.fastLm(estimation_prime)$coefficients
-#   estimation_prime$deviance
-#   estimation_prime$`Log-likelihood`
+# # REFERENCE, CAUCHIT, COMPLETE
+# l_3prime <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "cauchit",
+#   categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(l_3prime)$coefficients
+# l_3prime$deviance
+# l_3prime$`Log-likelihood`
 #
-#   # CUMULATIVE, GOMPERTZ, PROPORTIONAL
+# # ADJACENT, LOGISTIC, COMPLETE
+# lprime <- GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# lprime$coefficients
 #
-#   (estimation <- GLMcum(
-#     response = "Level",
-#     explanatory_complete = c("NA"),
-#     explanatory_proportional = c("intercept", "Age"),
-#     distribution = "normal",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1,
-#     beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
-#   ))
+# lprime <- GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "logistic",
+#   categories_order = c("Not.severe", "Severe.2", "Severe.1", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# lprime$coefficients
 #
-#   (estimation <- GLMcum(
-#     response = "Level",
-#     explanatory_complete = c("intercept"),
-#     explanatory_proportional = c("Age"),
-#     distribution = "gompertz",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1,
-#     beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
-#   ))
 #
-#   # Invariance under permutations
+# summary.fastLm(lprime)$coefficients
+# lprime$deviance
+# lprime$`Log-likelihood`
 #
-#   (l <- GLMcum(
-#     response = "Level",
-#     explanatory_complete = c("intercept"),
-#     explanatory_proportional = c("Age"),
-#     distribution = "gompertz",
-#     categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
-#     dataframe = dreams_d1,
-#     beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
-#   ))
+# # ADJACENT, CAUCHY, COMPLETE
+# estimation_1 <- GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "cauchit",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_1)$coefficients
+# estimation_1$deviance
+# estimation_1$`Log-likelihood`
 #
-#   (l <- GLMcum(
-#     response = "Level",
-#     explanatory_complete = c("intercept"),
-#     explanatory_proportional = c("Age"),
-#     distribution = "cauchit",
-#     categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
-#     dataframe = dreams_d1,
-#     beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
-#   ))
+# # ADJACENT, GOMPERTZ, PROPORTIONAL
+# estimation_2 <- GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_2)$coefficients
+# estimation_2$deviance
+# estimation_2$`Log-likelihood`
 #
-#   (l <- GLMcum(
-#     response = "Level",
-#     explanatory_complete = c("intercept"),
-#     explanatory_proportional = c("Age"),
-#     distribution = "logistic",
-#     categories_order = c("Very.severe", "Severe.1", "Severe.2", "Not.severe"),
-#     dataframe = dreams_d1,
-#     beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
-#   ))
-# }
-# # PLOTS
+# # ADJACENT, CAUCHY, COMPLETE (Reverse order)
+# estimation_1r <- GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "cauchit",
+#   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_1r)$coefficients
+# estimation_1r$deviance
+# estimation_1r$`Log-likelihood`
+#
+# # ADJACENT, GOMPERTZ, PROPORTIONAL (Reverse order)
+# estimation_2r <- GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_2r)$coefficients
+# estimation_2r$deviance
+# estimation_2r$`Log-likelihood`
+#
+# # ADJACENT, GUMBEL, PROPORTIONAL (Reverse order)
+# estimation_3r <- GLMadj(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "gumbel",
+#   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+#   dataframe = dreams_d1
+# )
+# summary.fastLm(estimation_3r)$coefficients
+# estimation_3r$deviance
+# estimation_3r$`Log-likelihood`
+#
+# # SEQUENTIAL, GOMPERTZ, PROPORTIONAL
+# (estimation_prime <- ratio_seq$GLMseq(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# ))
+#
+# (estimation_prime <- GLMseq(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1
+# ))
+#
+# summary.fastLm(estimation_prime)$coefficients
+# estimation_prime$deviance
+# estimation_prime$`Log-likelihood`
+#
+# # CUMULATIVE, GOMPERTZ, PROPORTIONAL
+#
+# (estimation <- GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "normal",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+# (estimation <- GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+# # Invariance under permutations
+#
+# (l <- GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "gompertz",
+#   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+# (l <- GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "cauchit",
+#   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+# (l <- GLMcum(
+#   response = "Level",
+#   explanatory_complete = c("intercept"),
+#   explanatory_proportional = c("Age"),
+#   distribution = "logistic",
+#   categories_order = c("Very.severe", "Severe.1", "Severe.2", "Not.severe"),
+#   dataframe = dreams_d1,
+#   beta_t = c("FALSE"), beta_init = c(-2.1150969, 0.2739375)
+# ))
+#
+#
 #
 # # PLOT ADJACENT
+# all_permutations <- permutations(
+#   v = c("Very.severe", "Severe.1", "Severe.2", "Not.severe"),
+#   repeats.allowed = F, n = 4, r = 4
+# )
+# library(forcats)
+#
 # plot <- list()
 #
-# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
+# for (dist in c("logistic", "normal", "cauchit", "gompertz")) {
 #   Log_lik_Vec <- NA
 #   for (element in 1:nrow(all_permutations)) {
 #     l <- GLMadj(
@@ -2595,7 +2606,7 @@
 #   to_plot$Distribution <- dist
 #   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
 #   to_plot <- left_join(to_plot, groups)
-#   to_plot <- to_plot[to_plot$LogLik >= -1000,]
+#   to_plot <- to_plot[to_plot$LogLik >= -1000, ]
 #   title <- str_c("Adjacent, ", dist, ", complete")
 #   plot[[dist]] <- to_plot %>%
 #     arrange(-LogLik) %>%
@@ -2604,21 +2615,24 @@
 #     geom_point() +
 #     geom_line(aes(group = gn)) +
 #     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-#     ggtitle(title)+
-#     xlab("")+
+#     ggtitle(title) +
+#     xlab("") +
 #     ylab("")
 # }
 #
+# library(gridExtra)
+# library(grid)
 #
 # plot_adj <- grid.arrange(plot[["logistic"]], plot[["normal"]],
 #                          plot[["cauchit"]], plot[["gompertz"]],
-#                          ncol=2, nrow=2)
+#                          ncol = 2, nrow = 2
+# )
 #
 # # PLOT ADJACENT Proportional
 #
 # plot <- list()
 #
-# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
+# for (dist in c("logistic", "normal", "cauchit", "gompertz")) {
 #   Log_lik_Vec <- NA
 #   for (element in 1:nrow(all_permutations)) {
 #     l <- GLMadj(
@@ -2640,7 +2654,7 @@
 #   to_plot$Distribution <- dist
 #   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
 #   to_plot <- left_join(to_plot, groups)
-#   to_plot <- to_plot[to_plot$LogLik >= -1000,]
+#   to_plot <- to_plot[to_plot$LogLik >= -1000, ]
 #   title <- str_c("Adjacent, ", dist, ", proportional")
 #   plot[[dist]] <- to_plot %>%
 #     arrange(-LogLik) %>%
@@ -2649,81 +2663,48 @@
 #     geom_point() +
 #     geom_line(aes(group = gn)) +
 #     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-#     ggtitle(title)+
-#     xlab("")+
+#     ggtitle(title) +
+#     xlab("") +
 #     ylab("")
 # }
 #
 #
 # plot_adj_pro <- grid.arrange(plot[["logistic"]], plot[["normal"]],
 #                              plot[["cauchit"]], plot[["gompertz"]],
-#                              ncol=2, nrow=2)
+#                              ncol = 2, nrow = 2
+# )
 #
 #
 # # PLOT CUMULATIVE
 #
-# plot1 <- list()
-#
-# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
+# plot3 <- list()
+# for (dist in c("logistic", "normal", "cauchit", "gompertz")) {
 #   Log_lik_Vec <- NA
 #   for (element in 1:nrow(all_permutations)) {
 #     skip_to_next <- FALSE
-#     tryCatch({
-#
-#       l <- GLMcum(
-#         response = "Level",
-#         explanatory_complete = c("intercept", "Age"),
-#         explanatory_proportional = c("NA"),
-#         distribution = dist,
-#         categories_order = all_permutations[element, ],
-#         dataframe = dreams_d1)
-#       Log_lik_Vec[element] <- l$`Log-likelihood`
-#       all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
-#       names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
-#       to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
-#       to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
-#       to_plot$Permutation <- as.factor(to_plot$Permutation)
-#       to_plot$Distribution <- dist
-#       groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
-#       to_plot <- left_join(to_plot, groups)
-#       to_plot <- to_plot[to_plot$LogLik >= -1000,]
-#       title <- str_c("Cumulative, ", dist, ", complete")
-#       plot1[[dist]] <- to_plot %>%
-#         arrange(-LogLik) %>%
-#         mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
-#         ggplot(aes(x = Permutation, y = LogLik)) +
-#         geom_point() +
-#         geom_line(aes(group = gn)) +
-#         theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-#         ggtitle(title)+
-#         xlab("")+
-#         ylab("") },error = function(e) {skip_to_next <<- TRUE})
-#     if(skip_to_next) { next }
-#   }
-# }
-#
-# plot_cum <- grid.arrange(plot1[["logistic"]], plot1[["normal"]],
-#                          plot1[["cauchit"]], plot1[["gompertz"]],
-#                          ncol=2, nrow=2)
-#
-# # PLOT ADJACENT Proportional
-#
-# plot <- list()
-#
-# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
-#   Log_lik_Vec <- NA
-#   for (element in 1:nrow(all_permutations)) {
-#     l <- GLMadj(
-#       response = "Level",
-#       explanatory_complete = c("NA"),
-#       explanatory_proportional = c("intercept", "Age"),
-#       distribution = dist,
-#       categories_order = all_permutations[element, ],
-#       dataframe = dreams_d1
+#     tryCatch(
+#       {
+#         l <- GLMcum(
+#           response = "Level",
+#           explanatory_complete = c("intercept", "Age"),
+#           explanatory_proportional = c("NA"),
+#           distribution = dist,
+#           categories_order = all_permutations[element, ],
+#           dataframe = dreams_d1
+#         )
+#       },
+#       error = function(e) {
+#         Log_lik_Vec[element] <- NA
+#         skip_to_next <<- TRUE
+#       }
 #     )
-#     Log_lik_Vec[element] <- l$`Log-likelihood`
+#     if (skip_to_next) {
+#       next
+#     } else {
+#       Log_lik_Vec[element] <- l$`Log-likelihood`
+#     }
 #   }
-#   Log_lik_Vec
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
 #   all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
 #   names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
 #   to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
@@ -2732,72 +2713,294 @@
 #   to_plot$Distribution <- dist
 #   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
 #   to_plot <- left_join(to_plot, groups)
-#   to_plot <- to_plot[to_plot$LogLik >= -1000,]
-#   title <- str_c("Adjacent, ", dist, ", proportional")
-#   plot[[dist]] <- to_plot %>%
+#   # to_plot <- to_plot[to_plot$LogLik >= -1000,]
+#   title <- str_c("Cumulative, ", dist, ", complete")
+#   plot3[[dist]] <- to_plot %>%
 #     arrange(-LogLik) %>%
 #     mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
 #     ggplot(aes(x = Permutation, y = LogLik)) +
 #     geom_point() +
 #     geom_line(aes(group = gn)) +
 #     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-#     ggtitle(title)+
-#     xlab("")+
+#     ggtitle(title) +
+#     xlab("") +
 #     ylab("")
 # }
 #
+# plot3
 #
-# plot_adj_pro <- grid.arrange(plot[["logistic"]], plot[["normal"]],
-#                              plot[["cauchit"]], plot[["gompertz"]],
-#                              ncol=2, nrow=2)
+# plot_cum_com <- grid.arrange(plot3[["logistic"]], plot3[["normal"]],
+#                              plot3[["cauchit"]], plot3[["gompertz"]],
+#                              ncol = 2, nrow = 2
+# )
 #
+# # PLOT Cumulative Proportional
 #
-# # REFERENCE PLOT
-#
-# plot_r <- list()
-#
-# for(dist in c("logistic", "normal", "cauchit", "gompertz") ){
+# plot2 <- list()
+# for (dist in c("logistic", "normal", "cauchit", "gompertz")) {
 #   Log_lik_Vec <- NA
 #   for (element in 1:nrow(all_permutations)) {
 #     skip_to_next <- FALSE
-#     tryCatch({
-#
-#       l <- GLMcum(
-#         response = "Level",
-#         explanatory_complete = c("intercept", "Age"),
-#         explanatory_proportional = c("NA"),
-#         distribution = dist,
-#         categories_order = all_permutations[element, ],
-#         dataframe = dreams_d1)
+#     tryCatch(
+#       {
+#         l <- GLMcum(
+#           response = "Level",
+#           explanatory_complete = c("intercept"),
+#           explanatory_proportional = c("Age"),
+#           distribution = dist,
+#           categories_order = all_permutations[element, ],
+#           dataframe = dreams_d1
+#         )
+#       },
+#       error = function(e) {
+#         Log_lik_Vec[element] <- NA
+#         skip_to_next <<- TRUE
+#       }
+#     )
+#     if (skip_to_next) {
+#       next
+#     } else {
 #       Log_lik_Vec[element] <- l$`Log-likelihood`
-#       all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
-#       names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
-#       to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
-#       to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
-#       to_plot$Permutation <- as.factor(to_plot$Permutation)
-#       to_plot$Distribution <- dist
-#       groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
-#       to_plot <- left_join(to_plot, groups)
-#       to_plot <- to_plot[to_plot$LogLik >= -1000,]
-#       title <- str_c("Cumulative, ", dist, ", complete")
-#       plot_r[[dist]] <- to_plot %>%
-#         arrange(-LogLik) %>%
-#         mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
-#         ggplot(aes(x = Permutation, y = LogLik)) +
-#         geom_point() +
-#         geom_line(aes(group = gn)) +
-#         theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-#         ggtitle(title)+
-#         xlab("")+
-#         ylab("") },error = function(e) {skip_to_next <<- TRUE})
-#     if(skip_to_next) { next }
+#     }
 #   }
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+#   all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+#   names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+#   to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+#   to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+#   to_plot$Permutation <- as.factor(to_plot$Permutation)
+#   to_plot$Distribution <- dist
+#   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+#   to_plot <- left_join(to_plot, groups)
+#   # to_plot <- to_plot[to_plot$LogLik >= -1000,]
+#   title <- str_c("Cumulative, ", dist, ", proportional")
+#   plot2[[dist]] <- to_plot %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle(title) +
+#     xlab("") +
+#     ylab("")
 # }
 #
-# plot_ref <- grid.arrange(plot_r[["logistic"]], plot_r[["normal"]],
-#                          plot_r[["cauchit"]], plot_r[["gompertz"]],
-#                          ncol=2, nrow=2)
+# plot2
 #
+# plot_cum_com <- grid.arrange(plot2[["logistic"]], plot2[["normal"]],
+#                              plot2[["cauchit"]], plot2[["gompertz"]],
+#                              ncol = 2, nrow = 2
+# )
+#
+# # PLOT SEQUENTIAL
+#
+# plot3 <- list()
+# for (dist in c("logistic", "normal", "cauchit", "gompertz")) {
+#   Log_lik_Vec <- NA
+#   for (element in 1:nrow(all_permutations)) {
+#     skip_to_next <- FALSE
+#     tryCatch(
+#       {
+#         l <- GLMseq(
+#           response = "Level",
+#           explanatory_complete = c("intercept", "Age"),
+#           explanatory_proportional = c("NA"),
+#           distribution = dist,
+#           categories_order = all_permutations[element, ],
+#           dataframe = dreams_d1
+#         )
+#       },
+#       error = function(e) {
+#         Log_lik_Vec[element] <- NA
+#         skip_to_next <<- TRUE
+#       }
+#     )
+#     if (skip_to_next) {
+#       next
+#     } else {
+#       Log_lik_Vec[element] <- l$`Log-likelihood`
+#     }
+#   }
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+#   all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+#   names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+#   to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+#   to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+#   to_plot$Permutation <- as.factor(to_plot$Permutation)
+#   to_plot$Distribution <- dist
+#   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+#   to_plot <- left_join(to_plot, groups)
+#   to_plot <- to_plot[to_plot$LogLik >= -1000, ]
+#   title <- str_c("Sequential, ", dist, ", complete")
+#   plot3[[dist]] <- to_plot %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle(title) +
+#     xlab("") +
+#     ylab("")
+# }
+#
+# plot3
+#
+# plot_cum_com <- grid.arrange(plot3[["logistic"]], plot3[["normal"]],
+#                              plot3[["cauchit"]], plot3[["gompertz"]],
+#                              ncol = 2, nrow = 2
+# )
+#
+# # PLOT Sequential Proportional
+#
+# plot2 <- list()
+# for (dist in c("logistic", "normal", "cauchit", "gompertz")) {
+#   Log_lik_Vec <- NA
+#   for (element in 1:nrow(all_permutations)) {
+#     skip_to_next <- FALSE
+#     tryCatch(
+#       {
+#         l <- GLMseq(
+#           response = "Level",
+#           explanatory_complete = c("intercept"),
+#           explanatory_proportional = c("Age"),
+#           distribution = dist,
+#           categories_order = all_permutations[element, ],
+#           dataframe = dreams_d1
+#         )
+#       },
+#       error = function(e) {
+#         Log_lik_Vec[element] <- NA
+#         skip_to_next <<- TRUE
+#       }
+#     )
+#     if (skip_to_next) {
+#       next
+#     } else {
+#       Log_lik_Vec[element] <- l$`Log-likelihood`
+#     }
+#   }
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+#   all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+#   names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+#   to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+#   to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+#   to_plot$Permutation <- as.factor(to_plot$Permutation)
+#   to_plot$Distribution <- dist
+#   groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+#   to_plot <- left_join(to_plot, groups)
+#   to_plot <- to_plot[to_plot$LogLik >= -1000, ]
+#   title <- str_c("Sequential, ", dist, ", proportional")
+#   plot2[[dist]] <- to_plot %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = (Permutation))) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle(title) +
+#     xlab("") +
+#     ylab("")
+# }
+#
+# plot2
+#
+# plot_cum_com <- grid.arrange(plot2[["logistic"]], plot2[["normal"]],
+#                              plot2[["cauchit"]], plot2[["gompertz"]],
+#                              ncol = 2, nrow = 2
+# )
+#
+# l <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("intercept", "Age"),
+#   explanatory_proportional = c("NA"),
+#   distribution = "student",
+#   categories_order = all_permutations[element, ],
+#   dataframe = dreams_d1,
+#   bias = T
+# )
+#
+# Log_lik_Vec <- NA
+# for (element in 1:nrow(all_permutations)) {
+#   l <- GLMref(
+#     response = "Level",
+#     explanatory_complete = c("intercept", "Age"),
+#     explanatory_proportional = c("NA"),
+#     distribution = "student",
+#     categories_order = all_permutations[element, ],
+#     dataframe = dreams_d1,
+#     freedom_degrees = 1
+#   )
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+# }
+# Log_lik_Vec
+#
+# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+# library(forcats)
+# to_plot$Permutation <- as.factor(to_plot$Permutation)
+# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+# to_plot <- left_join(to_plot, groups)
+#
+# saveRDS(to_plot, file = "LL_RefS1Com.rds")
+# to_plot2 <- readRDS(file = "LL_RefS1Com.rds")
+#
+# (ref_student_com <- to_plot2 %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle("Reference, Student(1), Complete"))
+#
+# l <- GLMref(
+#   response = "Level",
+#   explanatory_complete = c("NA"),
+#   explanatory_proportional = c("intercept", "Age"),
+#   distribution = "student",
+#   categories_order = all_permutations[element, ],
+#   dataframe = dreams_d1,
+#   freedom_degrees = 2
+# )
+#
+# Log_lik_Vec <- NA
+# for (element in 1:nrow(all_permutations)) {
+#   l <- GLMref(
+#     response = "Level",
+#     explanatory_complete = c("NA"),
+#     explanatory_proportional = c("intercept", "Age"),
+#     distribution = "student",
+#     categories_order = all_permutations[element, ],
+#     dataframe = dreams_d1,
+#     freedom_degrees = 2
+#   )
+#   Log_lik_Vec[element] <- l$`Log-likelihood`
+# }
+# Log_lik_Vec
+#
+# all_permutations_num <- permutations(v = c("1", "2", "3", "4"), repeats.allowed = F, n = 4, r = 4)
+# names <- as.data.frame(all_permutations_num) %>% unite("z", remove = FALSE, sep = "")
+# to_plot <- data.frame("LogLik" = Log_lik_Vec, "Permutation" = names[, 1])
+# to_plot$LogLik <- round(to_plot$LogLik, digits = 4)
+# library(forcats)
+# to_plot$Permutation <- as.factor(to_plot$Permutation)
+# groups <- data.frame(gn = 1:length(unique(to_plot$LogLik)), LogLik = unique(to_plot$LogLik))
+# to_plot <- left_join(to_plot, groups)
+# saveRDS(to_plot, file = "LL_RefS1Pro.rds")
+# to_plot3 <- readRDS(file = "LL_RefS1Pro.rds")
+#
+# (ref_student_com <- to_plot3 %>%
+#     arrange(-LogLik) %>%
+#     mutate(Permutation = factor(Permutation, levels = Permutation)) %>%
+#     ggplot(aes(x = Permutation, y = LogLik)) +
+#     geom_point() +
+#     geom_line(aes(group = gn)) +
+#     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     ggtitle("Reference, Student(1), Proportional"))
 #
 #
 # # KNEE DATASET ------------------------------------------------------------
@@ -3194,3 +3397,4 @@
 #
 #
 # # pkgdir("~/Desktop/pack_200320")
+#

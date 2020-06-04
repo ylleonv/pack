@@ -116,30 +116,31 @@ Eigen::MatrixXd SequentialR::inverse_derivative_gompertz(const Eigen::VectorXd& 
 distribution dist_seq;
 
 // [[Rcpp::export]]
-List GLMseq(std::string response,
-            StringVector explanatory_complete,
-            StringVector explanatory_proportional,
+List GLMseq(Formula formula,
+            CharacterVector categories_order,
+            CharacterVector proportional_effects,
+            DataFrame data,
             std::string distribution,
-            SEXP categories_order,
-            DataFrame dataframe){
+            double freedom_degrees){
 
-  int P_c = 0;
-  if(explanatory_complete[0] != "NA"){P_c = explanatory_complete.size(); }
+  const int N = data.nrows() ; // Number of observations
+
+  List Full_M = dist_seq.All_pre_data_or(formula, data,
+                                      categories_order, proportional_effects);
+
+  Eigen::MatrixXd Y_init = Full_M["Response_EXT"];
+  Eigen::MatrixXd X_EXT = Full_M["Design_Matrix"];
+  CharacterVector levs1 = Full_M["Levels"];
+  CharacterVector explanatory_complete = Full_M["Complete_effects"];
+
+  int P_c = explanatory_complete.length();
   int P_p = 0;
-  if(explanatory_proportional[0] != "NA"){P_p = explanatory_proportional.size(); }
+  if(proportional_effects[0] != "NA"){P_p = proportional_effects.length();}
   int P =  P_c +  P_p ; // Number of explanatory variables without intercept
-
-  const int N = dataframe.nrows() ; // Number of observations
-
-  List Full_M = dist_seq.select_data(dataframe, response, explanatory_complete,
-                                          explanatory_proportional, categories_order);
-
-  Eigen::MatrixXd Y_init = Full_M["Y_ext"];
-  Eigen::MatrixXd X_EXT = Full_M["X_EXT"];
-  // CharacterVector levs1 = Full_M["levs1"];
 
   int Q = Y_init.cols();
   int K = Q + 1;
+
   // // // Beta initialization with zeros
   Eigen::MatrixXd BETA;
   BETA = Eigen::MatrixXd::Zero(X_EXT.cols(),1);
@@ -181,7 +182,6 @@ List GLMseq(std::string response,
       eta = X_M_i * BETA;
 
       SequentialR seq;
-
       // Vector pi depends on selected distribution
       if(distribution == "logistic"){
         pi = seq.inverse_logistic(eta);
@@ -238,8 +238,8 @@ List GLMseq(std::string response,
     }
   }
   if(P_p > 0){
-    for(int var_p = 0 ; var_p < explanatory_proportional.size() ; var_p++){
-      names[(Q*P_c) + var_p] = explanatory_proportional[var_p];
+    for(int var_p = 0 ; var_p < proportional_effects.size() ; var_p++){
+      names[(Q*P_c) + var_p] = proportional_effects[var_p];
     }
   }
 
@@ -307,13 +307,13 @@ List GLMseq(std::string response,
 
 RCPP_MODULE(sequentialmodule){
   Rcpp::function("GLMseq", &GLMseq,
-                 List::create(_["response"] = "a",
-                              _["explanatory_complete"] = CharacterVector::create( "A", NA_STRING),
-                              _["explanatory_proportional"] = CharacterVector::create( "A", NA_STRING),
+                 List::create(_["formula"] = R_NaN,
+                              _["categories_order"] = CharacterVector::create( "A", NA_STRING),
+                              _["proportional_effects"] = CharacterVector::create(NA_STRING),
+                              _["data"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf),
                               _["distribution"] = "a",
-                              _["categories_order"] = R_NaN,
-                              _["dataframe"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf),
-                              _["freedom_degrees"] = 1.0));
+                              _["freedom_degrees"] = 1.0),
+                              "Sequential model");
   Rcpp::class_<SequentialR>("SequentialR")
   .constructor()
   // .method( "GLMseq", &SequentialR::GLMseq )

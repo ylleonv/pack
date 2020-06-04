@@ -4,6 +4,10 @@
 #' @export GLMcum
 #' @export GLMseq
 #' @export GLMref
+#' @export Discrete_CM
+#' @export Predict_Response
+#' @export summary.pcglm
+#' @export ReferenceF
 #' @useDynLib pack, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end

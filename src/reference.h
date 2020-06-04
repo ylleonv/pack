@@ -16,25 +16,20 @@ public:
   virtual Eigen::VectorXd inverse_cauchit(const Eigen::VectorXd& eta) const;
   virtual Eigen::MatrixXd inverse_derivative_cauchit(const Eigen::VectorXd& eta) const ;
 
-  virtual Eigen::VectorXd inverse_student(const Eigen::VectorXd& eta, double freedom_degrees) const;
-  virtual Eigen::MatrixXd inverse_derivative_student(const Eigen::VectorXd& eta, double freedom_degrees) const ;
+  virtual Eigen::VectorXd inverse_student(const Eigen::VectorXd& eta, const double& freedom_degrees) const;
+  // virtual Eigen::MatrixXd student_D(const Eigen::VectorXd& eta, const double& freedom_degrees) const;
+  virtual Eigen::MatrixXd inverse_derivative_student(const Eigen::VectorXd& eta, const double& freedom_degrees) const ;
 
-  // List GLMref(std::string response,
-  //             StringVector explanatory_complete,
-  //             StringVector explanatory_proportional,
-  //             std::string distribution,
-  //             SEXP categories_order,
-  //             DataFrame dataframe);
-
-  List GLMref_ec(std::string response, std::string actual_response,
-                 std::string individuals,
-                 StringVector explanatory_complete,
-                 StringVector depend_y,
-                 std::string distribution,
-                 SEXP categories_order,
-                 DataFrame dataframe,
-                 std::string design,
-                 double freedom_degrees);
+  // List Discrete_CM(std::string response_categories, std::string individual_choice,
+  //                std::string individuals,
+  //                StringVector explanatory_global,
+  //                StringVector category_specific,
+  //                std::string distribution,
+  //                StringVector initial_order,
+  //                std::string reference_category,
+  //                DataFrame dataframe,
+  //                std::string design,
+  //                double freedom_degrees);
 
 };
 

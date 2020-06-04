@@ -12,101 +12,86 @@ public:
 
   std::string concatenate(std::string x, std::string level);
 
-  List select_data(DataFrame x1, std::string response,
-                              StringVector explanatory_complete,
-                              StringVector explanatory_proportional,
-                              SEXP order) ;
+  List All_pre_data_or(Formula formula,
+                       DataFrame input_data,
+                       CharacterVector categories_order,
+                       CharacterVector proportional_effect);
 
-  List select_data_nested(DataFrame x1, std::string response,std::string actual_response,
-                                        std::string individuals,
-                                        StringVector explanatory_complete,
-                                        StringVector depend_y,
-                                        SEXP order);
+  List All_pre_data_NEWDATA(Formula formula,
+                            DataFrame NEWDATA,
+                            CharacterVector categories_order,
+                            CharacterVector proportional_effect,
+                            int N_cats
+  );
 
-  // distribution(int x);
+  List select_data_nested(Formula formula,
+                          String individuals,
+                          String Alternatives,
+                          SEXP ref_cat,
+                          CharacterVector var_alt_specific,
+                          DataFrame input_data
+  );
+
   distribution();
 };
 
 class Logistic : virtual public distribution{
 public:
-  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
-
   virtual Eigen::VectorXd in_open_corner(const Eigen::VectorXd& p) const;
-
   virtual double cdf_logit(const double& value) const;
   virtual double pdf_logit(const double& value) const;
 
-  // Logistic(int x):distribution()   {
-  //   cout<<"Logistic::Logistic(int ) called"<< endl;
-  // }
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   Logistic();
 };
 
 class Normal : virtual public distribution{
 public:
-  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
-
   virtual double cdf_normal(const double& value) const;
   virtual double pdf_normal(const double& value) const;
 
-  // Normal(int x):distribution()   {
-  //   cout<<"normal::normal(int ) called"<< endl;
-  // }
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   Normal();
 };
 
 class Cauchit : virtual public distribution{
 public:
-  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
-
   virtual double cdf_cauchit(const double& value) const;
   virtual double pdf_cauchit(const double& value) const;
 
-  // Cauchit(int x):distribution()   {
-  //   cout<<"Cauchit::Cauchit(int ) called"<< endl;
-  // }
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   Cauchit();
 };
 
 class Student :  virtual public distribution{
 public:
-  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
+  virtual double cdf_student(const double& value, const double& freedom_degrees) const;
+  virtual double pdf_student(const double& value, const double& freedom_degrees) const;
 
-  virtual double cdf_student(const double& value, double df_student) const;
-  virtual double pdf_student(const double& value, double df_student) const;
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   Student();
 };
 
 class Gumbel :  virtual public distribution{
 public:
-  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
-
   virtual double cdf_gumbel(const double& value) const;
   virtual double pdf_gumbel(const double& value) const;
+
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   Gumbel();
 };
 
 class Gompertz : virtual public distribution{
 public:
-  Eigen::VectorXd InverseLinkCumulativeFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkDensityFunction(Eigen::VectorXd vectordis);
-  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
-
   virtual double cdf_gompertz(const double& value) const;
   virtual double pdf_gompertz(const double& value) const;
+
+  Eigen::VectorXd InverseLinkQuantileFunction(Eigen::VectorXd vectordis);
 
   Gompertz();
 };

@@ -88,81 +88,74 @@ Eigen::MatrixXd CumulativeR::inverse_derivative_gompertz(const Eigen::VectorXd& 
 distribution dist_cum;
 
 // [[Rcpp::export]]
-List GLMcum(std::string response,
-            StringVector explanatory_complete,
-            StringVector explanatory_proportional,
+List GLMcum(Formula formula,
+            CharacterVector categories_order,
+            CharacterVector proportional_effects,
+            DataFrame data,
             std::string distribution,
-            SEXP categories_order,
-            DataFrame dataframe,
-            StringVector beta_t,
+            double freedom_degrees,
             Eigen::VectorXd beta_init){
 
-  int P_c = 0;
-  if(explanatory_complete[0] != "NA"){P_c = explanatory_complete.size(); }
+  const int N = data.nrows() ; // Number of observations
+
+  List Full_M = dist_cum.All_pre_data_or(formula, data,
+                                      categories_order, proportional_effects);
+
+  Eigen::MatrixXd Y_init = Full_M["Response_EXT"];
+  Eigen::MatrixXd X_EXT = Full_M["Design_Matrix"];
+  CharacterVector levs1 = Full_M["Levels"];
+  CharacterVector explanatory_complete = Full_M["Complete_effects"];
+
+  int P_c = explanatory_complete.length();
   int P_p = 0;
-  if(explanatory_proportional[0] != "NA"){P_p = explanatory_proportional.size(); }
+  if(proportional_effects[0] != "NA"){P_p = proportional_effects.length();}
   int P =  P_c +  P_p ; // Number of explanatory variables without intercept
-
-  const int N = dataframe.nrows() ; // Number of observations
-
-  List Full_M = dist_cum.select_data(dataframe, response, explanatory_complete,
-                                     explanatory_proportional, categories_order);
-
-  Eigen::MatrixXd Y_init = Full_M["Y_ext"];
-  Eigen::MatrixXd X_EXT = Full_M["X_EXT"];
-  // CharacterVector levs1 = Full_M["levs1"];
 
   int Q = Y_init.cols();
   int K = Q + 1;
+
   // // // Beta initialization with zeros
   Eigen::MatrixXd BETA2;
   BETA2 = Eigen::MatrixXd::Zero(X_EXT.cols(),1);
 
-  Eigen::VectorXd BETA3 = BETA2;
+  // Eigen::VectorXd BETA3 = BETA2;
 
-  NumericVector seq_cat2;
+  // NumericVector seq_cat2;
 
   // // Beta initialization modification
-  for (int ex_num = 0 ; ex_num < explanatory_complete.size() ; ex_num++ ){
-    if (explanatory_complete[ex_num] == "intercept"){
-      IntegerVector seq_cat = seq_len(Q);
-      NumericVector seq_cat1 = as<NumericVector>(seq_cat);
-      seq_cat2 = seq_cat1 / K;
-      Rcout << seq_cat2 << std::endl;
-      Eigen::Map<Eigen::VectorXd> seq_cat3 = as<Eigen::Map<Eigen::VectorXd> >(seq_cat2);
-      Eigen::VectorXd beta_ini_1;
+  // for (int ex_num = 0 ; ex_num < explanatory_complete.size() ; ex_num++ ){
+  //   if (explanatory_complete[ex_num] == "intercept"){
+  //     IntegerVector seq_cat = seq_len(Q);
+  //     NumericVector seq_cat1 = as<NumericVector>(seq_cat);
+  //     seq_cat2 = seq_cat1 / K;
+  //     Eigen::Map<Eigen::VectorXd> seq_cat3 = as<Eigen::Map<Eigen::VectorXd> >(seq_cat2);
+  //     Eigen::VectorXd beta_ini_1;
+  //
+  //     if(distribution == "logistic"){
+  //       Logistic logistic;
+  //       beta_ini_1 = logistic.InverseLinkQuantileFunction(seq_cat3);
+  //     }else if (distribution == "normal"){
+  //       Normal normal;
+  //       beta_ini_1 = normal.InverseLinkQuantileFunction(seq_cat3);
+  //     }else if(distribution == "cauchit"){
+  //       Cauchit cauchit;
+  //       beta_ini_1 = cauchit.InverseLinkQuantileFunction(seq_cat3);
+  //     }else if(distribution == "gompertz"){
+  //       Gompertz gompertz;
+  //       beta_ini_1 = gompertz.InverseLinkQuantileFunction(seq_cat3);
+  //     }
+  //
+  //     for(int el_be = 0 ; el_be < Q ; el_be++){
+  //       BETA3[el_be] = beta_ini_1[el_be];
+  //     }
+  //   }
+  // }
 
-      if(distribution == "logistic"){
-        Logistic logistic;
-        beta_ini_1 = logistic.InverseLinkQuantileFunction(seq_cat3);
-      }else if (distribution == "normal"){
-        Normal normal;
-        beta_ini_1 = normal.InverseLinkQuantileFunction(seq_cat3);
-      }else if(distribution == "cauchit"){
-        Cauchit cauchit;
-        beta_ini_1 = cauchit.InverseLinkQuantileFunction(seq_cat3);
-      }else if(distribution == "gompertz"){
-        Gompertz gompertz;
-        beta_ini_1 = gompertz.InverseLinkQuantileFunction(seq_cat3);
-      }
+  Eigen::MatrixXd BETA = BETA2;
 
-      for(int el_be = 0 ; el_be < Q ; el_be++){
-        BETA3[el_be] = beta_ini_1[el_be];
-      }
-    }
-  }
-
-
-
-  Eigen::MatrixXd BETA = BETA3;
-
-  if(beta_t[0] == "TRUE"){
+  if(beta_init.size() >= 2 ){
     BETA = beta_init;
   }
-
-  Rcout << "Beta inizialization" << std::endl;
-
-  Rcout << BETA << std::endl;
 
   int iteration = 0;
   // double check_tutz = 1.0;
@@ -258,8 +251,8 @@ List GLMcum(std::string response,
     }
   }
   if(P_p > 0){
-    for(int var_p = 0 ; var_p < explanatory_proportional.size() ; var_p++){
-      names[(Q*P_c) + var_p] = explanatory_proportional[var_p];
+    for(int var_p = 0 ; var_p < proportional_effects.size() ; var_p++){
+      names[(Q*P_c) + var_p] = proportional_effects[var_p];
     }
   }
 
@@ -310,7 +303,8 @@ List GLMcum(std::string response,
     Named("coefficients") = coef,
     Named("AIC") = AIC,
     Named("BIC") = BIC,
-    // Named("var_beta") = var_beta,
+    Named("X_EXT") = X_EXT,
+    Named("Y_init") = Y_init,
     Named("stderr") = Std_Error,
     Rcpp::Named("df") = df,
     Rcpp::Named("predicted") = predicted,
@@ -326,14 +320,13 @@ List GLMcum(std::string response,
 
 RCPP_MODULE(cumulativemodule){
   Rcpp::function("GLMcum", &GLMcum,
-                 List::create(_["response"] = "a",
-                              _["explanatory_complete"] = CharacterVector::create( "A", NA_STRING),
-                              _["explanatory_proportional"] = CharacterVector::create( "A", NA_STRING),
+                 List::create(_["formula"] = R_NaN,
+                              _["categories_order"] = CharacterVector::create( "A", NA_STRING),
+                              _["proportional_effects"] = CharacterVector::create(NA_STRING),
+                              _["data"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf),
                               _["distribution"] = "a",
-                              _["categories_order"] = R_NaN,
-                              _["dataframe"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf),
-                              _["beta_t"] = "FALSE",
-                              _["beta_init"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf)
+                              _["freedom_degrees"] = 1.0,
+                              _["beta_init"] = NumericVector::create(1)
                                 ));
   Rcpp::class_<CumulativeR>("CumulativeR")
   .constructor()

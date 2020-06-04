@@ -23,32 +23,6 @@ message=FALSE, warning=FALSE, paged.print=TRUE, collapse = TRUE, cache = TRUE, c
 
 ```{r include=FALSE}
 devtools::load_all(".")
-summary.pcglm <- function(object, ...) {
-  coef <- object$coefficients
-  se   <- object$stderr
-  tval <- coef/se
-  
-  object$coefficients <- cbind("Estimate"     = coef,
-                               "Std. Error" = se,
-                               "z value"    = tval,
-                               "Pr(>|z|)"   = 2*pnorm(-abs(tval)))
-  colnames(object$coefficients) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
-  printCoefmat(object$coefficients, P.values=TRUE, has.Pvalue=TRUE, ...)
-  # cf src/stats/R/lm.R and case with no weights and an intercept
-  # f <- object$fitted.values
-  # r <- object$residuals
-  #mss <- sum((f - mean(f))^2)
-  # mss <- if (object$intercept) sum((f - mean(f))^2) else sum(f^2)
-  # rss <- sum(r^2)
-  # 
-  # object$r.squared <- mss/(mss + rss)
-  # df.int <- if (object$intercept) 1L else 0L
-  # n <- length(f)
-  # rdf <- object$df
-  # object$adj.r.squared <- 1 - (1 - object$r.squared) * ((n - df.int)/rdf)
-  class(object) <- "summary.pcglm"
-  object
-}
 ```
 
 Severity of Disturbed Dreams
@@ -78,10 +52,10 @@ l_1 <- GLMref(
   explanatory_complete = c("intercept", "Age"),
   explanatory_proportional = c("NA"),
   distribution = "logistic",
-  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  reference_category = "Very.severe",
   dataframe = dreams_d1
 )
-summary.pcglm(l_1)$coefficients[1]
+summary.pcglm(l_1)
 l_1$deviance
 l_1$`Log-likelihood`
 ```
@@ -94,10 +68,24 @@ l_2 <- GLMref(
   explanatory_complete = c("NA"),
   explanatory_proportional = c("intercept", "Age"),
   distribution = "logistic",
-  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  reference_category = "Very.severe",
   dataframe = dreams_d1
 )
-summary.pcglm(l_2)$coefficients[1]
+summary.pcglm(l_2)
+l_2$deviance
+l_2$`Log-likelihood`
+```
+Same results as previous, note that the order of the categories is not defined in the "order structure", then, by default there is an automatic ascending order, first by numerical and later by alphabetical order.
+```{r}
+l_2 <- GLMref(
+  response = "Level",
+  explanatory_complete = c("NA"),
+  explanatory_proportional = c("intercept", "Age"),
+  distribution = "logistic",
+  reference_category = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  dataframe = dreams_d1
+)
+summary.pcglm(l_2)
 l_2$deviance
 l_2$`Log-likelihood`
 ```
@@ -110,10 +98,10 @@ l_3 <- GLMref(
   explanatory_complete = c("intercept", "Age"),
   explanatory_proportional = c("NA"),
   distribution = "cauchit",
-  categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
+  reference_category = "Very.severe",
   dataframe = dreams_d1
 )
-summary.pcglm(l_3)$coefficients[1]
+summary.pcglm(l_3)
 l_3$deviance
 l_3$`Log-likelihood`
 ```
@@ -128,10 +116,10 @@ l_1prime <- GLMref(
   explanatory_complete = c("intercept", "Age"),
   explanatory_proportional = c("NA"),
   distribution = "logistic",
-  categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+  reference_category = "Severe.2",
   dataframe = dreams_d1
 )
-summary.pcglm(l_1prime)$coefficients[1]
+summary.pcglm(l_1prime)
 l_1prime$deviance
 l_1prime$`Log-likelihood`
 ```
@@ -144,10 +132,10 @@ l_2prime <- GLMref(
   explanatory_complete = c("NA"),
   explanatory_proportional = c("intercept", "Age"),
   distribution = "logistic",
-  categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+  reference_category = "Severe.2",
   dataframe = dreams_d1
 )
-summary.pcglm(l_2prime)$coefficients[1]
+summary.pcglm(l_2prime)
 l_2prime$deviance
 l_2prime$`Log-likelihood`
 ```
@@ -160,10 +148,10 @@ l_3prime <- GLMref(
   explanatory_complete = c("intercept", "Age"),
   explanatory_proportional = c("NA"),
   distribution = "cauchit",
-  categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+  reference_category = "Severe.2",
   dataframe = dreams_d1
 )
-summary.pcglm(l_3prime)$coefficients[1]
+summary.pcglm(l_3prime)
 l_3prime$deviance
 l_3prime$`Log-likelihood`
 ```
@@ -182,10 +170,10 @@ l <- GLMref(
   explanatory_complete = c("intercept", "Age"),
   explanatory_proportional = c("NA"),
   distribution = "logistic",
-  categories_order = c("Not.severe", "Severe.1", "Very.severe", "Severe.2"),
+  reference_category = "Severe.2",
   dataframe = dreams_d1
 )
-summary.pcglm(l)$coefficients[1]
+summary.pcglm(l)
 l$deviance
 l$`Log-likelihood`
 ```
@@ -201,7 +189,7 @@ lprime <- GLMadj(
   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
   dataframe = dreams_d1
 )
-summary.pcglm(lprime)$coefficients[1]
+summary.pcglm(lprime)
 lprime$deviance
 lprime$`Log-likelihood`
 ```
@@ -222,7 +210,7 @@ estimation_1 <- GLMadj(
   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
   dataframe = dreams_d1
 )
-summary.pcglm(estimation_1)$coefficients[1]
+summary.pcglm(estimation_1)
 estimation_1$deviance
 estimation_1$`Log-likelihood`
 ```
@@ -238,7 +226,7 @@ estimation_2 <- GLMadj(
   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
   dataframe = dreams_d1
 )
-summary.pcglm(estimation_2)$coefficients[1]
+summary.pcglm(estimation_2)
 estimation_2$deviance
 estimation_2$`Log-likelihood`
 ```
@@ -254,7 +242,7 @@ estimation_1r <- GLMadj(
   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
   dataframe = dreams_d1
 )
-summary.pcglm(estimation_1r)$coefficients[1]
+summary.pcglm(estimation_1r)
 estimation_1r$deviance
 estimation_1r$`Log-likelihood`
 ```
@@ -270,7 +258,7 @@ estimation_2r <- GLMadj(
   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
   dataframe = dreams_d1
 )
-summary.pcglm(estimation_2r)$coefficients[1]
+summary.pcglm(estimation_2r)
 estimation_2r$deviance
 estimation_2r$`Log-likelihood`
 ```
@@ -286,7 +274,7 @@ estimation_3r <- GLMadj(
   categories_order = c("Very.severe", "Severe.2", "Severe.1", "Not.severe"),
   dataframe = dreams_d1
 )
-summary.pcglm(estimation_3r)$coefficients[1]
+summary.pcglm(estimation_3r)
 estimation_3r$deviance
 estimation_3r$`Log-likelihood`
 ```
@@ -309,7 +297,7 @@ l_prime <- GLMcum(
   dataframe = dreams_d1,
   beta_t = c("FALSE"),   beta_init = c(-0.08, 0.95, -0.84, -0.46, -0.18)
 )
-summary.pcglm(l_prime)$coefficients[1]
+summary.pcglm(l_prime)
 l_prime$deviance
 l_prime$`Log-likelihood`
 ```
@@ -325,13 +313,45 @@ l <- GLMseq(
   categories_order = c("Not.severe", "Severe.1", "Severe.2", "Very.severe"),
   dataframe = dreams_d1
 )
-summary.pcglm(l)$coefficients[1]
+summary.pcglm(l)
 l$deviance
 l$`Log-likelihood`
 ```
 
 
 The log-likelihoods l and l_prime are equal.
+
+### Reference
+
+The (reference, F , complete) and (reference, F , proportional) models are
+invariant under the (J − 1)! permutations that fix the reference category (Property 9). But are they still invariant under other permutations? The canonical (reference, logistic, complete) model, being is invariant under all permutations. Non-invariance of models may be shown when F is analytically defined (see chapter 5). This is more complex for normal for Student distributions ... We obtain J!/(J − 1)! = J = 4 plateaus as expected. Each plateau corresponds to a particular reference category with the (J − 1)! = 6 permutations that fix this category.
+
+For the next two plots, degrees of freedom = 0.2 for Student distribution:
+
+```{r}
+l <- GLMref(
+        response = "Level",
+        explanatory_complete = c("intercept", "Age"),
+        explanatory_proportional = c("NA"),
+        distribution = "student",
+        reference_category = "Very.severe",
+        dataframe = dreams_d1,
+        freedom_degrees = 0.2)
+summary.pcglm(l)
+l$deviance
+l$`Log-likelihood`
+```
+
+
+![Ordered log-likelihood of models for all permutations - Reference, Complete ](/home/leonvelasco/Desktop/Propierties_Ordinal/Ref_com.png)
+
+![Ordered log-likelihood of models for all permutations - Reference, Proportional ](/home/leonvelasco/Desktop/Propierties_Ordinal/Ref_pro.png)
+
+### Adjacent and cumulative
+
+Let us note that the specific (adjacent, logistic, com-
+plete) model is invariant under all permutations. For (adjacent, (cauchit, normal), Z),  (cumulative, (logistic, normal), complete)* and  (cumulative, (logistic, cauchit, normal), proportional) models for all the J! = 24 permutations we obtain J!/2! = 12 plateaus as expected. Each plateau corresponds to a particular permutation and its associated reverse permutation.
+
 
 ![Ordered log-likelihood of models for all permutations - Adjacent, Complete ](/home/leonvelasco/Desktop/Propierties_Ordinal/Adjacent.png)
 
@@ -342,23 +362,13 @@ The log-likelihoods l and l_prime are equal.
 
 ![Ordered log-likelihood of models for all permutations - Cumulative, Proportional ](/home/leonvelasco/Desktop/Propierties_Ordinal/Cum_pro.png)
 
+### Sequential
 
+The (sequential, F , complete) models are invariant under the trans-
+position of the last two categories when F is symmetric (Property 14). But are they still
+invariant under other permutations? Next figure investigates the case of (sequential, symmetric F , complete) models for all the J! = 24 permutations cdfs. We obtain J!/2! = 12 plateaus as expected for logistic (normal and cauchit failed at the estimation of certains permutation). Each plateau corresponds to a particular permutation and its associated transposition of the last two categories.
 
 ![Ordered log-likelihood of models for all permutations - Sequential, Complete ](/home/leonvelasco/Desktop/Propierties_Ordinal/Seq_com.png)
 
 ![Ordered log-likelihood of models for all permutations - Sequential, Proportional ](/home/leonvelasco/Desktop/Propierties_Ordinal/Seq_pro.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
