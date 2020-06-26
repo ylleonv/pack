@@ -15,7 +15,11 @@ Eigen::VectorXd ReferenceF::inverse_logistic(const Eigen::VectorXd& eta) const
   double norm1 = 1.;
   for(size_t j=0; j<eta.size(); ++j)
   {
-    pi[j] = Logistic::cdf_logit( eta(j) ) / ( 1-Logistic::cdf_logit( eta(j) ) );
+    pi[j] = cdf_logit( eta(j) ) / ( 1-
+      std::max(1e-10, std::min(1-1e-6,cdf_logit( eta(j) )))
+    );
+
+
     norm1 += pi[j];
   }
   return (pi/norm1);
@@ -27,8 +31,11 @@ Eigen::VectorXd ReferenceF::inverse_normal(const Eigen::VectorXd& eta) const
   double norm1 = 1.;
   for(size_t j=0; j<eta.size(); ++j)
   {
-    pi[j] = cdf_normal( eta(j) ) / ( 1-cdf_normal( eta(j) ) );
+    pi[j] = cdf_normal( eta(j) ) / ( 1-
+      std::max(1e-10, std::min(1-1e-6,cdf_normal( eta(j) )))
+    );
     norm1 += pi[j];
+
   }
   return (pi/norm1);
 }
@@ -38,9 +45,14 @@ Eigen::MatrixXd ReferenceF::inverse_derivative_logistic(const Eigen::VectorXd& e
   Eigen::VectorXd pi1 = ReferenceF::inverse_logistic(eta2);
   Eigen::MatrixXd D1 = Eigen::MatrixXd::Zero(pi1.rows(),pi1.rows());
   for(int j=0; j<eta2.rows(); ++j)
+    // { D1(j,j) = pdf_logit( eta2(j) ) /
+    //   (Logistic::cdf_logit(eta2(j)) * (1-Logistic::cdf_logit(eta2(j))));
+    // }
+
   { D1(j,j) = pdf_logit( eta2(j) ) /
-    (Logistic::cdf_logit(eta2(j)) * (1-Logistic::cdf_logit(eta2(j))));
-  }
+    ( std::max(1e-10, std::min(1-1e-6,cdf_logit(eta2(j)))) *
+      std::max(1e-10, std::min(1-1e-6, 1-cdf_logit(eta2(j)))) ); }
+
   return D1 * ( Eigen::MatrixXd(pi1.asDiagonal()) - pi1 * pi1.transpose().eval() );
 }
 
@@ -165,7 +177,7 @@ List GLMref(Formula formula,
   // for (int iteration=1; iteration < 18; iteration++){
   // while (check_tutz > 0.0001){
   double epsilon = 0.0001 ;
-  while (Stop_criteria >( epsilon / N)){
+  while (Stop_criteria >( epsilon / N) & iteration < 26){
 
     Eigen::MatrixXd Score_i = Eigen::MatrixXd::Zero(BETA.rows(),1);
     Eigen::MatrixXd F_i = Eigen::MatrixXd::Zero(BETA.rows(), BETA.rows());
@@ -196,6 +208,7 @@ List GLMref(Formula formula,
       }
 
       Cov_i = Eigen::MatrixXd(pi.asDiagonal()) - (pi*pi.transpose());
+      // Rcout << Cov_i.determinant() << std::endl;
       W_in = D * Cov_i.inverse();
       Score_i_2 = X_M_i.transpose() * W_in * (Y_M_i - pi);
       Score_i = Score_i + Score_i_2;
@@ -210,14 +223,45 @@ List GLMref(Formula formula,
     Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(pi_ma.rows());
     pi_ma.col(Q) = Ones1 - pi_ma.rowwise().sum() ;
 
+    // To stop when LogLik is smaller than the previous
+    if(iteration>1){
+      if (LogLikIter[iteration] > LogLik)
+        break;
+      // iteration = 25;
+    }
+
+    // To stop when LogLik is smaller than the previous
+    // if(iteration>1){
+    // if (iteration == 25) {  break; }
+
+    // }
+
     LogLikIter.conservativeResize(iteration+2, 1);
     LogLikIter(iteration+1) = LogLik;
     Stop_criteria = (abs(LogLikIter(iteration+1) - LogLikIter(iteration))) / (epsilon + (abs(LogLikIter(iteration+1)))) ;
     Eigen::VectorXd beta_old = BETA;
+
+    if (F_i.determinant() < 0.000000000000000000001) {
+      cout << "F_i.determinant() = 0" << endl;
+      Rcpp::stop("F_i.determinant() = 0 \n Memory allocation failed!\n");
+    }
+
     BETA = BETA + (F_i.inverse() * Score_i);
     // check_tutz = ((BETA - beta_old).norm())/(beta_old.norm()+check_tutz);
     iteration = iteration + 1;
+
+
+
+    // if (iteration == 30) {
+    //   cout << "Max iter" << endl;
+    //   Rcpp::stop("Max iter");
+    // }
+
     F_i_final = F_i;
+    // Rcout << "BETA" << std::endl;
+    // Rcout << BETA << std::endl;
+    // Rcout << "LogLik" << std::endl;
+    // Rcout << LogLik << std::endl;
   }
 
   // var_beta = (((X_EXT.transpose() * F_i_final) * X_EXT).inverse());
@@ -228,6 +272,8 @@ List GLMref(Formula formula,
   std::vector<std::string> text=as<std::vector<std::string>>(explanatory_complete);
   std::vector<std::string> level_text=as<std::vector<std::string>>(levs1);
   StringVector names(Q*P_c + P_p);
+
+
   if(P_c > 0){
     for(int var = 0 ; var < explanatory_complete.size() ; var++){
       for(int cat = 0 ; cat < Q ; cat++){
@@ -244,6 +290,8 @@ List GLMref(Formula formula,
   // TO NAMED THE RESULT BETAS
   NumericMatrix coef = wrap(BETA);
   rownames(coef) = names;
+
+
 
   // AIC
   double AIC = (-2*LogLik) + (2 *coef.length());
@@ -277,8 +325,10 @@ List GLMref(Formula formula,
 
   return List::create(
     Named("coefficients") = coef,
-    Named("AIC") = AIC,
-    Named("BIC") = BIC,
+    Named("iteration") = iteration,
+    // Named("AIC") = AIC,
+    // Named("BIC") = BIC,
+    Named("freedom_degrees") = freedom_degrees,
     Named("levs1") = levs1,
     Named("stderr") = Std_Error,
     Rcpp::Named("df") = df,
@@ -290,8 +340,9 @@ List GLMref(Formula formula,
     Rcpp::Named("deviance") = deviance,
     Rcpp::Named("residuals") = residuals,
     Named("Log-likelihood") = LogLik,
-    // Named("Y_ext") = Y_init,
-    Named("X_EXT") = X_EXT,
+    // Named("freedom_degrees") = freedom_degrees,
+    // Named("Y_init") = Y_init,
+    Named("LogLikIter") = LogLikIter,
     Named("formula") = formula,
     Named("categories_order") = categories_order,
     Named("proportional_effects") = proportional_effects,
@@ -303,9 +354,12 @@ List GLMref(Formula formula,
 // [[Rcpp::export(".Predict_Response")]]
 List Predict_Response(List model_object,
                       DataFrame NEWDATA){
+  Environment base_env("package:base");
+  Function my_rowSums = base_env["rowSums"];
 
   int N_cats = model_object["N_cats"];
   Eigen::MatrixXd coef = model_object["coefficients"];
+
   List NewDataList = dist1.All_pre_data_NEWDATA(model_object["formula"],
                                                 NEWDATA,
                                                 model_object["categories_order"],
@@ -318,38 +372,46 @@ List Predict_Response(List model_object,
   Eigen::MatrixXd predicted_eta;
 
   String distribution = model_object["distribution"];
+  double freedom_degrees = model_object["freedom_degrees"];
+
   ReferenceF ref;
   Eigen::VectorXd pi;
   int N = NEWDATA.rows();
   Eigen::MatrixXd X_M_i;
 
-  Eigen::MatrixXd pi_total;
+  Eigen::MatrixXd pi_total = Eigen::MatrixXd::Zero(N,N_cats-1);
 
 
   for (int i=0; i < N; i++){
 
     X_M_i = Design_Matrix.block(i*(N_cats-1) , 0 , N_cats-1 , Design_Matrix.cols());
+
     predicted_eta = X_M_i * coef;
 
     if(distribution == "logistic"){
       pi = ref.inverse_logistic(predicted_eta);
     }else if(distribution == "normal"){
-      pi = ref.inverse_logistic(predicted_eta);
+      pi = ref.inverse_normal(predicted_eta);
     }else if(distribution == "cauchit"){
-      pi = ref.inverse_logistic(predicted_eta);
+      pi = ref.inverse_cauchit(predicted_eta);
     }else if(distribution == "student"){
-      pi = ref.inverse_logistic(predicted_eta);
+      pi = ref.inverse_student(predicted_eta, freedom_degrees);
     }
-
-    pi_total.conservativeResize(pi_total.rows() + 1, N_cats-1);
-    pi_total.row(pi_total.rows()-1) = pi;
+    pi_total.row(i) = pi;
 
   }
 
+  NumericVector cum_prob = my_rowSums(pi_total);
+  Eigen::Map<Eigen::VectorXd> cum_prob1 = as<Eigen::Map<Eigen::VectorXd> >(cum_prob);
+  Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(pi_total.rows());
+
+  pi_total.conservativeResize(pi_total.rows() , N_cats);
+  pi_total.col(N_cats-1) = Ones1 - cum_prob1;
+
   return List::create(
-    // Named("Design_Matrix") = Design_Matrix,
+    Named("Design_Matrix") = Design_Matrix,
     Named("Eta") = predicted_eta,
-    // Named("Expected_value") = pi,
+    // Named("cum_prob") = cum_prob,
     Named("pi_total") = pi_total
   );
 

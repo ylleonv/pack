@@ -5,8 +5,12 @@
     .Call(`_pack_GLMadj`, formula, categories_order, proportional_effects, data, distribution, freedom_degrees)
 }
 
-GLMcum <- function(formula, categories_order, proportional_effects, data, distribution, freedom_degrees, beta_init) {
-    .Call(`_pack_GLMcum`, formula, categories_order, proportional_effects, data, distribution, freedom_degrees, beta_init)
+GLMcum <- function(formula, categories_order, proportional_effects, data, distribution, freedom_degrees, beta_init, threshold) {
+    .Call(`_pack_GLMcum`, formula, categories_order, proportional_effects, data, distribution, freedom_degrees, beta_init, threshold)
+}
+
+All_pre_data_or2 <- function(formula, input_data, categories_order, proportional_effect) {
+    .Call(`_pack_All_pre_data_or2`, formula, input_data, categories_order, proportional_effect)
 }
 
 .GLMref <- function(formula, categories_order, proportional_effects, data, distribution, freedom_degrees) {

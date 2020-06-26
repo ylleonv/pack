@@ -36,16 +36,24 @@ NumericMatrix to_dummy1(NumericVector A, CharacterVector levels)
   NumericVector cha_to_fact = A;
   CharacterVector levs1 = levels;
   int var_lev = levs1.length();
+
+  // Rcout << var_lev << std::endl;
+
   NumericMatrix B_Ma(cha_to_fact.length(), var_lev);
   for (int i_1 = 0; i_1 < cha_to_fact.length(); ++i_1){
     int col_ind = cha_to_fact[i_1] - 1;
     B_Ma(i_1, col_ind) = 1;
   }
-  if (var_lev != 2){
-    B_Ma = B_Ma( _ , Range(0,var_lev-2) );
-  } else {
-    B_Ma = B_Ma( _ , Range(1,var_lev-1) );
-  }
+
+  // print(B_Ma);
+
+  B_Ma = B_Ma( _ , Range(0,var_lev-2) );
+
+  // if (var_lev != 2){
+  //   B_Ma = B_Ma( _ , Range(0,var_lev-2) );
+  // } else {
+  //   B_Ma = B_Ma( _ , Range(1,var_lev-1) );
+  // }
   return B_Ma;
 }
 
@@ -64,12 +72,13 @@ List Model_Matrix_or(DataFrame data, Formula formula) {
 
 }
 
+
 List Cat_ref_order(CharacterVector categories_order, SEXP response_categories){
-  Environment base_env("package:base");
-  Function my_unique = base_env["unique"];
+  // Environment base_env("package:base");
+  // Function my_unique = base_env["unique"];
 
   CharacterVector response_categories1 = response_categories;
-  CharacterVector levels = my_unique(response_categories1);
+  // CharacterVector levels = my_unique(response_categories1);
 
   IntegerVector num_categories_order = seq_len(categories_order.length());
 
@@ -86,14 +95,141 @@ List Cat_ref_order(CharacterVector categories_order, SEXP response_categories){
     response_categories1[i] = a2[0];
   }
 
+  // print(response_categories1);
+
   return List::create(
     Named("response_neworder") = response_neworder,
     Named("response_categories2") = response_categories1,
-    Named("levels") = levels
+    Named("levels") = categories_order
   );
 }
 
-List distribution::All_pre_data_or(Formula formula, DataFrame input_data, CharacterVector categories_order, CharacterVector proportional_effect){
+
+
+List distribution::All_pre_data_or(Formula formula, DataFrame input_data,
+                                   CharacterVector categories_order,
+                                   CharacterVector proportional_effect,
+                                   std::string threshold){
+
+  Environment base_env("package:base");
+  Function my_asnumeric = base_env["as.numeric"];
+  Function my_cbind = base_env["cbind"];
+  Function my_order = base_env["order"];
+
+  List M_matrix = Model_Matrix_or(input_data, formula);
+  List Cat_ref_or_L = Cat_ref_order(categories_order, M_matrix["Response"]);
+  NumericMatrix Design = M_matrix["df_new"];
+
+  CharacterVector a1 = Cat_ref_or_L["response_categories2"];
+
+  NumericVector Num_res = my_asnumeric(a1);
+
+  Design = my_cbind(Num_res, Design);
+
+  // Now order dataset with respect to the repsonse variables in the given order
+  DataFrame df_tans = my_transpose(Design);
+  DataFrame df_tans_2 = Design ;
+  NumericVector order_var_sel = my_order(df_tans_2[0]);
+  order_var_sel = order_var_sel - 1 ;
+  df_tans = df_tans[order_var_sel];
+
+  df_tans_2 = my_transpose(df_tans);
+
+  CharacterVector Levels = Cat_ref_or_L["levels"];
+
+
+  int N_cats = Levels.length();
+
+  LogicalVector any_alternative_specific = !is_na(proportional_effect); // TRUE IF THERE ARE
+  CharacterVector colnames_final_m = df_tans_2.names();
+
+  NumericVector x(colnames_final_m.length());
+  if (any_alternative_specific[0]) {
+    // x(colnames_final_m.length());
+    for(int indi = 0 ; indi < proportional_effect.length(); indi++){
+      String var_1 = proportional_effect[indi];
+      int indi_var = df_tans_2.findName(var_1);
+      x[indi_var] = indi_var;
+    }
+    colnames_final_m = colnames_final_m[x==0]; // Case where there no proportional effects
+  }
+
+  // Now extend
+  // Y EXTEND
+  NumericVector Response = df_tans_2[0];
+  NumericMatrix Response_EXT = to_dummy1(Response, Levels);
+
+  // X EXTEND
+
+  // X COMPLETE
+
+  DataFrame DF_complete_effect = df_tans_2[colnames_final_m];
+  NumericMatrix Pre_Design1 = internal::convert_using_rfunction(DF_complete_effect, "as.matrix");
+  Eigen::Map<Eigen::MatrixXd> Pre_Design = as<Eigen::Map<Eigen::MatrixXd> >(Pre_Design1);
+  Eigen::MatrixXd Iden_Q1 = Eigen::MatrixXd::Identity(N_cats-1,N_cats-1);
+
+  Eigen::MatrixXd X_EXT_COMPLETE;
+
+  if (threshold == "equidistant"){ // eRASE THE LAST TWO COLUMNS ONE CORRESPONDING TO DR AND OTHER TO THE INTERCEPT
+    X_EXT_COMPLETE = Eigen::kroneckerProduct(Pre_Design.rightCols(DF_complete_effect.cols() - 2), Iden_Q1).eval();
+    colnames_final_m.erase(0);
+    colnames_final_m.erase(0);
+  } else {
+    X_EXT_COMPLETE = Eigen::kroneckerProduct(Pre_Design.rightCols(DF_complete_effect.cols() - 1), Iden_Q1).eval();
+    colnames_final_m.erase(0);
+  }
+
+  Eigen::MatrixXd Design_Matrix;
+
+  if (any_alternative_specific[0]) {
+
+    // PONER ESA PARTE ACA
+
+    DataFrame DF_proportional_effect = df_tans_2[proportional_effect];
+    NumericMatrix Pre_DF_proportional1 = internal::convert_using_rfunction(DF_proportional_effect, "as.matrix");
+    Eigen::Map<Eigen::MatrixXd> Pre_DF_proportional2 = as<Eigen::Map<Eigen::MatrixXd> >(Pre_DF_proportional1);
+
+    Eigen::MatrixXd Pre_DF_proportional = Pre_DF_proportional2;
+
+    Eigen::VectorXd Ones = Eigen::VectorXd::Ones(N_cats-1);
+    Eigen::MatrixXd X_EXT_PROPORTIONAL = Eigen::kroneckerProduct(Pre_DF_proportional, Ones).eval();
+
+    // TENGO QUE PONER EL IF ACA
+
+    if (threshold == "equidistant"){
+      NumericMatrix tJac = my_cbind(1, seq_len(categories_order.length() -1 )-1 );
+      Eigen::Map<Eigen::MatrixXd> tJac2 = as<Eigen::Map<Eigen::MatrixXd> >(tJac);
+      Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(Response_EXT.rows());
+      Eigen::MatrixXd Threshold_M = Eigen::kroneckerProduct(Ones1, tJac2).eval();
+      X_EXT_PROPORTIONAL.conservativeResize(X_EXT_PROPORTIONAL.rows(),X_EXT_PROPORTIONAL.cols()+2);
+      X_EXT_PROPORTIONAL.block(0,X_EXT_PROPORTIONAL.cols()-2, X_EXT_PROPORTIONAL.rows(),2) = Threshold_M;
+    }
+
+
+    Design_Matrix.conservativeResize(X_EXT_COMPLETE.rows(),X_EXT_COMPLETE.cols()+X_EXT_PROPORTIONAL.cols());
+    Design_Matrix.block(0,0,X_EXT_COMPLETE.rows(),X_EXT_COMPLETE.cols()) = X_EXT_COMPLETE;
+    Design_Matrix.block(0,X_EXT_COMPLETE.cols(),X_EXT_COMPLETE.rows(),X_EXT_PROPORTIONAL.cols()) = X_EXT_PROPORTIONAL;
+
+  }else{Design_Matrix = X_EXT_COMPLETE;}
+
+
+
+  return List::create(
+    Named("Design_Matrix") = Design_Matrix,
+    Named("Response_EXT") = Response_EXT,
+    Named("Levels") = Levels,
+    Named("Complete_effects") = colnames_final_m,
+    Named("N_cats") = N_cats
+  );
+}
+
+
+
+
+// [[Rcpp::export]]
+List All_pre_data_or2(Formula formula, DataFrame input_data,
+                      CharacterVector categories_order,
+                      CharacterVector proportional_effect){
 
   Environment base_env("package:base");
   Function my_asnumeric = base_env["as.numeric"];
@@ -148,13 +284,43 @@ List distribution::All_pre_data_or(Formula formula, DataFrame input_data, Charac
 
   Eigen::MatrixXd Design_Matrix;
 
+  // Y EXTEND
+  NumericVector Response = df_tans_2[0];
+  NumericMatrix Response_EXT = to_dummy1(Response, Levels);
+
+  NumericMatrix tJac = my_cbind(1, seq_len(categories_order.length() -1 )-1 );
+  Rcout << tJac << endl;
+
+  NumericMatrix Response_EXT1 = internal::convert_using_rfunction(Response_EXT, "as.matrix");
+  NumericMatrix tJac1 = internal::convert_using_rfunction(tJac, "as.matrix");
+
+  Eigen::Map<Eigen::MatrixXd> Response_EXT2 = as<Eigen::Map<Eigen::MatrixXd> >(Response_EXT1);
+  Eigen::Map<Eigen::MatrixXd> tJac2 = as<Eigen::Map<Eigen::MatrixXd> >(tJac1);
+
+
+  // Eigen::MatrixXd MAR = Response_EXT2 * tJac2;
+
+  Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(Response_EXT2.rows());
+  Eigen::MatrixXd MAR = Eigen::kroneckerProduct(Ones1, tJac2).eval();
+
+
   if (any_alternative_specific[0]) {
 
     DataFrame DF_proportional_effect = df_tans_2[proportional_effect];
     NumericMatrix Pre_DF_proportional1 = internal::convert_using_rfunction(DF_proportional_effect, "as.matrix");
-    Eigen::Map<Eigen::MatrixXd> Pre_DF_proportional = as<Eigen::Map<Eigen::MatrixXd> >(Pre_DF_proportional1);
+    Eigen::Map<Eigen::MatrixXd> Pre_DF_proportional2 = as<Eigen::Map<Eigen::MatrixXd> >(Pre_DF_proportional1);
+
+    Eigen::MatrixXd Pre_DF_proportional = Pre_DF_proportional2;
+
+    // Pre_DF_proportional.conservativeResize(Pre_DF_proportional.rows(),Pre_DF_proportional.cols()+2);
+    // Pre_DF_proportional.block(0,Pre_DF_proportional2.cols(),Pre_DF_proportional.rows(),2) = MAR;
+
+
     Eigen::VectorXd Ones = Eigen::VectorXd::Ones(N_cats-1);
     Eigen::MatrixXd X_EXT_PROPORTIONAL = Eigen::kroneckerProduct(Pre_DF_proportional, Ones).eval();
+
+    X_EXT_PROPORTIONAL.conservativeResize(X_EXT_PROPORTIONAL.rows(),X_EXT_PROPORTIONAL.cols()+2);
+    X_EXT_PROPORTIONAL.block(0,X_EXT_PROPORTIONAL.cols()-2,X_EXT_PROPORTIONAL.rows(),2) = MAR;
 
     Design_Matrix.conservativeResize(X_EXT_COMPLETE.rows(),X_EXT_COMPLETE.cols()+X_EXT_PROPORTIONAL.cols());
     Design_Matrix.block(0,0,X_EXT_COMPLETE.rows(),X_EXT_COMPLETE.cols()) = X_EXT_COMPLETE;
@@ -162,9 +328,7 @@ List distribution::All_pre_data_or(Formula formula, DataFrame input_data, Charac
 
   }else{Design_Matrix = X_EXT_COMPLETE;}
 
-  // Y EXTEND
-  NumericVector Response = df_tans_2[0];
-  NumericMatrix Response_EXT = to_dummy1(Response, Levels);
+
 
   colnames_final_m.erase(0);
 
@@ -173,6 +337,7 @@ List distribution::All_pre_data_or(Formula formula, DataFrame input_data, Charac
     Named("Response_EXT") = Response_EXT,
     Named("Levels") = Levels,
     Named("Complete_effects") = colnames_final_m,
+    Named("MAR2") = MAR,
     Named("N_cats") = N_cats
   );
 }
@@ -190,29 +355,30 @@ List distribution::All_pre_data_NEWDATA(Formula formula,
   Function my_order = base_env["order"];
 
   List M_matrix = Model_Matrix_or(NEWDATA, formula);
-  List Cat_ref_or_L = Cat_ref_order(categories_order, M_matrix["Response"]);
+  // List Cat_ref_or_L = Cat_ref_order(categories_order, M_matrix["Response"]);
   NumericMatrix Design = M_matrix["df_new"];
 
-  CharacterVector a1 = Cat_ref_or_L["response_categories2"];
-  NumericVector Num_res = my_asnumeric(a1);
-
-  Design = my_cbind(Num_res, Design);
+  // CharacterVector a1 = Cat_ref_or_L["response_categories2"];
+  // NumericVector Num_res = my_asnumeric(a1);
+  //
+  // Design = my_cbind(Num_res, Design);
 
   // Now order dataset with respect to the repsonse variables in the given order
-  DataFrame df_tans = my_transpose(Design);
+  // DataFrame df_tans = my_transpose(Design);
   DataFrame df_tans_2 = Design ;
-  NumericVector order_var_sel = my_order(df_tans_2[0]);
-  order_var_sel = order_var_sel - 1 ;
-  df_tans = df_tans[order_var_sel];
 
-  df_tans_2 = my_transpose(df_tans);
+
+  // NumericVector order_var_sel = my_order(df_tans_2[0]);
+  // order_var_sel = order_var_sel - 1 ;
+  // df_tans = df_tans[order_var_sel];
+
+  // df_tans_2 = my_transpose(df_tans);
 
   // CharacterVector Levels = Cat_ref_or_L["levels"];
   // int N_cats = Levels.length();
 
   LogicalVector any_alternative_specific = !is_na(proportional_effect); // TRUE IF THERE ARE
   CharacterVector colnames_final_m = df_tans_2.names();
-
 
 
   NumericVector x(colnames_final_m.length());
@@ -226,29 +392,56 @@ List distribution::All_pre_data_NEWDATA(Formula formula,
     colnames_final_m = colnames_final_m[x==0]; // Case where there no proportional effects
   }
 
-  // Now extend
 
+  // X EXTEND
 
   // X COMPLETE
+
   DataFrame DF_complete_effect = df_tans_2[colnames_final_m];
+
   NumericMatrix Pre_Design1 = internal::convert_using_rfunction(DF_complete_effect, "as.matrix");
   Eigen::Map<Eigen::MatrixXd> Pre_Design = as<Eigen::Map<Eigen::MatrixXd> >(Pre_Design1);
-  print(colnames_final_m);
   Eigen::MatrixXd Iden_Q1 = Eigen::MatrixXd::Identity(N_cats-1,N_cats-1);
 
-  Eigen::MatrixXd X_EXT_COMPLETE = Eigen::kroneckerProduct(Pre_Design.rightCols(DF_complete_effect.cols() - 1), Iden_Q1).eval();
+  Eigen::MatrixXd X_EXT_COMPLETE;
 
-  // X PROPOTIONAL
+  // if (threshold == "equidistant"){ // eRASE THE LAST TWO COLUMNS ONE CORRESPONDING TO DR AND OTHER TO THE INTERCEPT
+  //   X_EXT_COMPLETE = Eigen::kroneckerProduct(Pre_Design.rightCols(DF_complete_effect.cols() - 2), Iden_Q1).eval();
+  //   colnames_final_m.erase(0);
+  //   colnames_final_m.erase(0);
+  // } else {
+  X_EXT_COMPLETE = Eigen::kroneckerProduct(Pre_Design, Iden_Q1).eval();
+
+
+  // colnames_final_m.erase(0);
+  // }
 
   Eigen::MatrixXd Design_Matrix;
 
   if (any_alternative_specific[0]) {
 
+    // PONER ESA PARTE ACA
+
     DataFrame DF_proportional_effect = df_tans_2[proportional_effect];
     NumericMatrix Pre_DF_proportional1 = internal::convert_using_rfunction(DF_proportional_effect, "as.matrix");
-    Eigen::Map<Eigen::MatrixXd> Pre_DF_proportional = as<Eigen::Map<Eigen::MatrixXd> >(Pre_DF_proportional1);
+    Eigen::Map<Eigen::MatrixXd> Pre_DF_proportional2 = as<Eigen::Map<Eigen::MatrixXd> >(Pre_DF_proportional1);
+
+    Eigen::MatrixXd Pre_DF_proportional = Pre_DF_proportional2;
+
     Eigen::VectorXd Ones = Eigen::VectorXd::Ones(N_cats-1);
     Eigen::MatrixXd X_EXT_PROPORTIONAL = Eigen::kroneckerProduct(Pre_DF_proportional, Ones).eval();
+
+    // TENGO QUE PONER EL IF ACA
+    //
+    // if (threshold == "equidistant"){
+    //   NumericMatrix tJac = my_cbind(1, seq_len(categories_order.length() -1 )-1 );
+    //   Eigen::Map<Eigen::MatrixXd> tJac2 = as<Eigen::Map<Eigen::MatrixXd> >(tJac);
+    //   Eigen::VectorXd Ones1 = Eigen::VectorXd::Ones(Response_EXT.rows());
+    //   Eigen::MatrixXd Threshold_M = Eigen::kroneckerProduct(Ones1, tJac2).eval();
+    //   X_EXT_PROPORTIONAL.conservativeResize(X_EXT_PROPORTIONAL.rows(),X_EXT_PROPORTIONAL.cols()+2);
+    //   X_EXT_PROPORTIONAL.block(0,X_EXT_PROPORTIONAL.cols()-2, X_EXT_PROPORTIONAL.rows(),2) = Threshold_M;
+    // }
+
 
     Design_Matrix.conservativeResize(X_EXT_COMPLETE.rows(),X_EXT_COMPLETE.cols()+X_EXT_PROPORTIONAL.cols());
     Design_Matrix.block(0,0,X_EXT_COMPLETE.rows(),X_EXT_COMPLETE.cols()) = X_EXT_COMPLETE;
@@ -256,7 +449,38 @@ List distribution::All_pre_data_NEWDATA(Formula formula,
 
   }else{Design_Matrix = X_EXT_COMPLETE;}
 
+  // Now extend
+
+
+  // // X COMPLETE
+  // DataFrame DF_complete_effect = df_tans_2[colnames_final_m];
+  // NumericMatrix Pre_Design1 = internal::convert_using_rfunction(DF_complete_effect, "as.matrix");
+  // Eigen::Map<Eigen::MatrixXd> Pre_Design = as<Eigen::Map<Eigen::MatrixXd> >(Pre_Design1);
+  // // print(colnames_final_m);
+  // Eigen::MatrixXd Iden_Q1 = Eigen::MatrixXd::Identity(N_cats-1,N_cats-1);
+  //
+  // Eigen::MatrixXd X_EXT_COMPLETE = Eigen::kroneckerProduct(Pre_Design.rightCols(DF_complete_effect.cols() - 1), Iden_Q1).eval();
+  //
+  // // X PROPOTIONAL
+  //
+  // Eigen::MatrixXd Design_Matrix;
+  //
+  // if (any_alternative_specific[0]) {
+  //
+  //   DataFrame DF_proportional_effect = df_tans_2[proportional_effect];
+  //   NumericMatrix Pre_DF_proportional1 = internal::convert_using_rfunction(DF_proportional_effect, "as.matrix");
+  //   Eigen::Map<Eigen::MatrixXd> Pre_DF_proportional = as<Eigen::Map<Eigen::MatrixXd> >(Pre_DF_proportional1);
+  //   Eigen::VectorXd Ones = Eigen::VectorXd::Ones(N_cats-1);
+  //   Eigen::MatrixXd X_EXT_PROPORTIONAL = Eigen::kroneckerProduct(Pre_DF_proportional, Ones).eval();
+  //
+  //   Design_Matrix.conservativeResize(X_EXT_COMPLETE.rows(),X_EXT_COMPLETE.cols()+X_EXT_PROPORTIONAL.cols());
+  //   Design_Matrix.block(0,0,X_EXT_COMPLETE.rows(),X_EXT_COMPLETE.cols()) = X_EXT_COMPLETE;
+  //   Design_Matrix.block(0,X_EXT_COMPLETE.cols(),X_EXT_COMPLETE.rows(),X_EXT_PROPORTIONAL.cols()) = X_EXT_PROPORTIONAL;
+  //
+  // }else{Design_Matrix = X_EXT_COMPLETE;}
+
   return List::create(
+    Named("Design") = Design,
     Named("Design_Matrix") = Design_Matrix
   );
 }
@@ -545,11 +769,11 @@ List Extend_Response(DataFrame Final_mat ){
 }
 
 List distribution::select_data_nested(Formula formula,
-                        String individuals,
-                        String Alternatives,
-                        SEXP ref_cat,
-                        CharacterVector var_alt_specific,
-                        DataFrame input_data
+                                      String individuals,
+                                      String Alternatives,
+                                      SEXP ref_cat,
+                                      CharacterVector var_alt_specific,
+                                      DataFrame input_data
 ) {
 
   List Formula_l = formula_entry(formula);
@@ -668,15 +892,15 @@ Student::Student(void) {
 
 double Student::cdf_student(const double& value, const double& freedom_degrees) const
 {
-    double z;
-    if(freedom_degrees < 2 * pow(value, 2) )
-    { z = boost::math::ibeta(freedom_degrees * 0.5, 0.5, freedom_degrees / (freedom_degrees + pow(value, 2))) * 0.5; }
-    else
-    { z = boost::math::ibetac(0.5, freedom_degrees * 0.5, pow(value, 2) / (freedom_degrees + pow(value, 2))) * 0.5; }
-    if(value > 0)
-    { return 1-z; }
-    else
-    {return z; }
+  double z;
+  if(freedom_degrees < 2 * pow(value, 2) )
+  { z = boost::math::ibeta(freedom_degrees * 0.5, 0.5, freedom_degrees / (freedom_degrees + pow(value, 2))) * 0.5; }
+  else
+  { z = boost::math::ibetac(0.5, freedom_degrees * 0.5, pow(value, 2) / (freedom_degrees + pow(value, 2))) * 0.5; }
+  if(value > 0)
+  { return 1-z; }
+  else
+  {return z; }
 }
 
 double Student::pdf_student(const double& value, const double& freedom_degrees) const

@@ -15,7 +15,8 @@ public:
   List All_pre_data_or(Formula formula,
                        DataFrame input_data,
                        CharacterVector categories_order,
-                       CharacterVector proportional_effect);
+                       CharacterVector proportional_effect,
+                       std::string threshold = "NA");
 
   List All_pre_data_NEWDATA(Formula formula,
                             DataFrame NEWDATA,

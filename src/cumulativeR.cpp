@@ -94,12 +94,15 @@ List GLMcum(Formula formula,
             DataFrame data,
             std::string distribution,
             double freedom_degrees,
-            Eigen::VectorXd beta_init){
+            Eigen::VectorXd beta_init,
+            std::string threshold){
 
   const int N = data.nrows() ; // Number of observations
 
   List Full_M = dist_cum.All_pre_data_or(formula, data,
-                                      categories_order, proportional_effects);
+                                         categories_order,
+                                         proportional_effects,
+                                         threshold);
 
   Eigen::MatrixXd Y_init = Full_M["Response_EXT"];
   Eigen::MatrixXd X_EXT = Full_M["Design_Matrix"];
@@ -109,7 +112,7 @@ List GLMcum(Formula formula,
   int P_c = explanatory_complete.length();
   int P_p = 0;
   if(proportional_effects[0] != "NA"){P_p = proportional_effects.length();}
-  int P =  P_c +  P_p ; // Number of explanatory variables without intercept
+  if(threshold == "equidistant"){P_p = P_p + 2;}
 
   int Q = Y_init.cols();
   int K = Q + 1;
@@ -118,7 +121,7 @@ List GLMcum(Formula formula,
   Eigen::MatrixXd BETA2;
   BETA2 = Eigen::MatrixXd::Zero(X_EXT.cols(),1);
 
-  // Eigen::VectorXd BETA3 = BETA2;
+  Eigen::VectorXd BETA3 = BETA2;
 
   // NumericVector seq_cat2;
 
@@ -158,7 +161,7 @@ List GLMcum(Formula formula,
   }
 
   int iteration = 0;
-  // double check_tutz = 1.0;
+  double check_tutz = 1.0;
   double Stop_criteria = 1.0;
   Eigen::MatrixXd X_M_i ;
   Eigen::VectorXd Y_M_i ;
@@ -243,6 +246,7 @@ List GLMcum(Formula formula,
   std::vector<std::string> text=as<std::vector<std::string>>(explanatory_complete);
   std::vector<std::string> level_text=as<std::vector<std::string>>(categories_order);
   StringVector names(Q*P_c + P_p);
+
   if(P_c > 0){
     for(int var = 0 ; var < explanatory_complete.size() ; var++){
       for(int cat = 0 ; cat < Q ; cat++){
@@ -250,13 +254,19 @@ List GLMcum(Formula formula,
       }
     }
   }
+
   if(P_p > 0){
     for(int var_p = 0 ; var_p < proportional_effects.size() ; var_p++){
       names[(Q*P_c) + var_p] = proportional_effects[var_p];
     }
   }
 
-  // TO NAMED THE RESULT BETAS
+  if (threshold == "equidistant"){
+    names[Q*P_c + P_p-2] = dist_cum.concatenate("(Intercept)", level_text[0]);
+    names[Q*P_c + P_p-1] = "(Intercept) distance";
+  }
+
+  // // TO NAMED THE RESULT BETAS
   NumericMatrix coef = wrap(BETA);
   rownames(coef) = names;
 
@@ -299,12 +309,13 @@ List GLMcum(Formula formula,
   deviance = -2*deviance;
 
   return List::create(
-    // Named("Nb. iterations") = iteration-1 ,
+    Named("Nb. iterations") = iteration-1 ,
     Named("coefficients") = coef,
     Named("AIC") = AIC,
     Named("BIC") = BIC,
-    Named("X_EXT") = X_EXT,
-    Named("Y_init") = Y_init,
+    // Named("X_EXT") = X_EXT,
+    // Named("Y_init") = Y_init,
+    Named("BETA") = BETA,
     Named("stderr") = Std_Error,
     Rcpp::Named("df") = df,
     Rcpp::Named("predicted") = predicted,
@@ -321,15 +332,16 @@ List GLMcum(Formula formula,
 RCPP_MODULE(cumulativemodule){
   Rcpp::function("GLMcum", &GLMcum,
                  List::create(_["formula"] = R_NaN,
-                              _["categories_order"] = CharacterVector::create( "A", NA_STRING),
+                              _["categories_order"] = CharacterVector::create(NA_STRING),
                               _["proportional_effects"] = CharacterVector::create(NA_STRING),
                               _["data"] = NumericVector::create( 1, NA_REAL, R_NaN, R_PosInf, R_NegInf),
                               _["distribution"] = "a",
                               _["freedom_degrees"] = 1.0,
-                              _["beta_init"] = NumericVector::create(1)
-                                ));
+                              _["beta_init"] = NumericVector::create(1),
+                              _["threshold"] = CharacterVector::create(NA_STRING)
+                 ));
   Rcpp::class_<CumulativeR>("CumulativeR")
-  .constructor()
+    .constructor()
   // .method( "GLMcum", &CumulativeR::GLMcum )
   ;
 }
